@@ -82,8 +82,8 @@ export default function Hero() {
             { num: "4",      label: { ar: "وجهات مقدسة", en: "Destinations" } },
           ].map((s) => (
             <div key={s.num} className="flex flex-col items-center gap-0.5">
-              <div className="text-2xl sm:text-3xl font-bold text-[#00b86a]">{s.num}</div>
-              <div className="text-white/40 text-[11px] sm:text-xs text-center">
+              <div className="text-3xl sm:text-4xl font-bold text-[#00b86a]">{s.num}</div>
+              <div className="text-white/55 text-xs sm:text-sm text-center">
                 {isRTL ? s.label.ar : s.label.en}
               </div>
             </div>
