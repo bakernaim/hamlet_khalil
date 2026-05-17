@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "Bash(sed -i \"s/rgba\\(201,168,76,0.15\\)/rgba\\(0,201,212,0.15\\)/g\" /home/baker/Projects/hamlet_khalil/src/components/Hero.tsx)",
+      "Bash(sed -i \"s/#06091e/#040d18/g\" /home/baker/Projects/hamlet_khalil/src/components/Hero.tsx)",
+      "Bash(sed -i \"s/#06091e/#040d18/g\" /home/baker/Projects/hamlet_khalil/src/components/Footer.tsx)"
+    ]
+  }
+}

@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+:root {
+  --navy:        #040d18;
+  --navy-mid:    #081422;
+  --navy-card:   #0b1828;
+  --navy-border: #162035;
+  --green:       #00b86a;
+  --green-hover: #33d68a;
+  --green-dim:   #007a46;
+  --green-faint: rgba(0,184,106,0.10);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--navy);
+  color: white;
+  overflow-x: hidden;
+}
+
+/* ── Arabic: Cairo for body/UI, Reem Kufi for headings only ── */
+[dir="rtl"] {
+  font-family: "Cairo", sans-serif;
+  line-height: 1.8;
+}
+
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4 {
+  font-family: "Reem Kufi", sans-serif;
+  line-height: 1.4;
+}
+
+/* ── English ── */
+[dir="ltr"] {
+  font-family: "Inter", sans-serif;
+}
+
+/* ── Accent color helpers ── */
+.accent { color: var(--green); }
+
+/* ── WhatsApp pulse (functional indicator only) ── */
+@keyframes wa-pulse {
+  0%   { box-shadow: 0 0 0 0   rgba(34,197,94,.6); }
+  70%  { box-shadow: 0 0 0 12px rgba(34,197,94,0); }
+  100% { box-shadow: 0 0 0 0   rgba(34,197,94,0); }
+}
+.whatsapp-pulse { animation: wa-pulse 2.5s ease-out infinite; }
+
+/* ── Gentle scroll-cue bounce ── */
+@keyframes bounce-soft {
+  0%,100% { transform: translateY(0);   }
+  50%      { transform: translateY(5px); }
+}
+.bounce-soft { animation: bounce-soft 2s ease-in-out infinite; }
+
+/* ── Card hover ── */
+.package-card {
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+.package-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 0 1px rgba(0,184,106,.35), 0 16px 36px rgba(0,0,0,.5);
+}
+
+/* ── Section divider ── */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(0,184,106,.4), transparent);
+}
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--green), transparent);
+}
+
+/* ── Ornate divider ── */
+.ornate-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ornate-divider::before,
+.ornate-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(0,184,106,.35));
+}
+.ornate-divider::after {
+  background: linear-gradient(to left, transparent, rgba(0,184,106,.35));
+}
+
+/* ── Subtle grid pattern ── */
+.pattern-overlay {
+  background-image:
+    repeating-linear-gradient(45deg,  rgba(0,184,106,.016) 0, rgba(0,184,106,.016) 1px, transparent 1px, transparent 24px),
+    repeating-linear-gradient(-45deg, rgba(0,184,106,.016) 0, rgba(0,184,106,.016) 1px, transparent 1px, transparent 24px);
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar       { width: 4px; }
+::-webkit-scrollbar-track { background: var(--navy); }
+::-webkit-scrollbar-thumb { background: var(--green-dim); border-radius: 4px; }
