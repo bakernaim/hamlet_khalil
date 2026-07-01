@@ -3,7 +3,7 @@ import { SESSION_COOKIE, verifySession } from "@/lib/auth";
 
 // Guards the admin area. The login page and auth endpoints stay public;
 // everything else under /admin and /api/admin requires a valid session.
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const token = req.cookies.get(SESSION_COOKIE)?.value;
   const session = await verifySession(token);
