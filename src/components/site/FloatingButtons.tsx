@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { WHATSAPP_URL } from "@/data/content";
+import { waHref } from "@/lib/whatsapp";
 
-export default function FloatingButtons() {
+export default function FloatingButtons({ whatsappNumber }: { whatsappNumber: string }) {
   const [showScroll, setShowScroll] = useState(false);
+  const WHATSAPP_URL = waHref(whatsappNumber);
 
   useEffect(() => {
     const onScroll = () => setShowScroll(window.scrollY > 300);

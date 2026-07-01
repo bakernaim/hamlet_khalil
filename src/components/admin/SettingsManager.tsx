@@ -1,0 +1,112 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { Field, Input, Textarea, Button, ErrorText } from "@/components/admin/ui";
+import type { SiteSettings } from "@/lib/types";
+
+export default function SettingsManager() {
+  const [form, setForm] = useState<SiteSettings | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/admin/settings", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data) => setForm(data))
+      .catch(() => setError("Could not load settings"))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const set = <K extends keyof SiteSettings>(k: K, v: SiteSettings[K]) =>
+    setForm((f) => (f ? { ...f, [k]: v } : f));
+
+  async function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!form) return;
+    setSaving(true);
+    setError("");
+    setSaved(false);
+    try {
+      const res = await fetch("/api/admin/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Save failed");
+        return;
+      }
+      setForm(data);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
+    } catch {
+      setError("Network error");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (loading || !form) {
+    return <p className="text-white/40 text-sm">Loading settings…</p>;
+  }
+
+  return (
+    <div>
+      <header className="mb-6">
+        <h1 className="text-2xl font-bold text-white">Site Settings</h1>
+        <p className="text-white/45 text-sm mt-1">Contact info and hero text shown across the site.</p>
+      </header>
+
+      <form onSubmit={onSubmit} className="space-y-6 max-w-2xl">
+        <section className="rounded-2xl bg-[#0c1524] border border-[#1e2b40] p-5 space-y-4">
+          <h2 className="text-white font-semibold text-sm">Contact</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="WhatsApp number" hint="Country code + number, digits only">
+              <Input value={form.whatsappNumber} onChange={(e) => set("whatsappNumber", e.target.value)} />
+            </Field>
+            <Field label="Phone (display)">
+              <Input value={form.phone} onChange={(e) => set("phone", e.target.value)} dir="ltr" />
+            </Field>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="Address (EN)">
+              <Textarea rows={2} value={form.addressEn} onChange={(e) => set("addressEn", e.target.value)} />
+            </Field>
+            <Field label="Address (AR)">
+              <Textarea rows={2} dir="rtl" value={form.addressAr} onChange={(e) => set("addressAr", e.target.value)} />
+            </Field>
+          </div>
+        </section>
+
+        <section className="rounded-2xl bg-[#0c1524] border border-[#1e2b40] p-5 space-y-4">
+          <h2 className="text-white font-semibold text-sm">Hero section</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="Heading (EN)">
+              <Textarea rows={2} value={form.heroHeadingEn} onChange={(e) => set("heroHeadingEn", e.target.value)} />
+            </Field>
+            <Field label="Heading (AR)">
+              <Textarea rows={2} dir="rtl" value={form.heroHeadingAr} onChange={(e) => set("heroHeadingAr", e.target.value)} />
+            </Field>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="Subheading (EN)">
+              <Textarea rows={2} value={form.heroSubheadingEn} onChange={(e) => set("heroSubheadingEn", e.target.value)} />
+            </Field>
+            <Field label="Subheading (AR)">
+              <Textarea rows={2} dir="rtl" value={form.heroSubheadingAr} onChange={(e) => set("heroSubheadingAr", e.target.value)} />
+            </Field>
+          </div>
+        </section>
+
+        <ErrorText>{error}</ErrorText>
+        <div className="flex items-center gap-3">
+          <Button type="submit" disabled={saving}>{saving ? "Saving…" : "Save Settings"}</Button>
+          {saved && <span className="text-[#33d68a] text-sm">✓ Saved</span>}
+        </div>
+      </form>
+    </div>
+  );
+}

@@ -1,0 +1,86 @@
+// Hamlet Al Khalil — data model
+// Bilingual content stored as paired `...Ar` / `...En` fields.
+// List fields (highlights) are stored as JSON strings — parse with lib/serialize.
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  name         String
+  role         String   @default("editor") // "admin" | "editor"
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model ZiyaratPackage {
+  id           String   @id @default(cuid())
+  slug         String   @unique
+  flag         String
+  nameAr       String
+  nameEn       String
+  durationAr   String
+  durationEn   String
+  price        Int
+  badgeAr      String?
+  badgeEn      String?
+  highlightsAr String   @default("[]") // JSON string[]
+  highlightsEn String   @default("[]") // JSON string[]
+  image        String
+  color        String   @default("from-[#1a2444] to-[#0a0f2c]")
+  sortOrder    Int      @default(0)
+  published    Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model TourismPackage {
+  id         String   @id @default(cuid())
+  slug       String   @unique
+  flag       String
+  nameAr     String
+  nameEn     String
+  durationAr String
+  durationEn String
+  price      Int
+  descAr     String
+  descEn     String
+  image      String
+  sortOrder  Int      @default(0)
+  published  Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model CurrentTrip {
+  id            String    @id @default(cuid())
+  titleAr       String
+  titleEn       String
+  destinationAr String
+  destinationEn String
+  departureDate DateTime
+  returnDate    DateTime?
+  price         Int
+  seatsLeft     Int?
+  status        String    @default("OPEN") // OPEN | ALMOST_FULL | DEPARTED | CLOSED
+  image         String?
+  packageType   String? // "ziyarat" | "tourism"
+  packageSlug   String? // links to a package card via #anchor
+  sortOrder     Int       @default(0)
+  published     Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Setting {
+  key   String @id
+  value String
+}

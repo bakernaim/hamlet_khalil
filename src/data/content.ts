@@ -5,6 +5,7 @@ export const nav = {
   logo: { ar: "حملة الخليل", en: "Hamlet Al Khalil" },
   links: [
     { ar: "الرئيسية", en: "Home", href: "#home" },
+    { ar: "الرحلات الحالية", en: "Current Trips", href: "#trips" },
     { ar: "زيارات", en: "Ziyarat", href: "#ziyarat" },
     { ar: "السياحة", en: "Tourism", href: "#tourism" },
     { ar: "عن الوكالة", en: "About", href: "#about" },

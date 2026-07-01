@@ -2,7 +2,9 @@
 
 import Image from "next/image";
 import { useLang } from "@/context/LanguageContext";
-import { nav, footer, WHATSAPP_URL, WHATSAPP_NUMBER } from "@/data/content";
+import { nav, footer } from "@/data/content";
+import { waHref } from "@/lib/whatsapp";
+import type { SiteSettings } from "@/lib/types";
 
 const WA_ICON = (
   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -10,8 +12,9 @@ const WA_ICON = (
   </svg>
 );
 
-export default function Footer() {
+export default function Footer({ settings }: { settings: SiteSettings }) {
   const { isRTL } = useLang();
+  const WHATSAPP_URL = waHref(settings.whatsappNumber);
 
   return (
     <footer id="contact" dir={isRTL ? "rtl" : "ltr"} className="bg-[#040d18] border-t border-[#162035]">
@@ -104,13 +107,13 @@ export default function Footer() {
               <li className="flex items-start gap-2.5">
                 <span className="text-[#00b86a] text-sm mt-0.5 shrink-0">📍</span>
                 <span className="text-white/45 text-xs leading-relaxed">
-                  {isRTL ? footer.address.ar : footer.address.en}
+                  {isRTL ? settings.addressAr : settings.addressEn}
                 </span>
               </li>
               <li className="flex items-center gap-2.5">
                 <span className="text-[#00b86a] text-sm shrink-0">📞</span>
-                <a href={`tel:${WHATSAPP_NUMBER}`} className="text-white/45 hover:text-white text-xs transition-colors" dir="ltr">
-                  {footer.phone}
+                <a href={`tel:${settings.phone.replace(/\s/g, "")}`} className="text-white/45 hover:text-white text-xs transition-colors" dir="ltr">
+                  {settings.phone}
                 </a>
               </li>
               <li className="flex items-center gap-2.5">

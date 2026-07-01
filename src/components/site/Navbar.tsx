@@ -4,10 +4,12 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { useLang } from "@/context/LanguageContext";
-import { nav, WHATSAPP_URL } from "@/data/content";
+import { nav } from "@/data/content";
+import { waHref } from "@/lib/whatsapp";
 
-export default function Navbar() {
+export default function Navbar({ whatsappNumber }: { whatsappNumber: string }) {
   const { lang, toggleLang, isRTL } = useLang();
+  const WHATSAPP_URL = waHref(whatsappNumber);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 

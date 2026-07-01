@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useLang } from "@/context/LanguageContext";
-import { WHATSAPP_URL } from "@/data/content";
+import { waHref } from "@/lib/whatsapp";
 
 const ARBAEEN_DATE = new Date("2025-08-13T00:00:00Z");
 
@@ -32,8 +32,9 @@ function DigitBox({ value, label }: { value: number; label: string }) {
   );
 }
 
-export default function ArbaeenBanner() {
+export default function ArbaeenBanner({ whatsappNumber }: { whatsappNumber: string }) {
   const { isRTL } = useLang();
+  const WHATSAPP_URL = waHref(whatsappNumber);
   const [cd, setCd] = useState(getCountdown());
 
   useEffect(() => {
