@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useState } from "react";
+import Image from "next/image";
 
 export function Field({
   label,
@@ -56,9 +57,7 @@ export function Toggle({
         }`}
       >
         <span
-          className={`absolute top-0.5 w-5 h-5 rounded-full bg-white transition-transform ${
-            checked ? "translate-x-4.5 left-0.5" : "left-0.5"
-          }`}
+          className="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-transform"
           style={{ transform: checked ? "translateX(16px)" : "translateX(0)" }}
         />
       </span>
@@ -84,6 +83,84 @@ export function Button({
       {...props}
       className={`inline-flex items-center justify-center gap-1.5 text-sm px-4 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${styles[variant]} ${className}`}
     />
+  );
+}
+
+// Upload-based image picker: posts the file to /api/admin/upload and stores the
+// returned public path in the form. Uses a div (not <label>) so clicks on the
+// preview/text don't get forwarded to the buttons.
+export function ImageUpload({
+  label,
+  value,
+  onChange,
+  hint,
+}: {
+  label: string;
+  value: string;
+  onChange: (path: string) => void;
+  hint?: string;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState("");
+
+  async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // allow picking the same file again
+    if (!file) return;
+    setUploading(true);
+    setError("");
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
+      const data = await res.json();
+      if (!res.ok) setError(data.error || "Upload failed");
+      else onChange(data.path);
+    } catch {
+      setError("Network error");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  return (
+    <div>
+      <span className="block text-xs font-medium text-white/70 mb-1.5">{label}</span>
+      <div className="flex items-center gap-3">
+        <div className="relative w-24 h-16 rounded-lg overflow-hidden border border-[#1e2b40] bg-[#0b1626] shrink-0">
+          {value ? (
+            <Image src={value} alt="Preview" fill className="object-cover" sizes="96px" />
+          ) : (
+            <span className="w-full h-full flex items-center justify-center text-white/25 text-[10px]">
+              No image
+            </span>
+          )}
+        </div>
+        <div className="flex flex-col gap-1.5 min-w-0">
+          <div className="flex gap-2">
+            <Button type="button" variant="ghost" onClick={() => inputRef.current?.click()} disabled={uploading}>
+              {uploading ? "Uploading…" : value ? "Replace image" : "Upload image"}
+            </Button>
+            {value && (
+              <Button type="button" variant="danger" onClick={() => onChange("")}>
+                Remove
+              </Button>
+            )}
+          </div>
+          {value && <span className="text-[11px] text-white/30 truncate">{value}</span>}
+          {error && <span className="text-[11px] text-red-300">{error}</span>}
+        </div>
+      </div>
+      {hint && <span className="block text-[11px] text-white/35 mt-1">{hint}</span>}
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
+        className="hidden"
+        onChange={onFile}
+      />
+    </div>
   );
 }
 

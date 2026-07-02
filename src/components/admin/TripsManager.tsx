@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useResource } from "@/components/admin/useResource";
-import { Field, Input, Select, Button, Modal, Toggle, ErrorText } from "@/components/admin/ui";
+import { Field, Input, Select, Button, Modal, Toggle, ErrorText, ImageUpload } from "@/components/admin/ui";
 
 interface Trip {
   id: string;
@@ -247,9 +247,12 @@ export default function TripsManager() {
               <Input type="number" value={form.sortOrder} onChange={(e) => set("sortOrder", e.target.value)} />
             </Field>
           </div>
-          <Field label="Image path" hint="Optional, e.g. /shrines/reza-mashhad.jpg">
-            <Input value={form.image} onChange={(e) => set("image", e.target.value)} />
-          </Field>
+          <ImageUpload
+            label="Image"
+            hint="Optional — shown on the trip card"
+            value={form.image}
+            onChange={(p) => set("image", p)}
+          />
           <Toggle checked={form.published} onChange={(v) => set("published", v)} label="Published (visible on site)" />
 
           <ErrorText>{formError}</ErrorText>

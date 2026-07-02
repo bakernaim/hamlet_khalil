@@ -1,13 +1,15 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { badRequest, notFound, str, int, bool } from "@/lib/api";
+import { badRequest, notFound, str, optionalStr, int, optionalInt, bool, optionalDate } from "@/lib/api";
 import { removeUpload } from "@/lib/uploads";
+
+const THEMES = ["green", "amber"];
 
 type Ctx = { params: Promise<{ id: string }> };
 
 export async function GET(_req: Request, { params }: Ctx) {
   const { id } = await params;
-  const row = await prisma.tourismPackage.findUnique({ where: { id } });
+  const row = await prisma.banner.findUnique({ where: { id } });
   if (!row) return notFound();
   return NextResponse.json(row);
 }
@@ -17,29 +19,27 @@ export async function PUT(req: Request, { params }: Ctx) {
   const body = await req.json().catch(() => null);
   if (!body) return badRequest("Invalid JSON body");
 
-  const existing = await prisma.tourismPackage.findUnique({ where: { id } });
+  const existing = await prisma.banner.findUnique({ where: { id } });
   if (!existing) return notFound();
 
-  const slug = str(body.slug, existing.slug);
-  if (slug !== existing.slug) {
-    const clash = await prisma.tourismPackage.findUnique({ where: { slug } });
-    if (clash) return badRequest("A package with this slug already exists");
-  }
-
-  const image = str(body.image, existing.image);
-  const updated = await prisma.tourismPackage.update({
+  const image = optionalStr(body.image);
+  const updated = await prisma.banner.update({
     where: { id },
     data: {
-      slug,
-      flag: str(body.flag, existing.flag),
-      nameAr: str(body.nameAr),
-      nameEn: str(body.nameEn),
-      durationAr: str(body.durationAr),
-      durationEn: str(body.durationEn),
-      price: int(body.price, existing.price),
-      descAr: str(body.descAr),
-      descEn: str(body.descEn),
+      titleAr: str(body.titleAr),
+      titleEn: str(body.titleEn),
+      badgeAr: optionalStr(body.badgeAr),
+      badgeEn: optionalStr(body.badgeEn),
+      textAr: str(body.textAr),
+      textEn: str(body.textEn),
       image,
+      theme: THEMES.includes(str(body.theme)) ? str(body.theme) : existing.theme,
+      targetDate: optionalDate(body.targetDate),
+      priceFrom: optionalInt(body.priceFrom),
+      noteAr: optionalStr(body.noteAr),
+      noteEn: optionalStr(body.noteEn),
+      ctaAr: optionalStr(body.ctaAr),
+      ctaEn: optionalStr(body.ctaEn),
       sortOrder: int(body.sortOrder, existing.sortOrder),
       published: bool(body.published),
     },
@@ -50,9 +50,9 @@ export async function PUT(req: Request, { params }: Ctx) {
 
 export async function DELETE(_req: Request, { params }: Ctx) {
   const { id } = await params;
-  const existing = await prisma.tourismPackage.findUnique({ where: { id } });
+  const existing = await prisma.banner.findUnique({ where: { id } });
   if (!existing) return notFound();
-  await prisma.tourismPackage.delete({ where: { id } });
+  await prisma.banner.delete({ where: { id } });
   await removeUpload(existing.image);
   return NextResponse.json({ ok: true });
 }

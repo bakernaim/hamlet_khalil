@@ -12,6 +12,7 @@ export const SETTING_DEFAULTS: SiteSettings = {
   phone: "+961 71 234 567",
   addressAr: "بيروت، لبنان — شارع الحمراء، مبنى الخليل، الطابق الثالث",
   addressEn: "Beirut, Lebanon — Hamra Street, Khalil Building, 3rd Floor",
+  instagramUrl: "https://instagram.com/hamlet_alkhalil",
 };
 
 export const SETTING_KEYS = Object.keys(SETTING_DEFAULTS) as (keyof SiteSettings)[];

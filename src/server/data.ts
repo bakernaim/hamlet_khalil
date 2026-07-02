@@ -5,6 +5,7 @@ import type {
   ZiyaratPackageDTO,
   TourismPackageDTO,
   CurrentTripDTO,
+  BannerDTO,
   SiteSettings,
   TripStatus,
 } from "@/lib/types";
@@ -71,6 +72,30 @@ export async function getCurrentTrips(publishedOnly = true): Promise<CurrentTrip
     image: t.image,
     packageType: t.packageType,
     packageSlug: t.packageSlug,
+  }));
+}
+
+export async function getBanners(publishedOnly = true): Promise<BannerDTO[]> {
+  const rows = await prisma.banner.findMany({
+    where: publishedOnly ? { published: true } : undefined,
+    orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
+  });
+  return rows.map((b) => ({
+    id: b.id,
+    titleAr: b.titleAr,
+    titleEn: b.titleEn,
+    badgeAr: b.badgeAr,
+    badgeEn: b.badgeEn,
+    textAr: b.textAr,
+    textEn: b.textEn,
+    image: b.image,
+    theme: b.theme,
+    targetDate: b.targetDate ? b.targetDate.toISOString() : null,
+    priceFrom: b.priceFrom,
+    noteAr: b.noteAr,
+    noteEn: b.noteEn,
+    ctaAr: b.ctaAr,
+    ctaEn: b.ctaEn,
   }));
 }
 

@@ -8,6 +8,7 @@ import {
   Landmark,
   Plane,
   CalendarClock,
+  Megaphone,
   Users,
   Settings,
   LogOut,
@@ -21,6 +22,7 @@ const NAV = [
   { href: "/admin/ziyarat", label: "Ziyarat Packages", icon: Landmark },
   { href: "/admin/tourism", label: "Tourism Packages", icon: Plane },
   { href: "/admin/trips", label: "Current Trips", icon: CalendarClock },
+  { href: "/admin/banners", label: "Banners", icon: Megaphone },
   { href: "/admin/users", label: "Staff Users", icon: Users },
   { href: "/admin/settings", label: "Site Settings", icon: Settings },
 ];

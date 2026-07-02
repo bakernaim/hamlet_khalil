@@ -43,7 +43,7 @@ Verify changes with `npm run build` **and** `npm run lint`. The first admin is `
   component from [src/components/admin/](src/components/admin/) that fetches its own data from
   the API via the [useResource](src/components/admin/useResource.ts) hook.
 - **API** [src/app/api/](src/app/api/): `auth/{login,logout}` set/clear the session cookie;
-  `admin/{ziyarat,tourism,trips,users,settings}` are the CRUD handlers (collection `route.ts`
+  `admin/{ziyarat,tourism,trips,banners,users,settings}` are the CRUD handlers (collection `route.ts`
   + item `[id]/route.ts`).
 - **Auth guard** [src/proxy.ts](src/proxy.ts) (Next 16 renamed `middleware` → `proxy`)
   protects `/admin/**` (redirect to login) and `/api/admin/**` (401).
@@ -74,9 +74,14 @@ Verify changes with `npm run build` **and** `npm run lint`. The first admin is `
   `#00b86a`/`#33d68a`. Custom animations/utilities live in
   [src/app/globals.css](src/app/globals.css). Public site is RTL-capable; admin is LTR.
 - **Admin UI primitives**: reuse `Field`, `Input`, `Textarea`, `Select`, `Toggle`, `Button`,
-  `Modal`, `ErrorText` from [src/components/admin/ui.tsx](src/components/admin/ui.tsx).
+  `Modal`, `ErrorText`, `ImageUpload` from [src/components/admin/ui.tsx](src/components/admin/ui.tsx).
 - **Route handler input coercion**: use helpers in [src/lib/api.ts](src/lib/api.ts)
   (`str`, `int`, `bool`, `optionalDate`, `badRequest`, …).
+- **Image uploads**: admin forms use `ImageUpload`, which POSTs to `api/admin/upload` and
+  stores files in `public/uploads/` (gitignored). Use `saveUpload`/`removeUpload` from
+  [src/lib/uploads.ts](src/lib/uploads.ts); item DELETE/PUT handlers call `removeUpload` so
+  deleting a record (or replacing its image) also deletes the uploaded file. `removeUpload`
+  never touches anything outside `/uploads/` (seed images in `/shrines` are safe).
 
 ## Adding things (recipes)
 

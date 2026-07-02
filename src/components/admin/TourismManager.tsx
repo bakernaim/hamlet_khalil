@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useResource } from "@/components/admin/useResource";
-import { Field, Input, Textarea, Button, Modal, Toggle, ErrorText } from "@/components/admin/ui";
+import { Field, Input, Textarea, Button, Modal, Toggle, ErrorText, ImageUpload } from "@/components/admin/ui";
 
 interface Tourism {
   id: string;
@@ -208,9 +208,12 @@ export default function TourismManager() {
             </Field>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Image path" hint="e.g. /shrines/dubai-skyline.jpg">
-              <Input value={form.image} onChange={(e) => set("image", e.target.value)} />
-            </Field>
+            <ImageUpload
+              label="Image"
+              hint="Shown on the package card"
+              value={form.image}
+              onChange={(p) => set("image", p)}
+            />
             <Field label="Sort order" hint="Lower shows first">
               <Input type="number" value={form.sortOrder} onChange={(e) => set("sortOrder", e.target.value)} />
             </Field>

@@ -92,11 +92,10 @@ body {
   background: linear-gradient(to left, transparent, rgba(0,184,106,.35));
 }
 
-/* ── Subtle grid pattern ── */
+/* ── Islamic geometric pattern — 8-pointed star (khatam) tile ── */
 .pattern-overlay {
-  background-image:
-    repeating-linear-gradient(45deg,  rgba(0,184,106,.016) 0, rgba(0,184,106,.016) 1px, transparent 1px, transparent 24px),
-    repeating-linear-gradient(-45deg, rgba(0,184,106,.016) 0, rgba(0,184,106,.016) 1px, transparent 1px, transparent 24px);
+  background-image: url("data:image/svg+xml,%3Csvg width='96' height='96' viewBox='0 0 96 96' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%2300b86a' stroke-opacity='0.055' stroke-width='1'%3E%3Cpath d='M48 10 L58 38 L86 48 L58 58 L48 86 L38 58 L10 48 L38 38 Z'/%3E%3Crect x='34' y='34' width='28' height='28' transform='rotate(45 48 48)'/%3E%3Ccircle cx='48' cy='48' r='5'/%3E%3Ccircle cx='0' cy='0' r='7'/%3E%3Ccircle cx='96' cy='0' r='7'/%3E%3Ccircle cx='0' cy='96' r='7'/%3E%3Ccircle cx='96' cy='96' r='7'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 96px 96px;
 }
 
 /* ── Scroll-reveal ── */
@@ -169,13 +168,67 @@ body {
   animation: shimmer-badge 2.6s linear infinite;
 }
 
+/* ── Shimmer sweep clipped to text (navbar logo) ── */
+.shimmer-text {
+  background-image: linear-gradient(100deg, #ffffff 35%, #7dffc0 50%, #ffffff 65%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer-badge 5s linear infinite;
+}
+
+/* ── Quranic calligraphy ── */
+.font-quran {
+  font-family: "Amiri", serif;
+  line-height: 2.1;
+}
+
+/* ── Gentle float for decorative ornaments ── */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+.float-slow { animation: float-slow 5s ease-in-out infinite; }
+
+/* ── Slow spin for star ornaments ── */
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+.spin-slow { animation: spin-slow 24s linear infinite; }
+
+/* ── Pulsing glow ring for the featured (Arbaeen) card ── */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(0,184,106,.30), 0 0 18px rgba(0,184,106,.10); }
+  50%      { box-shadow: 0 0 0 1px rgba(0,184,106,.55), 0 0 34px rgba(0,184,106,.22); }
+}
+.glow-ring { animation: glow-pulse 3.5s ease-in-out infinite; }
+
+/* ── Pointed-arch (mihrab) frame for the verse banner ── */
+.arch-frame {
+  border: 1px solid rgba(0,184,106,.22);
+  border-radius: 50% 50% 1rem 1rem / 18% 18% 1rem 1rem;
+}
+
+/* ── FAQ accordion open/close ── */
+.faq-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.faq-body-open { grid-template-rows: 1fr; }
+.faq-body > div { overflow: hidden; }
+
 /* ── Respect reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
-  .hero-kenburns, .aurora, .shimmer-badge, .bounce-soft, .whatsapp-pulse {
+  .hero-kenburns, .aurora, .shimmer-badge, .bounce-soft, .whatsapp-pulse,
+  .shimmer-text, .float-slow, .spin-slow, .glow-ring {
     animation: none !important;
   }
+  .shimmer-text { color: white; background: none; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .hero-fade { opacity: 1; animation: none; }
+  .faq-body { transition: none; }
 }
 
 /* ── Scrollbar ── */

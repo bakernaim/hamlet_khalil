@@ -164,6 +164,32 @@ async function main() {
     });
   }
 
+  // ── Promo banners (only if none exist) ───────────────────────────
+  const bannerCount = await prisma.banner.count();
+  if (bannerCount === 0) {
+    await prisma.banner.create({
+      data: {
+        titleAr: "موكب الأربعين ٢٠٢٦",
+        titleEn: "Arbaeen 2026 Convoy",
+        badgeAr: "أعظم موكب في التاريخ",
+        badgeEn: "The Greatest March in History",
+        textAr: "انضم إلى الملايين في أكبر تجمع بشري على وجه الأرض",
+        textEn: "Join millions in the largest human gathering on Earth — Holy Karbala",
+        image: "/shrines/arbaeen-crowd.jpg",
+        theme: "amber",
+        targetDate: new Date("2026-08-03T00:00:00Z"), // 20 Safar 1448 (estimated)
+        priceFrom: 1100,
+        noteAr: "١٤ يوماً · شامل كل شيء",
+        noteEn: "14 Days · All Inclusive",
+        ctaAr: "سجّل مكانك الآن",
+        ctaEn: "Reserve Your Spot Now",
+        sortOrder: 0,
+        published: true,
+      },
+    });
+    console.log("✔ Seeded the Arbaeen promo banner");
+  }
+
   // ── Settings ─────────────────────────────────────────────────────
   for (const key of SETTING_KEYS) {
     const value = SETTING_DEFAULTS[key];

@@ -79,7 +79,11 @@ export default function SettingsManager() {
               <Textarea rows={2} dir="rtl" value={form.addressAr} onChange={(e) => set("addressAr", e.target.value)} />
             </Field>
           </div>
+          <Field label="Instagram URL" hint="Full profile link used on the site's Instagram buttons">
+            <Input value={form.instagramUrl} onChange={(e) => set("instagramUrl", e.target.value)} dir="ltr" />
+          </Field>
         </section>
+
 
         <section className="rounded-2xl bg-[#0c1524] border border-[#1e2b40] p-5 space-y-4">
           <h2 className="text-white font-semibold text-sm">Hero section</h2>

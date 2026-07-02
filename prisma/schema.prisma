@@ -80,6 +80,29 @@ model CurrentTrip {
   updatedAt     DateTime  @updatedAt
 }
 
+// Promo banners rendered between homepage sections (Arbaeen countdown, offers…).
+model Banner {
+  id         String    @id @default(cuid())
+  titleAr    String
+  titleEn    String
+  badgeAr    String? // small uppercase chip above the title
+  badgeEn    String?
+  textAr     String
+  textEn     String
+  image      String? // background photo (uploaded)
+  theme      String    @default("green") // "green" | "amber"
+  targetDate DateTime? // when set and in the future, shows a live countdown
+  priceFrom  Int? // when set, shows a "From $X" box
+  noteAr     String? // extra line next to the price, e.g. "١٤ يوماً"
+  noteEn     String?
+  ctaAr      String? // CTA label; defaults to "تواصل معنا" / "Contact Us"
+  ctaEn      String?
+  sortOrder  Int       @default(0)
+  published  Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
 model Setting {
   key   String @id
   value String

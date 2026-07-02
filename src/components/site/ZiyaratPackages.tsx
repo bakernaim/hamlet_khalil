@@ -60,7 +60,7 @@ export default function ZiyaratPackages({
                   <article
                     id={`ziyarat-${pkg.slug}`}
                     className={`package-card group flex flex-col rounded-2xl overflow-hidden border ${
-                      isArbaeen ? "border-[#00b86a]/40" : "border-[#162035]"
+                      isArbaeen ? "border-[#00b86a]/40 glow-ring" : "border-[#162035]"
                     } bg-[#0b1828] h-full`}
                   >
                     {/* Photo */}

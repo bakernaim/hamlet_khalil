@@ -52,6 +52,24 @@ export interface CurrentTripDTO {
   packageSlug: string | null;
 }
 
+export interface BannerDTO {
+  id: string;
+  titleAr: string;
+  titleEn: string;
+  badgeAr: string | null;
+  badgeEn: string | null;
+  textAr: string;
+  textEn: string;
+  image: string | null;
+  theme: string; // "green" | "amber"
+  targetDate: string | null; // ISO — countdown when in the future
+  priceFrom: number | null;
+  noteAr: string | null;
+  noteEn: string | null;
+  ctaAr: string | null;
+  ctaEn: string | null;
+}
+
 export interface SiteSettings {
   whatsappNumber: string;
   heroHeadingAr: string;
@@ -61,4 +79,5 @@ export interface SiteSettings {
   phone: string;
   addressAr: string;
   addressEn: string;
+  instagramUrl: string;
 }

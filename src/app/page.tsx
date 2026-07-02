@@ -3,9 +3,12 @@ import Hero from "@/components/site/Hero";
 import CurrentTrips from "@/components/site/CurrentTrips";
 import ZiyaratPackages from "@/components/site/ZiyaratPackages";
 import TrustBar from "@/components/site/TrustBar";
+import VerseBanner from "@/components/site/VerseBanner";
 import TourismPackages from "@/components/site/TourismPackages";
-import ArbaeenBanner from "@/components/site/ArbaeenBanner";
+import PromoBanner from "@/components/site/PromoBanner";
+import HowItWorks from "@/components/site/HowItWorks";
 import Testimonials from "@/components/site/Testimonials";
+import FAQ from "@/components/site/FAQ";
 import InstagramFeed from "@/components/site/InstagramFeed";
 import Footer from "@/components/site/Footer";
 import FloatingButtons from "@/components/site/FloatingButtons";
@@ -14,6 +17,7 @@ import {
   getZiyaratPackages,
   getTourismPackages,
   getCurrentTrips,
+  getBanners,
   getSettings,
 } from "@/server/data";
 
@@ -21,11 +25,12 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const [settings, ziyarat, tourism, trips] = await Promise.all([
+  const [settings, ziyarat, tourism, trips, banners] = await Promise.all([
     getSettings(),
     getZiyaratPackages(),
     getTourismPackages(),
     getCurrentTrips(),
+    getBanners(),
   ]);
 
   const wa = settings.whatsappNumber;
@@ -38,10 +43,15 @@ export default async function Home() {
         <CurrentTrips trips={trips} whatsappNumber={wa} />
         <ZiyaratPackages packages={ziyarat} whatsappNumber={wa} />
         <TrustBar />
+        <VerseBanner />
         <TourismPackages packages={tourism} whatsappNumber={wa} />
-        <ArbaeenBanner whatsappNumber={wa} />
+        {banners.map((b) => (
+          <PromoBanner key={b.id} banner={b} whatsappNumber={wa} />
+        ))}
+        <HowItWorks />
         <Testimonials />
-        <InstagramFeed />
+        <FAQ />
+        <InstagramFeed instagramUrl={settings.instagramUrl} />
       </main>
       <Footer settings={settings} />
       <FloatingButtons whatsappNumber={wa} />

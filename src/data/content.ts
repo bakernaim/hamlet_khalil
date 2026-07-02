@@ -169,6 +169,89 @@ export const testimonials = [
   },
 ];
 
+// Travel dua — recited when setting out on a journey (Az-Zukhruf 43:13)
+export const verse = {
+  arabic: "سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَٰذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ وَإِنَّا إِلَىٰ رَبِّنَا لَمُنقَلِبُونَ",
+  translation: {
+    ar: "دعاء السفر — سورة الزخرف",
+    en: "“Glory be to Him who has subjected this to us, for we could never have done it ourselves — and surely to our Lord we will return.”",
+  },
+  reference: { ar: "الزخرف ١٣–١٤", en: "Az-Zukhruf 13–14 — The Traveler's Prayer" },
+};
+
+export const howItWorks = [
+  {
+    icon: "🗺️",
+    title: { ar: "اختر رحلتك", en: "Choose Your Trip" },
+    desc: {
+      ar: "تصفّح باقات الزيارة والسياحة واختر ما يناسبك",
+      en: "Browse our Ziyarat and tourism packages and pick what suits you",
+    },
+  },
+  {
+    icon: "💬",
+    title: { ar: "تواصل عبر واتساب", en: "Contact on WhatsApp" },
+    desc: {
+      ar: "أرسل لنا رسالة وسنجيب على كل استفساراتك فوراً",
+      en: "Send us a message and we'll answer all your questions right away",
+    },
+  },
+  {
+    icon: "🛂",
+    title: { ar: "نجهّز كل شيء", en: "We Arrange Everything" },
+    desc: {
+      ar: "التأشيرات والحجوزات والنقل — كلها علينا",
+      en: "Visas, bookings, and transport — we handle it all",
+    },
+  },
+  {
+    icon: "🕌",
+    title: { ar: "انطلق بسلام", en: "Travel in Peace" },
+    desc: {
+      ar: "سافر مطمئناً برفقة مرشد ديني متخصص",
+      en: "Travel with peace of mind, accompanied by a specialist religious guide",
+    },
+  },
+];
+
+export const faq = [
+  {
+    q: { ar: "ما هي الأوراق المطلوبة للسفر؟", en: "What documents do I need to travel?" },
+    a: {
+      ar: "جواز سفر ساري المفعول لمدة ٦ أشهر على الأقل وصور شخصية. نحن نتولى إجراءات التأشيرة كاملة للعراق وإيران وسوريا.",
+      en: "A passport valid for at least 6 months and personal photos. We handle the entire visa process for Iraq, Iran, and Syria.",
+    },
+  },
+  {
+    q: { ar: "ماذا تشمل أسعار الباقات؟", en: "What do the package prices include?" },
+    a: {
+      ar: "تشمل تذاكر الطيران أو النقل البري، الإقامة الفندقية، الوجبات، التنقلات الداخلية، والمرشد الديني المرافق طوال الرحلة.",
+      en: "Flights or ground transport, hotel accommodation, meals, internal transfers, and a religious guide accompanying you throughout the trip.",
+    },
+  },
+  {
+    q: { ar: "هل الرحلات مناسبة للعائلات وكبار السن؟", en: "Are the trips suitable for families and the elderly?" },
+    a: {
+      ar: "نعم، رحلاتنا عائلية بامتياز. نوفر مساعدة خاصة لكبار السن وذوي الاحتياجات، وبرامجنا مصممة لتناسب جميع الأعمار.",
+      en: "Yes — our trips are very family-friendly. We provide special assistance for the elderly and those with special needs, and our programs suit all ages.",
+    },
+  },
+  {
+    q: { ar: "هل يمكن الدفع بالتقسيط؟", en: "Can I pay in installments?" },
+    a: {
+      ar: "نعم، نوفر إمكانية حجز المقعد بدفعة أولى وتقسيط المبلغ المتبقي قبل موعد الانطلاق. تواصل معنا عبر واتساب للتفاصيل.",
+      en: "Yes — you can reserve your seat with a deposit and pay the rest in installments before departure. Contact us on WhatsApp for details.",
+    },
+  },
+  {
+    q: { ar: "متى يجب الحجز لموكب الأربعين؟", en: "When should I book for Arbaeen?" },
+    a: {
+      ar: "ننصح بالحجز قبل شهرين على الأقل، فالأماكن محدودة والطلب كبير جداً في موسم الأربعين.",
+      en: "We recommend booking at least two months in advance — seats are limited and demand is very high during Arbaeen season.",
+    },
+  },
+];
+
 export const footer = {
   tagline: {
     ar: "رفقاؤك الموثوقون في كل رحلة مقدسة وسياحية",

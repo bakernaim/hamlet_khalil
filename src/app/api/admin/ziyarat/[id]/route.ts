@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { stringifyList } from "@/lib/serialize";
 import { badRequest, notFound, str, optionalStr, int, bool } from "@/lib/api";
+import { removeUpload } from "@/lib/uploads";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -26,6 +27,7 @@ export async function PUT(req: Request, { params }: Ctx) {
     if (clash) return badRequest("A package with this slug already exists");
   }
 
+  const image = str(body.image, existing.image);
   const updated = await prisma.ziyaratPackage.update({
     where: { id },
     data: {
@@ -40,12 +42,13 @@ export async function PUT(req: Request, { params }: Ctx) {
       badgeEn: optionalStr(body.badgeEn),
       highlightsAr: stringifyList(body.highlightsAr),
       highlightsEn: stringifyList(body.highlightsEn),
-      image: str(body.image, existing.image),
+      image,
       color: str(body.color, existing.color),
       sortOrder: int(body.sortOrder, existing.sortOrder),
       published: bool(body.published),
     },
   });
+  if (image !== existing.image) await removeUpload(existing.image);
   return NextResponse.json(updated);
 }
 
@@ -54,5 +57,6 @@ export async function DELETE(_req: Request, { params }: Ctx) {
   const existing = await prisma.ziyaratPackage.findUnique({ where: { id } });
   if (!existing) return notFound();
   await prisma.ziyaratPackage.delete({ where: { id } });
+  await removeUpload(existing.image);
   return NextResponse.json({ ok: true });
 }

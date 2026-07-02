@@ -12,7 +12,7 @@ const FEED_ITEMS = [
   { src: "/shrines/turkey-istanbul.jpg",  label: { ar: "رحلة إسطنبول",                  en: "Istanbul Trip" } },
 ];
 
-export default function InstagramFeed() {
+export default function InstagramFeed({ instagramUrl }: { instagramUrl: string }) {
   const { isRTL } = useLang();
 
   return (
@@ -42,10 +42,12 @@ export default function InstagramFeed() {
             </h2>
           </div>
           <a
-            href="#"
+            href={instagramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-[#00b86a] font-semibold text-sm hover:text-[#4dffa0] transition-colors"
           >
-            @hamlet_alkhalil
+            @{instagramUrl.split("/").filter(Boolean).pop()}
           </a>
         </div>
 
@@ -83,7 +85,9 @@ export default function InstagramFeed() {
 
         <div className="text-center">
           <a
-            href="#"
+            href={instagramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 border border-[#00b86a]/40 text-[#00b86a] hover:bg-[#00b86a]/10 font-semibold px-8 py-3 rounded-full transition-all"
           >
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">

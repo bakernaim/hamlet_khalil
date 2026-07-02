@@ -12,12 +12,26 @@ export default function Navbar({ whatsappNumber }: { whatsappNumber: string }) {
   const WHATSAPP_URL = waHref(whatsappNumber);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [hijriDate, setHijriDate] = useState("");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Hijri date via the built-in Umm al-Qura calendar; set in an effect so the
+  // server render (which may sit in another timezone) never mismatches.
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- client-only date, runs once per language
+    setHijriDate(
+      new Intl.DateTimeFormat(lang === "ar" ? "ar-SA-u-ca-islamic-umalqura" : "en-u-ca-islamic-umalqura", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }).format(new Date())
+    );
+  }, [lang]);
 
   return (
     <nav
@@ -68,6 +82,12 @@ export default function Navbar({ whatsappNumber }: { whatsappNumber: string }) {
 
           {/* ── Right controls ── */}
           <div className="hidden lg:flex items-center gap-3">
+            {hijriDate && (
+              <span className="inline-flex items-center gap-1.5 text-[11px] text-white/45 border border-white/10 bg-white/4 rounded-full px-3 py-1.5">
+                <span className="text-[#00b86a]/80">☾</span>
+                {hijriDate}
+              </span>
+            )}
             <button
               onClick={toggleLang}
               className="text-xs font-bold px-4 py-2 rounded-full border border-[#00b86a]/30 text-[#00b86a]/80 hover:text-[#00b86a] hover:border-[#00b86a]/60 hover:bg-[#00b86a]/8 transition-all"
