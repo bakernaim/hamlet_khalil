@@ -50,19 +50,19 @@ export default function SettingsManager() {
   }
 
   if (loading || !form) {
-    return <p className="text-white/40 text-sm">Loading settings…</p>;
+    return <p className="text-ink/40 text-sm">Loading settings…</p>;
   }
 
   return (
     <div>
       <header className="mb-6">
-        <h1 className="text-2xl font-bold text-white">Site Settings</h1>
-        <p className="text-white/45 text-sm mt-1">Contact info and hero text shown across the site.</p>
+        <h1 className="text-2xl font-bold text-ink">Site Settings</h1>
+        <p className="text-ink/45 text-sm mt-1">Contact info and hero text shown across the site.</p>
       </header>
 
       <form onSubmit={onSubmit} className="space-y-6 max-w-2xl">
-        <section className="rounded-2xl bg-[#0c1524] border border-[#1e2b40] p-5 space-y-4">
-          <h2 className="text-white font-semibold text-sm">Contact</h2>
+        <section className="rounded-2xl bg-card border border-line p-5 space-y-4">
+          <h2 className="text-ink font-semibold text-sm">Contact</h2>
           <div className="grid grid-cols-2 gap-4">
             <Field label="WhatsApp number" hint="Country code + number, digits only">
               <Input value={form.whatsappNumber} onChange={(e) => set("whatsappNumber", e.target.value)} />
@@ -85,8 +85,8 @@ export default function SettingsManager() {
         </section>
 
 
-        <section className="rounded-2xl bg-[#0c1524] border border-[#1e2b40] p-5 space-y-4">
-          <h2 className="text-white font-semibold text-sm">Hero section</h2>
+        <section className="rounded-2xl bg-card border border-line p-5 space-y-4">
+          <h2 className="text-ink font-semibold text-sm">Hero section</h2>
           <div className="grid grid-cols-2 gap-4">
             <Field label="Heading (EN)">
               <Textarea rows={2} value={form.heroHeadingEn} onChange={(e) => set("heroHeadingEn", e.target.value)} />
@@ -108,7 +108,7 @@ export default function SettingsManager() {
         <ErrorText>{error}</ErrorText>
         <div className="flex items-center gap-3">
           <Button type="submit" disabled={saving}>{saving ? "Saving…" : "Save Settings"}</Button>
-          {saved && <span className="text-[#33d68a] text-sm">✓ Saved</span>}
+          {saved && <span className="text-accent text-sm">✓ Saved</span>}
         </div>
       </form>
     </div>

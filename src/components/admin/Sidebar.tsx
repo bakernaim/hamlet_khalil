@@ -15,7 +15,9 @@ import {
   ExternalLink,
   Menu,
   X,
+  KeyRound,
 } from "lucide-react";
+import ThemeToggle from "@/components/site/ThemeToggle";
 
 const NAV = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
@@ -25,6 +27,7 @@ const NAV = [
   { href: "/admin/banners", label: "Banners", icon: Megaphone },
   { href: "/admin/users", label: "Staff Users", icon: Users },
   { href: "/admin/settings", label: "Site Settings", icon: Settings },
+  { href: "/admin/account", label: "My Account", icon: KeyRound },
 ];
 
 export default function Sidebar({ userName }: { userName: string }) {
@@ -53,8 +56,8 @@ export default function Sidebar({ userName }: { userName: string }) {
             onClick={() => setOpen(false)}
             className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
               active
-                ? "bg-[#00b86a]/15 text-[#33d68a] font-medium"
-                : "text-white/55 hover:text-white hover:bg-white/5"
+                ? "bg-[#00b86a]/15 text-accent font-medium"
+                : "text-ink/55 hover:text-ink hover:bg-ink/5"
             }`}
           >
             <Icon size={17} />
@@ -68,48 +71,54 @@ export default function Sidebar({ userName }: { userName: string }) {
   return (
     <>
       {/* Mobile top bar */}
-      <div className="lg:hidden flex items-center justify-between px-4 h-14 border-b border-[#1a2740] bg-[#0a1220] sticky top-0 z-40">
-        <span className="font-bold text-[#00b86a]">🕌 Admin</span>
-        <button onClick={() => setOpen((o) => !o)} className="text-white/70 p-1">
-          {open ? <X size={22} /> : <Menu size={22} />}
-        </button>
+      <div className="lg:hidden flex items-center justify-between px-4 h-14 border-b border-line bg-page-alt sticky top-0 z-40">
+        <span className="font-bold text-accent">🕌 Admin</span>
+        <div className="flex items-center gap-2">
+          <ThemeToggle className="w-7 h-7 flex items-center justify-center rounded-full border border-ink/15 text-ink/60 hover:text-ink" />
+          <button onClick={() => setOpen((o) => !o)} className="text-ink/70 p-1">
+            {open ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile drawer */}
       {open && (
         <div className="lg:hidden fixed inset-0 z-40 pt-14">
           <div className="absolute inset-0 bg-black/50" onClick={() => setOpen(false)} />
-          <div className="relative bg-[#0a1220] border-b border-[#1a2740] p-4">{links}</div>
+          <div className="relative bg-page-alt border-b border-line p-4">{links}</div>
         </div>
       )}
 
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 shrink-0 bg-[#0a1220] border-r border-[#1a2740] p-4 min-h-screen sticky top-0">
+      <aside className="hidden lg:flex flex-col w-64 shrink-0 bg-page-alt border-r border-line p-4 min-h-screen sticky top-0">
         <div className="px-2 py-3 mb-4">
           <div className="flex items-center gap-2">
             <span className="text-xl">🕌</span>
-            <span className="font-bold text-[#00b86a]">Hamlet Al Khalil</span>
+            <span className="font-bold text-accent">Hamlet Al Khalil</span>
           </div>
-          <p className="text-white/35 text-[11px] mt-1">Admin Dashboard</p>
+          <p className="text-ink/35 text-[11px] mt-1">Admin Dashboard</p>
         </div>
 
         {links}
 
-        <div className="mt-auto pt-4 border-t border-[#1a2740] space-y-1">
+        <div className="mt-auto pt-4 border-t border-line space-y-1">
           <Link
             href="/"
             target="_blank"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/55 hover:text-white hover:bg-white/5"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-ink/55 hover:text-ink hover:bg-ink/5"
           >
             <ExternalLink size={17} />
             View Website
           </Link>
-          <div className="px-3 py-2 text-[11px] text-white/35">
-            Signed in as <span className="text-white/60">{userName}</span>
+          <div className="flex items-center justify-between px-3 py-2">
+            <span className="text-[11px] text-ink/35">
+              Signed in as <span className="text-ink/60">{userName}</span>
+            </span>
+            <ThemeToggle className="w-7 h-7 flex items-center justify-center rounded-full border border-ink/15 text-ink/60 hover:text-ink transition-colors" />
           </div>
           <button
             onClick={logout}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-red-300/80 hover:text-red-300 hover:bg-red-500/10"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-red-600/80 hover:text-red-600 dark:text-red-300/80 dark:hover:text-red-300 hover:bg-red-500/10"
           >
             <LogOut size={17} />
             Sign Out

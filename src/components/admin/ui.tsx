@@ -14,15 +14,15 @@ export function Field({
 }) {
   return (
     <label className="block">
-      <span className="block text-xs font-medium text-white/70 mb-1.5">{label}</span>
+      <span className="block text-xs font-medium text-ink/70 mb-1.5">{label}</span>
       {children}
-      {hint && <span className="block text-[11px] text-white/35 mt-1">{hint}</span>}
+      {hint && <span className="block text-[11px] text-ink/35 mt-1">{hint}</span>}
     </label>
   );
 }
 
 const baseInput =
-  "w-full rounded-lg bg-[#0b1626] border border-[#1e2b40] text-white text-sm px-3 py-2 outline-none focus:border-[#00b86a]/60 focus:ring-1 focus:ring-[#00b86a]/40 transition-colors placeholder:text-white/25";
+  "w-full rounded-lg bg-card border border-line text-ink text-sm px-3 py-2 outline-none focus:border-[#00b86a]/60 focus:ring-1 focus:ring-[#00b86a]/40 transition-colors placeholder:text-ink/25";
 
 export function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return <input {...props} className={`${baseInput} ${props.className ?? ""}`} />;
@@ -49,11 +49,11 @@ export function Toggle({
     <button
       type="button"
       onClick={() => onChange(!checked)}
-      className="inline-flex items-center gap-2 text-sm text-white/70"
+      className="inline-flex items-center gap-2 text-sm text-ink/70"
     >
       <span
         className={`relative w-10 h-6 rounded-full transition-colors ${
-          checked ? "bg-[#00b86a]" : "bg-[#1e2b40]"
+          checked ? "bg-[#00b86a]" : "bg-line"
         }`}
       >
         <span
@@ -75,8 +75,8 @@ export function Button({
 }) {
   const styles: Record<string, string> = {
     primary: "bg-[#00b86a] text-[#04121e] hover:bg-[#33d68a] font-semibold",
-    ghost: "bg-transparent border border-[#25344c] text-white/75 hover:bg-white/5",
-    danger: "bg-red-500/10 border border-red-500/30 text-red-300 hover:bg-red-500/20",
+    ghost: "bg-transparent border border-line text-ink/75 hover:bg-ink/5",
+    danger: "bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-300 hover:bg-red-500/20",
   };
   return (
     <button
@@ -126,13 +126,13 @@ export function ImageUpload({
 
   return (
     <div>
-      <span className="block text-xs font-medium text-white/70 mb-1.5">{label}</span>
+      <span className="block text-xs font-medium text-ink/70 mb-1.5">{label}</span>
       <div className="flex items-center gap-3">
-        <div className="relative w-24 h-16 rounded-lg overflow-hidden border border-[#1e2b40] bg-[#0b1626] shrink-0">
+        <div className="relative w-24 h-16 rounded-lg overflow-hidden border border-line bg-card shrink-0">
           {value ? (
             <Image src={value} alt="Preview" fill className="object-cover" sizes="96px" />
           ) : (
-            <span className="w-full h-full flex items-center justify-center text-white/25 text-[10px]">
+            <span className="w-full h-full flex items-center justify-center text-ink/25 text-[10px]">
               No image
             </span>
           )}
@@ -148,11 +148,11 @@ export function ImageUpload({
               </Button>
             )}
           </div>
-          {value && <span className="text-[11px] text-white/30 truncate">{value}</span>}
-          {error && <span className="text-[11px] text-red-300">{error}</span>}
+          {value && <span className="text-[11px] text-ink/30 truncate">{value}</span>}
+          {error && <span className="text-[11px] text-red-600 dark:text-red-300">{error}</span>}
         </div>
       </div>
-      {hint && <span className="block text-[11px] text-white/35 mt-1">{hint}</span>}
+      {hint && <span className="block text-[11px] text-ink/35 mt-1">{hint}</span>}
       <input
         ref={inputRef}
         type="file"
@@ -179,12 +179,12 @@ export function Modal({
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center p-4 sm:p-8 overflow-y-auto">
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative z-10 w-full max-w-2xl rounded-2xl bg-[#0c1524] border border-[#1e2b40] shadow-2xl my-4">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-[#1e2b40]">
-          <h3 className="text-white font-semibold">{title}</h3>
+      <div className="relative z-10 w-full max-w-2xl rounded-2xl bg-card border border-line shadow-2xl my-4">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-line">
+          <h3 className="text-ink font-semibold">{title}</h3>
           <button
             onClick={onClose}
-            className="text-white/40 hover:text-white text-xl leading-none w-8 h-8 rounded-lg hover:bg-white/5"
+            className="text-ink/40 hover:text-ink text-xl leading-none w-8 h-8 rounded-lg hover:bg-ink/5"
           >
             ×
           </button>
@@ -197,5 +197,5 @@ export function Modal({
 
 export function ErrorText({ children }: { children: React.ReactNode }) {
   if (!children) return null;
-  return <p className="text-sm text-red-300 bg-red-500/10 border border-red-500/25 rounded-lg px-3 py-2">{children}</p>;
+  return <p className="text-sm text-red-600 dark:text-red-300 bg-red-500/10 border border-red-500/25 rounded-lg px-3 py-2">{children}</p>;
 }
