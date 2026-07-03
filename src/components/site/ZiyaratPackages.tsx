@@ -60,7 +60,7 @@ export default function ZiyaratPackages({
                   <article
                     id={`ziyarat-${pkg.slug}`}
                     className={`package-card group flex flex-col rounded-2xl overflow-hidden border ${
-                      isArbaeen ? "border-[#00b86a]/40 glow-ring" : "border-line"
+                      isArbaeen ? "border-brand/40 glow-ring" : "border-line"
                     } bg-card h-full`}
                   >
                     {/* Photo */}
@@ -82,7 +82,7 @@ export default function ZiyaratPackages({
                       </div>
 
                       {badge && (
-                        <div className="absolute bottom-3 start-3 bg-[#00b86a] text-[#040d18] text-[10px] font-bold px-2.5 py-1 rounded-full shimmer-badge">
+                        <div className="absolute bottom-3 start-3 bg-brand text-[#040d18] text-[10px] font-bold px-2.5 py-1 rounded-full shimmer-badge">
                           {badge}
                         </div>
                       )}
@@ -103,7 +103,7 @@ export default function ZiyaratPackages({
                       <ul className="space-y-2 mb-4 flex-1">
                         {highlights.map((h) => (
                           <li key={h} className="flex items-start gap-2 text-soft text-xs leading-snug">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#00b86a] shrink-0 mt-1" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-brand shrink-0 mt-1" />
                             {h}
                           </li>
                         ))}
@@ -126,8 +126,8 @@ export default function ZiyaratPackages({
                         rel="noopener noreferrer"
                         className={`block w-full text-center text-sm font-semibold py-3 rounded-xl transition-colors duration-200 min-h-[44px] flex items-center justify-center ${
                           isArbaeen
-                            ? "bg-[#00b86a] text-[#040d18] hover:bg-[#33d68a]"
-                            : "bg-[#00b86a]/10 border border-[#00b86a]/30 text-accent hover:bg-[#00b86a] hover:text-[#040d18] hover:border-[#00b86a]"
+                            ? "bg-brand text-[#040d18] hover:bg-brand-hover"
+                            : "bg-brand/10 border border-brand/30 text-accent hover:bg-brand hover:text-[#040d18] hover:border-brand"
                         }`}
                       >
                         {isRTL ? "احجز الآن" : "Book Now"}

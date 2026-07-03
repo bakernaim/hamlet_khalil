@@ -107,7 +107,7 @@ export default function TourismPackages({
                         href={waHref(whatsappNumber, bookMsg(name))}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="block w-full text-center text-sm font-semibold py-3 rounded-xl border border-[#00b86a]/30 text-accent bg-[#00b86a]/8 hover:bg-[#00b86a] hover:text-[#040d18] hover:border-[#00b86a] transition-colors duration-200 min-h-[44px] flex items-center justify-center"
+                        className="block w-full text-center text-sm font-semibold py-3 rounded-xl border border-brand/30 text-accent bg-brand/8 hover:bg-brand hover:text-[#040d18] hover:border-brand transition-colors duration-200 min-h-[44px] flex items-center justify-center"
                       >
                         {isRTL ? "احجز الآن" : "Book Now"}
                       </a>

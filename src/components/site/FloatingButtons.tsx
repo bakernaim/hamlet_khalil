@@ -32,7 +32,7 @@ export default function FloatingButtons({ whatsappNumber }: { whatsappNumber: st
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         aria-label="Scroll to top"
-        className={`fixed right-6 z-50 w-10 h-10 rounded-full bg-[#00b86a] hover:bg-[#33d68a] flex items-center justify-center shadow-lg shadow-[#00b86a]/25 transition-all duration-200 ${
+        className={`fixed right-6 z-50 w-10 h-10 rounded-full bg-brand hover:bg-brand-hover flex items-center justify-center shadow-lg shadow-brand/25 transition-all duration-200 ${
           showScroll ? "bottom-24 opacity-100" : "bottom-24 opacity-0 pointer-events-none"
         }`}
       >

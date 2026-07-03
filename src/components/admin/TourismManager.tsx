@@ -153,7 +153,7 @@ export default function TourismManager() {
                   <td className="px-4 py-3 text-accent font-semibold">${t.price}</td>
                   <td className="px-4 py-3 text-ink/60">{t.durationEn}</td>
                   <td className="px-4 py-3">
-                    <span className={`text-xs px-2 py-1 rounded-full ${t.published ? "bg-[#00b86a]/15 text-accent" : "bg-ink/8 text-ink/40"}`}>
+                    <span className={`text-xs px-2 py-1 rounded-full ${t.published ? "bg-brand/15 text-accent" : "bg-ink/8 text-ink/40"}`}>
                       {t.published ? "Published" : "Hidden"}
                     </span>
                   </td>

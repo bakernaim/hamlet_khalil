@@ -109,7 +109,7 @@ export default function AccountManager({
         </Field>
         <ErrorText>{error}</ErrorText>
         {saved && (
-          <p className="text-sm text-accent bg-[#00b86a]/10 border border-[#00b86a]/25 rounded-lg px-3 py-2">
+          <p className="text-sm text-accent bg-brand/10 border border-brand/25 rounded-lg px-3 py-2">
             Password updated successfully
           </p>
         )}

@@ -14,7 +14,7 @@ export default function VerseBanner() {
 
       {/* Soft green glow behind the arch */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-2/3 h-56 rounded-full bg-[#00b86a]/12 blur-[90px]" />
+        <div className="w-2/3 h-56 rounded-full bg-brand/12 blur-[90px]" />
       </div>
 
       <Reveal className="relative z-10 max-w-2xl mx-auto">

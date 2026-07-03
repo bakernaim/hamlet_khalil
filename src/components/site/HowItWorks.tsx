@@ -31,17 +31,17 @@ export default function HowItWorks() {
 
         <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-6">
           {/* Connecting line (desktop only) */}
-          <div className="hidden lg:block absolute top-8 inset-x-16 h-px bg-gradient-to-r from-[#00b86a]/10 via-[#00b86a]/40 to-[#00b86a]/10" />
+          <div className="hidden lg:block absolute top-8 inset-x-16 h-px bg-gradient-to-r from-brand/10 via-brand/40 to-brand/10" />
 
           {howItWorks.map((step, i) => (
             <Reveal key={step.icon} delay={i * 120}>
               <div className="relative flex flex-col items-center text-center">
                 {/* Numbered icon disc */}
                 <div className="relative mb-5">
-                  <div className="w-16 h-16 rounded-2xl bg-card border border-[#00b86a]/30 flex items-center justify-center text-3xl shadow-lg shadow-black/8 dark:shadow-black/30">
+                  <div className="w-16 h-16 rounded-2xl bg-card border border-brand/30 flex items-center justify-center text-3xl shadow-lg shadow-black/8 dark:shadow-black/30">
                     {step.icon}
                   </div>
-                  <span className="absolute -top-2 -end-2 w-6 h-6 rounded-full bg-[#00b86a] text-[#040d18] text-xs font-bold flex items-center justify-center">
+                  <span className="absolute -top-2 -end-2 w-6 h-6 rounded-full bg-brand text-[#040d18] text-xs font-bold flex items-center justify-center">
                     {isRTL ? ["١", "٢", "٣", "٤"][i] : i + 1}
                   </span>
                 </div>

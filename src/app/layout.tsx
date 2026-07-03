@@ -1,13 +1,19 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { getSettings } from "@/server/data";
+import { buildThemeCss, isValidHex } from "@/lib/color";
+import { SETTING_DEFAULTS } from "@/lib/settings";
 
 export const metadata: Metadata = {
   title: "حملة الخليل | Hamlet Al Khalil",
   description: "وكالة سفر لبنانية متخصصة في الزيارات الدينية والسياحة — Lebanese travel agency specializing in Ziyarat and tourism",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // Accent color is editable from the admin dashboard (Site Settings).
+  const { themeColor } = await getSettings();
+  const accent = isValidHex(themeColor) ? themeColor : SETTING_DEFAULTS.themeColor;
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning>
       <head>
@@ -26,6 +32,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;600;700&family=Cairo:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap"
           rel="stylesheet"
         />
+        {/* Accent shades derived from the dashboard themeColor setting. */}
+        <style dangerouslySetInnerHTML={{ __html: buildThemeCss(accent) }} />
       </head>
       <body>
         <LanguageProvider>{children}</LanguageProvider>

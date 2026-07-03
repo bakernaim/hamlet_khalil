@@ -13,6 +13,7 @@ export const SETTING_DEFAULTS: SiteSettings = {
   addressAr: "بيروت، لبنان — شارع الحمراء، مبنى الخليل، الطابق الثالث",
   addressEn: "Beirut, Lebanon — Hamra Street, Khalil Building, 3rd Floor",
   instagramUrl: "https://instagram.com/hamlet_alkhalil",
+  themeColor: "#00b86a",
 };
 
 export const SETTING_KEYS = Object.keys(SETTING_DEFAULTS) as (keyof SiteSettings)[];

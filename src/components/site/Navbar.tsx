@@ -48,7 +48,7 @@ export default function Navbar({ whatsappNumber }: { whatsappNumber: string }) {
 
           {/* ── Logo ── */}
           <a href="#home" className="group flex items-center gap-3 shrink-0">
-            <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-[#00b86a]/30 bg-white group-hover:border-[#00b86a]/60 group-hover:shadow-md group-hover:shadow-[#00b86a]/20 transition-all shrink-0">
+            <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-brand/30 bg-white group-hover:border-brand/60 group-hover:shadow-md group-hover:shadow-brand/20 transition-all shrink-0">
               <Image
                 src="/logo.png"
                 alt="حملة الخليل"
@@ -73,12 +73,12 @@ export default function Navbar({ whatsappNumber }: { whatsappNumber: string }) {
               <a
                 key={link.href}
                 href={link.href}
-                className={`relative text-sm transition-colors font-medium px-4 py-2 rounded-lg hover:bg-[#00b86a]/6 group ${
-                  scrolled ? "text-muted hover:text-accent" : "text-white/60 hover:text-[#33d68a]"
+                className={`relative text-sm transition-colors font-medium px-4 py-2 rounded-lg hover:bg-brand/6 group ${
+                  scrolled ? "text-muted hover:text-accent" : "text-white/60 hover:text-brand-hover"
                 }`}
               >
                 {isRTL ? link.ar : link.en}
-                <span className="absolute bottom-1.5 start-1/2 -translate-x-1/2 w-0 h-px bg-[#00b86a] group-hover:w-4 transition-all duration-300" />
+                <span className="absolute bottom-1.5 start-1/2 -translate-x-1/2 w-0 h-px bg-brand group-hover:w-4 transition-all duration-300" />
               </a>
             ))}
           </div>
@@ -89,12 +89,12 @@ export default function Navbar({ whatsappNumber }: { whatsappNumber: string }) {
               <span className={`inline-flex items-center gap-1.5 text-[11px] rounded-full px-3 py-1.5 border ${
                 scrolled ? "text-muted border-ink/10 bg-ink/4" : "text-white/45 border-white/10 bg-white/4"
               }`}>
-                <span className="text-[#00b86a]/80">☾</span>
+                <span className="text-brand/80">☾</span>
                 {hijriDate}
               </span>
             )}
             <ThemeToggle
-              className={`w-8 h-8 flex items-center justify-center rounded-full border transition-all hover:border-[#00b86a]/60 hover:bg-[#00b86a]/8 ${
+              className={`w-8 h-8 flex items-center justify-center rounded-full border transition-all hover:border-brand/60 hover:bg-brand/8 ${
                 scrolled
                   ? "border-ink/15 text-muted hover:text-accent"
                   : "border-white/15 text-white/60 hover:text-white"
@@ -102,10 +102,10 @@ export default function Navbar({ whatsappNumber }: { whatsappNumber: string }) {
             />
             <button
               onClick={toggleLang}
-              className={`text-xs font-bold px-4 py-2 rounded-full border transition-all hover:border-[#00b86a]/60 hover:bg-[#00b86a]/8 ${
+              className={`text-xs font-bold px-4 py-2 rounded-full border transition-all hover:border-brand/60 hover:bg-brand/8 ${
                 scrolled
                   ? "border-accent/35 text-accent/90 hover:text-accent"
-                  : "border-[#00b86a]/30 text-[#00b86a]/80 hover:text-[#00b86a]"
+                  : "border-brand/30 text-brand/80 hover:text-brand"
               }`}
             >
               {lang === "ar" ? "EN" : "عربي"}
@@ -133,7 +133,7 @@ export default function Navbar({ whatsappNumber }: { whatsappNumber: string }) {
             <button
               onClick={toggleLang}
               className={`text-xs font-bold px-3 py-1.5 rounded-full border ${
-                scrolled ? "border-accent/40 text-accent" : "border-[#00b86a]/35 text-[#00b86a]"
+                scrolled ? "border-accent/40 text-accent" : "border-brand/35 text-brand"
               }`}
             >
               {lang === "ar" ? "EN" : "عربي"}
@@ -160,7 +160,7 @@ export default function Navbar({ whatsappNumber }: { whatsappNumber: string }) {
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="text-soft hover:text-accent transition-colors py-3 px-3 rounded-lg hover:bg-[#00b86a]/6 text-sm border-b border-ink/6 last:border-0"
+              className="text-soft hover:text-accent transition-colors py-3 px-3 rounded-lg hover:bg-brand/6 text-sm border-b border-ink/6 last:border-0"
             >
               {isRTL ? link.ar : link.en}
             </a>

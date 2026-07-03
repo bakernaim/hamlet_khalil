@@ -31,7 +31,7 @@ export default function FAQ() {
               <Reveal key={i} delay={i * 60}>
                 <div
                   className={`rounded-2xl border bg-card overflow-hidden transition-colors duration-300 ${
-                    open ? "border-[#00b86a]/40" : "border-line hover:border-[#00b86a]/25"
+                    open ? "border-brand/40" : "border-line hover:border-brand/25"
                   }`}
                 >
                   <button
@@ -45,7 +45,7 @@ export default function FAQ() {
                     <span
                       className={`shrink-0 w-7 h-7 rounded-full border flex items-center justify-center transition-all duration-300 ${
                         open
-                          ? "border-[#00b86a]/50 bg-[#00b86a]/10 text-accent rotate-180"
+                          ? "border-brand/50 bg-brand/10 text-accent rotate-180"
                           : "border-ink/15 text-muted"
                       }`}
                     >

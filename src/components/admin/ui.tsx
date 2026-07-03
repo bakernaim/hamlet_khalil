@@ -22,7 +22,7 @@ export function Field({
 }
 
 const baseInput =
-  "w-full rounded-lg bg-card border border-line text-ink text-sm px-3 py-2 outline-none focus:border-[#00b86a]/60 focus:ring-1 focus:ring-[#00b86a]/40 transition-colors placeholder:text-ink/25";
+  "w-full rounded-lg bg-card border border-line text-ink text-sm px-3 py-2 outline-none focus:border-brand/60 focus:ring-1 focus:ring-brand/40 transition-colors placeholder:text-ink/25";
 
 export function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return <input {...props} className={`${baseInput} ${props.className ?? ""}`} />;
@@ -53,7 +53,7 @@ export function Toggle({
     >
       <span
         className={`relative w-10 h-6 rounded-full transition-colors ${
-          checked ? "bg-[#00b86a]" : "bg-line"
+          checked ? "bg-brand" : "bg-line"
         }`}
       >
         <span
@@ -74,7 +74,7 @@ export function Button({
   variant?: "primary" | "ghost" | "danger";
 }) {
   const styles: Record<string, string> = {
-    primary: "bg-[#00b86a] text-[#04121e] hover:bg-[#33d68a] font-semibold",
+    primary: "bg-brand text-[#04121e] hover:bg-brand-hover font-semibold",
     ghost: "bg-transparent border border-line text-ink/75 hover:bg-ink/5",
     danger: "bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-300 hover:bg-red-500/20",
   };

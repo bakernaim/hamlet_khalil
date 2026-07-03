@@ -105,6 +105,37 @@ export default function SettingsManager() {
           </div>
         </section>
 
+        <section className="rounded-2xl bg-card border border-line p-5 space-y-4">
+          <h2 className="text-ink font-semibold text-sm">Appearance</h2>
+          <Field
+            label="Theme color"
+            hint="Accent color used across the site and dashboard (buttons, highlights, dividers). Medium-bright colors work best."
+          >
+            <div className="flex items-center gap-3">
+              <input
+                type="color"
+                value={/^#[0-9a-fA-F]{6}$/.test(form.themeColor) ? form.themeColor : "#00b86a"}
+                onChange={(e) => set("themeColor", e.target.value)}
+                className="w-10 h-10 rounded-lg border border-line bg-card cursor-pointer p-1"
+              />
+              <Input
+                value={form.themeColor}
+                onChange={(e) => set("themeColor", e.target.value)}
+                dir="ltr"
+                placeholder="#00b86a"
+                className="max-w-[140px]"
+              />
+              <button
+                type="button"
+                onClick={() => set("themeColor", "#00b86a")}
+                className="text-xs text-ink/50 hover:text-ink border border-line rounded-lg px-3 py-2 transition-colors"
+              >
+                Reset to default
+              </button>
+            </div>
+          </Field>
+        </section>
+
         <ErrorText>{error}</ErrorText>
         <div className="flex items-center gap-3">
           <Button type="submit" disabled={saving}>{saving ? "Saving…" : "Save Settings"}</Button>

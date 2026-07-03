@@ -26,7 +26,7 @@ export default function Testimonials() {
           {testimonials.map((t, i) => (
             <div
               key={i}
-              className="flex flex-col rounded-2xl p-5 sm:p-6 border border-line hover:border-[#00b86a]/35 transition-colors bg-card"
+              className="flex flex-col rounded-2xl p-5 sm:p-6 border border-line hover:border-brand/35 transition-colors bg-card"
             >
               {/* Stars */}
               <div className="flex gap-0.5 mb-3 text-amber-500 dark:text-amber-400 text-sm">
@@ -40,7 +40,7 @@ export default function Testimonials() {
 
               {/* Reviewer */}
               <div className="flex items-center gap-3 border-t border-line pt-4">
-                <div className="w-9 h-9 rounded-full bg-[#00b86a]/12 border border-[#00b86a]/25 flex items-center justify-center text-accent font-bold text-sm shrink-0">
+                <div className="w-9 h-9 rounded-full bg-brand/12 border border-brand/25 flex items-center justify-center text-accent font-bold text-sm shrink-0">
                   {(isRTL ? t.name.ar : t.name.en).charAt(0)}
                 </div>
                 <div>

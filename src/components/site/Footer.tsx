@@ -26,7 +26,7 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
           {/* Brand — full width on mobile */}
           <div className="col-span-2 sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3 mb-4">
-              <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-white border border-[#00b86a]/25 shrink-0">
+              <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-white border border-brand/25 shrink-0">
                 <Image src="/logo.png" alt="Logo" fill className="object-contain p-1" sizes="40px" />
               </div>
               <div>

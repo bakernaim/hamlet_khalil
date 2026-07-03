@@ -166,7 +166,7 @@ export default function ZiyaratManager() {
                   <td className="px-4 py-3 text-accent font-semibold">${z.price}</td>
                   <td className="px-4 py-3 text-ink/60">{z.durationEn}</td>
                   <td className="px-4 py-3">
-                    <span className={`text-xs px-2 py-1 rounded-full ${z.published ? "bg-[#00b86a]/15 text-accent" : "bg-ink/8 text-ink/40"}`}>
+                    <span className={`text-xs px-2 py-1 rounded-full ${z.published ? "bg-brand/15 text-accent" : "bg-ink/8 text-ink/40"}`}>
                       {z.published ? "Published" : "Hidden"}
                     </span>
                   </td>

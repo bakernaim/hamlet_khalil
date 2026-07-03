@@ -104,7 +104,9 @@ Defined in [../prisma/schema.prisma](../prisma/schema.prisma). Bilingual fields 
   status ("OPEN"|"ALMOST_FULL"|"DEPARTED"|"CLOSED"), image?, packageType?, packageSlug?,
   sortOrder, published`.
 - **Setting** — `key @id, value`. Keys: `whatsappNumber, heroHeadingAr/En,
-  heroSubheadingAr/En, phone, addressAr/En` (defaults in `lib/settings.ts`).
+  heroSubheadingAr/En, phone, addressAr/En, instagramUrl, themeColor` (defaults in
+  `lib/settings.ts`). `themeColor` is the accent hex; the root layout derives its
+  hover/text/sheen shades (`lib/color.ts`) and injects them as CSS variables.
 
 ### Prisma 7 notes (important)
 

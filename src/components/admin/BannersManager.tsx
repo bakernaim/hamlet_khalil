@@ -176,7 +176,7 @@ export default function BannersManager() {
                       className={`text-xs px-2 py-1 rounded-full border ${
                         b.theme === "amber"
                           ? "bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/25"
-                          : "bg-[#00b86a]/10 text-accent border-[#00b86a]/25"
+                          : "bg-brand/10 text-accent border-brand/25"
                       }`}
                     >
                       {b.theme}

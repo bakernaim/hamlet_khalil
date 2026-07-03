@@ -13,8 +13,8 @@ const STATUS_META: Record<
   OPEN: {
     ar: "التسجيل مفتوح",
     en: "Booking Open",
-    dot: "bg-[#00b86a]",
-    chip: "bg-white/85 text-accent border-[#00b86a]/35 dark:bg-[#00b86a]/15 dark:text-[#33d68a] dark:border-[#00b86a]/30",
+    dot: "bg-brand",
+    chip: "bg-white/85 text-accent border-brand/35 dark:bg-brand/15 dark:text-brand-hover dark:border-brand/30",
   },
   ALMOST_FULL: {
     ar: "أوشكت على الاكتمال",
@@ -69,8 +69,8 @@ export default function CurrentTrips({
         <div className="text-center mb-10 sm:mb-14">
           <span className="inline-flex items-center gap-2 text-accent text-xs font-medium tracking-[0.2em] uppercase mb-2">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00b86a] opacity-70" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00b86a]" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-70" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-brand" />
             </span>
             {isRTL ? "الرحلات القادمة" : "Upcoming Departures"}
           </span>
@@ -179,7 +179,7 @@ export default function CurrentTrips({
                           href={waHref(whatsappNumber, bookMsg(title))}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex-1 text-center text-sm font-semibold py-2.5 rounded-xl bg-[#00b86a] text-[#040d18] hover:bg-[#33d68a] transition-colors duration-200 min-h-[42px] flex items-center justify-center"
+                          className="flex-1 text-center text-sm font-semibold py-2.5 rounded-xl bg-brand text-[#040d18] hover:bg-brand-hover transition-colors duration-200 min-h-[42px] flex items-center justify-center"
                         >
                           {isRTL ? "احجز مقعدك" : "Book a Seat"}
                         </a>
@@ -191,7 +191,7 @@ export default function CurrentTrips({
                       {packageAnchor && (
                         <a
                           href={packageAnchor}
-                          className="shrink-0 text-xs font-medium px-3 py-2.5 rounded-xl border border-[#00b86a]/30 text-accent hover:bg-[#00b86a]/10 transition-colors min-h-[42px] flex items-center justify-center"
+                          className="shrink-0 text-xs font-medium px-3 py-2.5 rounded-xl border border-brand/30 text-accent hover:bg-brand/10 transition-colors min-h-[42px] flex items-center justify-center"
                         >
                           {isRTL ? "الباقة" : "Package"}
                         </a>

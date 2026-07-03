@@ -27,7 +27,7 @@ export default async function DashboardPage() {
   ];
 
   const statuses = [
-    { label: "Booking Open", value: statusCount("OPEN"), dot: "bg-[#00b86a]" },
+    { label: "Booking Open", value: statusCount("OPEN"), dot: "bg-brand" },
     { label: "Almost Full", value: statusCount("ALMOST_FULL"), dot: "bg-amber-400" },
     { label: "Departed", value: statusCount("DEPARTED"), dot: "bg-ink/40" },
     { label: "Closed", value: statusCount("CLOSED"), dot: "bg-ink/40" },
@@ -52,7 +52,7 @@ export default async function DashboardPage() {
             <Link
               key={c.label}
               href={c.href}
-              className="rounded-2xl bg-card border border-line p-5 hover:border-[#00b86a]/40 transition-colors group"
+              className="rounded-2xl bg-card border border-line p-5 hover:border-brand/40 transition-colors group"
             >
               <div className="flex items-center justify-between mb-3">
                 <Icon size={20} className={c.color} />
@@ -83,7 +83,7 @@ export default async function DashboardPage() {
 
       {/* Quick actions */}
       <div className="flex flex-wrap gap-3">
-        <Link href="/admin/trips" className="rounded-lg bg-[#00b86a] text-[#04121e] font-semibold text-sm px-4 py-2.5 hover:bg-[#33d68a] transition-colors">
+        <Link href="/admin/trips" className="rounded-lg bg-brand text-[#04121e] font-semibold text-sm px-4 py-2.5 hover:bg-brand-hover transition-colors">
           + Add a current trip
         </Link>
         <Link href="/admin/ziyarat" className="rounded-lg border border-line text-ink/75 text-sm px-4 py-2.5 hover:bg-ink/5 transition-colors">
