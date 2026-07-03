@@ -22,19 +22,19 @@ export default function ZiyaratPackages({
 
   return (
     <section id="ziyarat" dir={isRTL ? "rtl" : "ltr"} className="relative py-16 sm:py-24 px-4">
-      <div className="absolute inset-0 bg-[#040d18] pattern-overlay" />
+      <div className="absolute inset-0 bg-[#eef4f0] pattern-overlay" />
 
       <div className="relative z-10 max-w-7xl mx-auto">
 
         {/* Heading */}
         <div className="text-center mb-10 sm:mb-14">
-          <span className="text-[#00b86a] text-xs font-medium tracking-[0.2em] uppercase mb-2 block">
+          <span className="text-[#00995a] text-xs font-medium tracking-[0.2em] uppercase mb-2 block">
             {isRTL ? "باقاتنا المقدسة" : "Sacred Packages"}
           </span>
-          <h2 className="text-2xl sm:text-4xl font-bold text-white mb-3">
+          <h2 className="text-2xl sm:text-4xl font-bold text-[#0c1a14] mb-3">
             {isRTL ? "زيارات الأماكن المقدسة" : "Ziyarat Packages"}
           </h2>
-          <p className="text-white/45 max-w-md mx-auto text-sm leading-relaxed">
+          <p className="text-[#5b6b63] max-w-md mx-auto text-sm leading-relaxed">
             {isRTL
               ? "رحلات روحانية منظمة مع مرشد ديني متخصص"
               : "Fully organized spiritual journeys with a specialist religious guide"}
@@ -43,7 +43,7 @@ export default function ZiyaratPackages({
         </div>
 
         {packages.length === 0 ? (
-          <p className="text-center text-white/40 text-sm">
+          <p className="text-center text-[#5b6b63] text-sm">
             {isRTL ? "لا توجد باقات متاحة حالياً" : "No packages available right now"}
           </p>
         ) : (
@@ -60,8 +60,8 @@ export default function ZiyaratPackages({
                   <article
                     id={`ziyarat-${pkg.slug}`}
                     className={`package-card group flex flex-col rounded-2xl overflow-hidden border ${
-                      isArbaeen ? "border-[#00b86a]/40 glow-ring" : "border-[#162035]"
-                    } bg-[#0b1828] h-full`}
+                      isArbaeen ? "border-[#00b86a]/40 glow-ring" : "border-[#d9e3dd]"
+                    } bg-white h-full`}
                   >
                     {/* Photo */}
                     <div className="relative h-44 sm:h-48 shrink-0 overflow-hidden">
@@ -72,7 +72,7 @@ export default function ZiyaratPackages({
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,25vw"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0b1828] via-transparent to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-white/80 via-transparent to-transparent" />
 
                       <div className="absolute top-3 inset-x-3 flex items-center justify-between">
                         <span className="text-xl drop-shadow">{pkg.flag}</span>
@@ -91,18 +91,18 @@ export default function ZiyaratPackages({
                     {/* Body */}
                     <div className="flex flex-col flex-1 p-4 sm:p-5">
                       <div className="flex items-start justify-between gap-2 mb-3">
-                        <h3 className="text-white font-bold text-sm leading-snug flex-1">{name}</h3>
+                        <h3 className="text-[#0c1a14] font-bold text-sm leading-snug flex-1">{name}</h3>
                         <div className="text-end shrink-0">
-                          <div className="text-[#00b86a] text-lg font-bold leading-none">${pkg.price}</div>
-                          <div className="text-white/35 text-[10px] mt-0.5">{isRTL ? "/شخص" : "/person"}</div>
+                          <div className="text-[#00995a] text-lg font-bold leading-none">${pkg.price}</div>
+                          <div className="text-[#5b6b63]/80 text-[10px] mt-0.5">{isRTL ? "/شخص" : "/person"}</div>
                         </div>
                       </div>
 
-                      <div className="h-px bg-[#162035] mb-3" />
+                      <div className="h-px bg-[#d9e3dd] mb-3" />
 
                       <ul className="space-y-2 mb-4 flex-1">
                         {highlights.map((h) => (
-                          <li key={h} className="flex items-start gap-2 text-white/60 text-xs leading-snug">
+                          <li key={h} className="flex items-start gap-2 text-[#3d4b44] text-xs leading-snug">
                             <span className="w-1.5 h-1.5 rounded-full bg-[#00b86a] shrink-0 mt-1" />
                             {h}
                           </li>
@@ -114,7 +114,7 @@ export default function ZiyaratPackages({
                           ? ["✈️ رحلة", "🏨 إقامة", "🚌 نقل", "👳 مرشد"]
                           : ["✈️ Flight", "🏨 Hotel", "🚌 Bus", "👳 Guide"]
                         ).map((s) => (
-                          <span key={s} className="text-[10px] text-white/45 bg-white/5 border border-white/8 px-2 py-0.5 rounded-md">
+                          <span key={s} className="text-[10px] text-[#5b6b63] bg-[#0c1a14]/4 border border-[#0c1a14]/8 px-2 py-0.5 rounded-md">
                             {s}
                           </span>
                         ))}
@@ -127,7 +127,7 @@ export default function ZiyaratPackages({
                         className={`block w-full text-center text-sm font-semibold py-3 rounded-xl transition-colors duration-200 min-h-[44px] flex items-center justify-center ${
                           isArbaeen
                             ? "bg-[#00b86a] text-[#040d18] hover:bg-[#33d68a]"
-                            : "bg-[#00b86a]/10 border border-[#00b86a]/30 text-[#00b86a] hover:bg-[#00b86a] hover:text-[#040d18] hover:border-[#00b86a]"
+                            : "bg-[#00b86a]/10 border border-[#00b86a]/30 text-[#00995a] hover:bg-[#00b86a] hover:text-[#040d18] hover:border-[#00b86a]"
                         }`}
                       >
                         {isRTL ? "احجز الآن" : "Book Now"}

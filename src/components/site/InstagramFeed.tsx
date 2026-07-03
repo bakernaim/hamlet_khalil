@@ -17,7 +17,7 @@ export default function InstagramFeed({ instagramUrl }: { instagramUrl: string }
 
   return (
     <section dir={isRTL ? "rtl" : "ltr"} className="relative py-16 px-4 overflow-hidden">
-      <div className="absolute inset-0 bg-[#06091e]" />
+      <div className="absolute inset-0 bg-[#e3ece6]" />
       <div className="absolute inset-0 pattern-overlay opacity-50" />
 
       <div className="relative z-10 max-w-6xl mx-auto">
@@ -37,7 +37,7 @@ export default function InstagramFeed({ instagramUrl }: { instagramUrl: string }
               <circle cx="12" cy="12" r="5" stroke="url(#ig-g)" strokeWidth="2"/>
               <circle cx="17.5" cy="6.5" r="1.5" fill="url(#ig-g)"/>
             </svg>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#0c1a14]">
               {isRTL ? "تابعونا على انستغرام" : "Follow Us on Instagram"}
             </h2>
           </div>
@@ -45,7 +45,7 @@ export default function InstagramFeed({ instagramUrl }: { instagramUrl: string }
             href={instagramUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[#00b86a] font-semibold text-sm hover:text-[#4dffa0] transition-colors"
+            className="text-[#00995a] font-semibold text-sm hover:text-[#00b86a] transition-colors"
           >
             @{instagramUrl.split("/").filter(Boolean).pop()}
           </a>
@@ -88,7 +88,7 @@ export default function InstagramFeed({ instagramUrl }: { instagramUrl: string }
             href={instagramUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 border border-[#00b86a]/40 text-[#00b86a] hover:bg-[#00b86a]/10 font-semibold px-8 py-3 rounded-full transition-all"
+            className="inline-flex items-center gap-2 border border-[#00b86a]/40 text-[#00995a] hover:bg-[#00b86a]/10 font-semibold px-8 py-3 rounded-full transition-all"
           >
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>

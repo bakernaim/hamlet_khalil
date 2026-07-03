@@ -38,7 +38,7 @@ export default function Navbar({ whatsappNumber }: { whatsappNumber: string }) {
       dir={isRTL ? "rtl" : "ltr"}
       className={`fixed top-0 w-full z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-[#040d18]/96 backdrop-blur-lg border-b border-[#00b86a]/10 shadow-xl shadow-black/40"
+          ? "bg-white/95 backdrop-blur-lg border-b border-[#d9e3dd] shadow-lg shadow-[#0c1a14]/5"
           : "bg-transparent"
       }`}
     >
@@ -57,10 +57,10 @@ export default function Navbar({ whatsappNumber }: { whatsappNumber: string }) {
               />
             </div>
             <div className="flex flex-col leading-none">
-              <span className="text-base lg:text-lg font-bold shimmer-text">
+              <span className={`text-base lg:text-lg font-bold ${scrolled ? "shimmer-text" : "shimmer-text-light"}`}>
                 {isRTL ? nav.logo.ar : nav.logo.en}
               </span>
-              <span className="text-[9px] lg:text-[10px] text-white/35 tracking-[0.2em] uppercase">
+              <span className={`text-[9px] lg:text-[10px] tracking-[0.2em] uppercase ${scrolled ? "text-[#5b6b63]/80" : "text-white/35"}`}>
                 {isRTL ? "Hamlet Al Khalil" : "حملة الخليل"}
               </span>
             </div>
@@ -72,7 +72,9 @@ export default function Navbar({ whatsappNumber }: { whatsappNumber: string }) {
               <a
                 key={link.href}
                 href={link.href}
-                className="relative text-sm text-white/60 hover:text-[#00b86a] transition-colors font-medium px-4 py-2 rounded-lg hover:bg-[#00b86a]/6 group"
+                className={`relative text-sm transition-colors font-medium px-4 py-2 rounded-lg hover:bg-[#00b86a]/6 group ${
+                  scrolled ? "text-[#5b6b63] hover:text-[#00995a]" : "text-white/60 hover:text-[#33d68a]"
+                }`}
               >
                 {isRTL ? link.ar : link.en}
                 <span className="absolute bottom-1.5 start-1/2 -translate-x-1/2 w-0 h-px bg-[#00b86a] group-hover:w-4 transition-all duration-300" />
@@ -83,14 +85,20 @@ export default function Navbar({ whatsappNumber }: { whatsappNumber: string }) {
           {/* ── Right controls ── */}
           <div className="hidden lg:flex items-center gap-3">
             {hijriDate && (
-              <span className="inline-flex items-center gap-1.5 text-[11px] text-white/45 border border-white/10 bg-white/4 rounded-full px-3 py-1.5">
+              <span className={`inline-flex items-center gap-1.5 text-[11px] rounded-full px-3 py-1.5 border ${
+                scrolled ? "text-[#5b6b63] border-[#0c1a14]/10 bg-[#0c1a14]/4" : "text-white/45 border-white/10 bg-white/4"
+              }`}>
                 <span className="text-[#00b86a]/80">☾</span>
                 {hijriDate}
               </span>
             )}
             <button
               onClick={toggleLang}
-              className="text-xs font-bold px-4 py-2 rounded-full border border-[#00b86a]/30 text-[#00b86a]/80 hover:text-[#00b86a] hover:border-[#00b86a]/60 hover:bg-[#00b86a]/8 transition-all"
+              className={`text-xs font-bold px-4 py-2 rounded-full border transition-all hover:border-[#00b86a]/60 hover:bg-[#00b86a]/8 ${
+                scrolled
+                  ? "border-[#00995a]/35 text-[#00995a]/90 hover:text-[#00995a]"
+                  : "border-[#00b86a]/30 text-[#00b86a]/80 hover:text-[#00b86a]"
+              }`}
             >
               {lang === "ar" ? "EN" : "عربي"}
             </button>
@@ -111,11 +119,16 @@ export default function Navbar({ whatsappNumber }: { whatsappNumber: string }) {
           <div className="flex lg:hidden items-center gap-2.5">
             <button
               onClick={toggleLang}
-              className="text-xs font-bold px-3 py-1.5 rounded-full border border-[#00b86a]/35 text-[#00b86a]"
+              className={`text-xs font-bold px-3 py-1.5 rounded-full border ${
+                scrolled ? "border-[#00995a]/40 text-[#00995a]" : "border-[#00b86a]/35 text-[#00b86a]"
+              }`}
             >
               {lang === "ar" ? "EN" : "عربي"}
             </button>
-            <button onClick={() => setOpen(!open)} className="text-white/70 hover:text-white p-1">
+            <button
+              onClick={() => setOpen(!open)}
+              className={`p-1 ${scrolled ? "text-[#0c1a14]/70 hover:text-[#0c1a14]" : "text-white/70 hover:text-white"}`}
+            >
               {open ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
@@ -126,7 +139,7 @@ export default function Navbar({ whatsappNumber }: { whatsappNumber: string }) {
       <div
         className={`lg:hidden overflow-hidden transition-all duration-300 ${
           open ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-        } bg-[#040d18]/98 backdrop-blur-xl border-t border-[#00b86a]/10`}
+        } bg-white/98 backdrop-blur-xl border-t border-[#d9e3dd] shadow-xl shadow-[#0c1a14]/8`}
       >
         <div className="px-5 py-5 flex flex-col gap-1" dir={isRTL ? "rtl" : "ltr"}>
           {nav.links.map((link) => (
@@ -134,7 +147,7 @@ export default function Navbar({ whatsappNumber }: { whatsappNumber: string }) {
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="text-white/65 hover:text-[#00b86a] transition-colors py-3 px-3 rounded-lg hover:bg-[#00b86a]/6 text-sm border-b border-white/5 last:border-0"
+              className="text-[#3d4b44] hover:text-[#00995a] transition-colors py-3 px-3 rounded-lg hover:bg-[#00b86a]/6 text-sm border-b border-[#0c1a14]/6 last:border-0"
             >
               {isRTL ? link.ar : link.en}
             </a>

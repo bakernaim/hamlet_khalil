@@ -70,9 +70,12 @@ Verify changes with `npm run build` **and** `npm run lint`. The first admin is `
 - **Settings**: key/value `Setting` rows merged over defaults in
   [src/lib/settings.ts](src/lib/settings.ts). Add a new setting by extending `SETTING_DEFAULTS`
   + the `SiteSettings` type.
-- **Theme**: dark navy (`#040d18`, cards `#0b1828`, borders `#162035`) + green accent
-  `#00b86a`/`#33d68a`. Custom animations/utilities live in
-  [src/app/globals.css](src/app/globals.css). Public site is RTL-capable; admin is LTR.
+- **Theme**: light — warm off-white page (`#eef4f0`, alt sections `#e3ece6`, cards white,
+  borders `#d9e3dd`, ink `#0c1a14`, muted `#5b6b63`) + green accent (`#00b86a` fills,
+  `#00995a` for green text on light). Hero and promo banners keep photo backgrounds with dark
+  overlays and white text. Custom animations/utilities live in
+  [src/app/globals.css](src/app/globals.css). Public site is RTL-capable; admin is LTR (and
+  still uses the dark navy palette).
 - **Admin UI primitives**: reuse `Field`, `Input`, `Textarea`, `Select`, `Toggle`, `Button`,
   `Modal`, `ErrorText`, `ImageUpload` from [src/components/admin/ui.tsx](src/components/admin/ui.tsx).
 - **Route handler input coercion**: use helpers in [src/lib/api.ts](src/lib/api.ts)

@@ -20,7 +20,8 @@ function getCountdown(target: Date): Countdown {
   };
 }
 
-// Visual variants; both keep the dark navy base of the site.
+// Visual variants; banners stay photo-backed with a dark overlay (like the hero)
+// so they read as accent panels on the light page.
 const THEMES = {
   amber: {
     overlay: "bg-[#0f0300]/88",
@@ -106,10 +107,10 @@ export default function PromoBanner({
         {banner.image ? (
           <Image src={banner.image} alt={title} fill className="object-cover object-center" sizes="100vw" />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-[#0b1828] to-[#040d18]" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#0e2018] to-[#06120c]" />
         )}
         <div className={`absolute inset-0 ${t.overlay}`} />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#040d18]/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
       </div>
 
       {/* Soft glow */}

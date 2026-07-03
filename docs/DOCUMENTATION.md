@@ -20,8 +20,10 @@ dashboard. This document is the complete reference for the codebase.
 | Icons | `lucide-react` |
 | Fonts | Reem Kufi (AR headings), Cairo (AR body), Inter (EN) |
 
-Design language: dark navy background (`#040d18`), cards `#0b1828`, borders `#162035`,
-green accent `#00b86a` / `#33d68a`.
+Design language: light warm off-white background (`#eef4f0`, alternate sections `#e3ece6`),
+white cards, borders `#d9e3dd`, ink text `#0c1a14`, muted text `#5b6b63`, green accent
+(`#00b86a` fills / `#00995a` for green text on light). Hero and promo banners keep photo
+backgrounds with dark overlays and white text.
 
 ---
 
