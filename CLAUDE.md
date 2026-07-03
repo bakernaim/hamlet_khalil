@@ -70,12 +70,17 @@ Verify changes with `npm run build` **and** `npm run lint`. The first admin is `
 - **Settings**: key/value `Setting` rows merged over defaults in
   [src/lib/settings.ts](src/lib/settings.ts). Add a new setting by extending `SETTING_DEFAULTS`
   + the `SiteSettings` type.
-- **Theme**: light — warm off-white page (`#eef4f0`, alt sections `#e3ece6`, cards white,
-  borders `#d9e3dd`, ink `#0c1a14`, muted `#5b6b63`) + green accent (`#00b86a` fills,
-  `#00995a` for green text on light). Hero and promo banners keep photo backgrounds with dark
-  overlays and white text. Custom animations/utilities live in
-  [src/app/globals.css](src/app/globals.css). Public site is RTL-capable; admin is LTR (and
-  still uses the dark navy palette).
+- **Theme**: dual light/dark driven by semantic tokens in
+  [src/app/globals.css](src/app/globals.css) — `:root` = light (warm off-white + green),
+  `html.dark` = the original dark navy. Use the token utilities (`bg-page`, `bg-page-alt`,
+  `bg-card`, `border-line`, `text-ink`, `text-muted`, `text-soft`, `text-accent`) instead of
+  hex colors; the green fill `#00b86a` is theme-invariant. A class-based `dark:` variant
+  (`@custom-variant`) exists for the few cases a token swap can't cover. The initial theme
+  comes from localStorage `theme` / device preference via the inline script in
+  [layout.tsx](src/app/layout.tsx) (no-flash) and is toggled by
+  [ThemeToggle](src/components/site/ThemeToggle.tsx) in the navbar. Hero and promo banners
+  keep photo backgrounds with dark overlays in both themes. Public site is RTL-capable;
+  admin is LTR (dark-only).
 - **Admin UI primitives**: reuse `Field`, `Input`, `Textarea`, `Select`, `Toggle`, `Button`,
   `Modal`, `ErrorText`, `ImageUpload` from [src/components/admin/ui.tsx](src/components/admin/ui.tsx).
 - **Route handler input coercion**: use helpers in [src/lib/api.ts](src/lib/api.ts)

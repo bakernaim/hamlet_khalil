@@ -20,10 +20,15 @@ dashboard. This document is the complete reference for the codebase.
 | Icons | `lucide-react` |
 | Fonts | Reem Kufi (AR headings), Cairo (AR body), Inter (EN) |
 
-Design language: light warm off-white background (`#eef4f0`, alternate sections `#e3ece6`),
-white cards, borders `#d9e3dd`, ink text `#0c1a14`, muted text `#5b6b63`, green accent
-(`#00b86a` fills / `#00995a` for green text on light). Hero and promo banners keep photo
-backgrounds with dark overlays and white text.
+Design language: dual theme via CSS-variable tokens in `globals.css`. Light (default):
+warm off-white `#eef4f0` / alt `#e3ece6`, white cards, borders `#d9e3dd`, ink `#0c1a14`,
+green text `#00995a`. Dark (`html.dark`): the original navy — `#040d18` / `#060e1a`, cards
+`#0b1828`, borders `#162035`, white ink, green text `#00b86a`. Components use the token
+utilities `bg-page`, `bg-page-alt`, `bg-card`, `border-line`, `text-ink`, `text-muted`,
+`text-soft`, `text-accent` (+ a class-based `dark:` variant for edge cases). Theme is
+auto-detected from the device (`prefers-color-scheme`) with a navbar toggle persisted to
+localStorage (`theme`), applied pre-paint by an inline script in `app/layout.tsx`. Hero and
+promo banners keep photo backgrounds with dark overlays in both themes.
 
 ---
 

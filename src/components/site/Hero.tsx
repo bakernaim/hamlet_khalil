@@ -42,7 +42,7 @@ export default function Hero({ settings }: { settings: SiteSettings }) {
         <div className="aurora aurora-2" />
       </div>
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-40 bg-[#00b86a]/6 blur-[80px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#eef4f0] to-transparent pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-page to-transparent pointer-events-none" />
 
       {/* Content */}
       <div className="relative z-10 w-full text-center max-w-3xl mx-auto px-5 sm:px-8 pt-24 sm:pt-28 pb-36 sm:pb-44">
@@ -105,7 +105,7 @@ export default function Hero({ settings }: { settings: SiteSettings }) {
 
       {/* Scroll cue */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 bounce-soft opacity-50">
-        <svg className="w-5 h-5 text-[#0c1a14]" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-ink" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/>
         </svg>
       </div>

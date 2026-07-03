@@ -8,14 +8,14 @@ export default function TrustBar() {
 
   return (
     <section id="about" dir={isRTL ? "rtl" : "ltr"} className="relative py-12 sm:py-16 px-4">
-      <div className="absolute inset-0 bg-[#e3ece6]" />
+      <div className="absolute inset-0 bg-page-alt" />
       <div className="absolute top-0 left-0 right-0 gold-divider" />
       <div className="absolute bottom-0 left-0 right-0 gold-divider" />
 
       <div className="relative z-10 max-w-6xl mx-auto">
         <div className="text-center mb-8 sm:mb-10">
           <div className="ornate-divider max-w-[220px] mx-auto">
-            <span className="text-[#00995a]/90 text-xs font-medium tracking-widest uppercase whitespace-nowrap px-3">
+            <span className="text-accent/90 text-xs font-medium tracking-widest uppercase whitespace-nowrap px-3">
               {isRTL ? "لماذا تختارنا" : "Why Choose Us"}
             </span>
           </div>
@@ -27,10 +27,10 @@ export default function TrustBar() {
               <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#00b86a]/10 border border-[#00b86a]/20 flex items-center justify-center text-2xl sm:text-3xl mb-3 transition-colors group-hover:bg-[#00b86a]/18 group-hover:border-[#00b86a]/40">
                 {item.icon}
               </div>
-              <h3 className="text-[#0c1a14] font-bold text-sm sm:text-base mb-1.5">
+              <h3 className="text-ink font-bold text-sm sm:text-base mb-1.5">
                 {isRTL ? item.title.ar : item.title.en}
               </h3>
-              <p className="text-[#5b6b63] text-xs leading-relaxed max-w-[150px]">
+              <p className="text-muted text-xs leading-relaxed max-w-[150px]">
                 {isRTL ? item.desc.ar : item.desc.en}
               </p>
             </div>
