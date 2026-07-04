@@ -138,8 +138,8 @@ export default function TripsManager() {
     <div>
       <header className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-white">Current Trips</h1>
-          <p className="text-white/45 text-sm mt-1">Upcoming departures with live availability.</p>
+          <h1 className="text-2xl font-bold text-ink">Current Trips</h1>
+          <p className="text-ink/45 text-sm mt-1">Upcoming departures with live availability.</p>
         </div>
         <Button onClick={openNew}>+ New Trip</Button>
       </header>
@@ -147,13 +147,13 @@ export default function TripsManager() {
       <ErrorText>{error}</ErrorText>
 
       {loading ? (
-        <p className="text-white/40 text-sm">Loading…</p>
+        <p className="text-ink/40 text-sm">Loading…</p>
       ) : items.length === 0 ? (
-        <p className="text-white/40 text-sm">No trips yet. Add your first departure.</p>
+        <p className="text-ink/40 text-sm">No trips yet. Add your first departure.</p>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-[#1e2b40]">
+        <div className="overflow-x-auto rounded-2xl border border-line">
           <table className="w-full text-sm">
-            <thead className="bg-[#0a1220] text-white/50 text-left text-xs uppercase">
+            <thead className="bg-page-alt text-ink/50 text-left text-xs uppercase">
               <tr>
                 <th className="px-4 py-3 font-medium">Trip</th>
                 <th className="px-4 py-3 font-medium">Departs</th>
@@ -165,23 +165,23 @@ export default function TripsManager() {
             </thead>
             <tbody className="divide-y divide-[#16223a]">
               {items.map((t) => (
-                <tr key={t.id} className="hover:bg-white/[0.02]">
+                <tr key={t.id} className="hover:bg-ink/[0.02]">
                   <td className="px-4 py-3">
-                    <div className="text-white font-medium">{t.titleEn}</div>
-                    <div className="text-white/40 text-xs">{t.destinationEn}{!t.published && " · hidden"}</div>
+                    <div className="text-ink font-medium">{t.titleEn}</div>
+                    <div className="text-ink/40 text-xs">{t.destinationEn}{!t.published && " · hidden"}</div>
                   </td>
-                  <td className="px-4 py-3 text-white/60">{fmt(t.departureDate)}</td>
-                  <td className="px-4 py-3 text-[#33d68a] font-semibold">${t.price}</td>
-                  <td className="px-4 py-3 text-white/60">{t.seatsLeft ?? "—"}</td>
+                  <td className="px-4 py-3 text-ink/60">{fmt(t.departureDate)}</td>
+                  <td className="px-4 py-3 text-accent font-semibold">${t.price}</td>
+                  <td className="px-4 py-3 text-ink/60">{t.seatsLeft ?? "—"}</td>
                   <td className="px-4 py-3">
-                    <span className="text-xs px-2 py-1 rounded-full bg-white/8 text-white/70">
+                    <span className="text-xs px-2 py-1 rounded-full bg-ink/8 text-ink/70">
                       {STATUS_LABEL[t.status] ?? t.status}
                     </span>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => openEdit(t)} className="text-white/60 hover:text-white text-xs px-2 py-1 rounded border border-[#25344c] hover:bg-white/5">Edit</button>
-                      <button onClick={() => onDelete(t)} className="text-red-300/80 hover:text-red-300 text-xs px-2 py-1 rounded border border-red-500/25 hover:bg-red-500/10">Delete</button>
+                      <button onClick={() => openEdit(t)} className="text-ink/60 hover:text-ink text-xs px-2 py-1 rounded border border-line hover:bg-ink/5">Edit</button>
+                      <button onClick={() => onDelete(t)} className="text-red-600/80 hover:text-red-600 dark:text-red-300/80 dark:hover:text-red-300 text-xs px-2 py-1 rounded border border-red-500/25 hover:bg-red-500/10">Delete</button>
                     </div>
                   </td>
                 </tr>

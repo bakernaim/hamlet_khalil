@@ -65,8 +65,8 @@ export default function UsersManager() {
     <div>
       <header className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-white">Staff Users</h1>
-          <p className="text-white/45 text-sm mt-1">People who can sign in and manage the site.</p>
+          <h1 className="text-2xl font-bold text-ink">Staff Users</h1>
+          <p className="text-ink/45 text-sm mt-1">People who can sign in and manage the site.</p>
         </div>
         <Button onClick={openNew}>+ New User</Button>
       </header>
@@ -74,11 +74,11 @@ export default function UsersManager() {
       <ErrorText>{error}</ErrorText>
 
       {loading ? (
-        <p className="text-white/40 text-sm">Loading…</p>
+        <p className="text-ink/40 text-sm">Loading…</p>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-[#1e2b40]">
+        <div className="overflow-x-auto rounded-2xl border border-line">
           <table className="w-full text-sm">
-            <thead className="bg-[#0a1220] text-white/50 text-left text-xs uppercase">
+            <thead className="bg-page-alt text-ink/50 text-left text-xs uppercase">
               <tr>
                 <th className="px-4 py-3 font-medium">Name</th>
                 <th className="px-4 py-3 font-medium">Username</th>
@@ -88,18 +88,18 @@ export default function UsersManager() {
             </thead>
             <tbody className="divide-y divide-[#16223a]">
               {items.map((u) => (
-                <tr key={u.id} className="hover:bg-white/[0.02]">
-                  <td className="px-4 py-3 text-white font-medium">{u.name}</td>
-                  <td className="px-4 py-3 text-white/60">{u.username}</td>
+                <tr key={u.id} className="hover:bg-ink/[0.02]">
+                  <td className="px-4 py-3 text-ink font-medium">{u.name}</td>
+                  <td className="px-4 py-3 text-ink/60">{u.username}</td>
                   <td className="px-4 py-3">
-                    <span className={`text-xs px-2 py-1 rounded-full ${u.role === "admin" ? "bg-violet-500/15 text-violet-300" : "bg-white/8 text-white/60"}`}>
+                    <span className={`text-xs px-2 py-1 rounded-full ${u.role === "admin" ? "bg-violet-500/15 text-violet-700 dark:text-violet-300" : "bg-ink/8 text-ink/60"}`}>
                       {u.role}
                     </span>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => openEdit(u)} className="text-white/60 hover:text-white text-xs px-2 py-1 rounded border border-[#25344c] hover:bg-white/5">Edit</button>
-                      <button onClick={() => onDelete(u)} className="text-red-300/80 hover:text-red-300 text-xs px-2 py-1 rounded border border-red-500/25 hover:bg-red-500/10">Delete</button>
+                      <button onClick={() => openEdit(u)} className="text-ink/60 hover:text-ink text-xs px-2 py-1 rounded border border-line hover:bg-ink/5">Edit</button>
+                      <button onClick={() => onDelete(u)} className="text-red-600/80 hover:text-red-600 dark:text-red-300/80 dark:hover:text-red-300 text-xs px-2 py-1 rounded border border-red-500/25 hover:bg-red-500/10">Delete</button>
                     </div>
                   </td>
                 </tr>

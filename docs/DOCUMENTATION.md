@@ -20,8 +20,15 @@ dashboard. This document is the complete reference for the codebase.
 | Icons | `lucide-react` |
 | Fonts | Reem Kufi (AR headings), Cairo (AR body), Inter (EN) |
 
-Design language: dark navy background (`#040d18`), cards `#0b1828`, borders `#162035`,
-green accent `#00b86a` / `#33d68a`.
+Design language: dual theme via CSS-variable tokens in `globals.css`. Light (default):
+warm off-white `#eef4f0` / alt `#e3ece6`, white cards, borders `#d9e3dd`, ink `#0c1a14`,
+green text `#00995a`. Dark (`html.dark`): the original navy — `#040d18` / `#060e1a`, cards
+`#0b1828`, borders `#162035`, white ink, green text `#00b86a`. Components use the token
+utilities `bg-page`, `bg-page-alt`, `bg-card`, `border-line`, `text-ink`, `text-muted`,
+`text-soft`, `text-accent` (+ a class-based `dark:` variant for edge cases). Theme is
+auto-detected from the device (`prefers-color-scheme`) with a navbar toggle persisted to
+localStorage (`theme`), applied pre-paint by an inline script in `app/layout.tsx`. Hero and
+promo banners keep photo backgrounds with dark overlays in both themes.
 
 ---
 
@@ -97,7 +104,9 @@ Defined in [../prisma/schema.prisma](../prisma/schema.prisma). Bilingual fields 
   status ("OPEN"|"ALMOST_FULL"|"DEPARTED"|"CLOSED"), image?, packageType?, packageSlug?,
   sortOrder, published`.
 - **Setting** — `key @id, value`. Keys: `whatsappNumber, heroHeadingAr/En,
-  heroSubheadingAr/En, phone, addressAr/En` (defaults in `lib/settings.ts`).
+  heroSubheadingAr/En, phone, addressAr/En, instagramUrl, themeColor` (defaults in
+  `lib/settings.ts`). `themeColor` is the accent hex; the root layout derives its
+  hover/text/sheen shades (`lib/color.ts`) and injects them as CSS variables.
 
 ### Prisma 7 notes (important)
 

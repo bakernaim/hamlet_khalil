@@ -127,8 +127,8 @@ export default function ZiyaratManager() {
     <div>
       <header className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-white">Ziyarat Packages</h1>
-          <p className="text-white/45 text-sm mt-1">Pilgrimage packages shown on the homepage.</p>
+          <h1 className="text-2xl font-bold text-ink">Ziyarat Packages</h1>
+          <p className="text-ink/45 text-sm mt-1">Pilgrimage packages shown on the homepage.</p>
         </div>
         <Button onClick={openNew}>+ New Package</Button>
       </header>
@@ -136,13 +136,13 @@ export default function ZiyaratManager() {
       <ErrorText>{error}</ErrorText>
 
       {loading ? (
-        <p className="text-white/40 text-sm">Loading…</p>
+        <p className="text-ink/40 text-sm">Loading…</p>
       ) : items.length === 0 ? (
-        <p className="text-white/40 text-sm">No packages yet. Add your first one.</p>
+        <p className="text-ink/40 text-sm">No packages yet. Add your first one.</p>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-[#1e2b40]">
+        <div className="overflow-x-auto rounded-2xl border border-line">
           <table className="w-full text-sm">
-            <thead className="bg-[#0a1220] text-white/50 text-left text-xs uppercase">
+            <thead className="bg-page-alt text-ink/50 text-left text-xs uppercase">
               <tr>
                 <th className="px-4 py-3 font-medium">Package</th>
                 <th className="px-4 py-3 font-medium">Price</th>
@@ -153,27 +153,27 @@ export default function ZiyaratManager() {
             </thead>
             <tbody className="divide-y divide-[#16223a]">
               {items.map((z) => (
-                <tr key={z.id} className="hover:bg-white/[0.02]">
+                <tr key={z.id} className="hover:bg-ink/[0.02]">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
                       <span className="text-lg">{z.flag}</span>
                       <div>
-                        <div className="text-white font-medium">{z.nameEn}</div>
-                        <div className="text-white/40 text-xs" dir="rtl">{z.nameAr}</div>
+                        <div className="text-ink font-medium">{z.nameEn}</div>
+                        <div className="text-ink/40 text-xs" dir="rtl">{z.nameAr}</div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-[#33d68a] font-semibold">${z.price}</td>
-                  <td className="px-4 py-3 text-white/60">{z.durationEn}</td>
+                  <td className="px-4 py-3 text-accent font-semibold">${z.price}</td>
+                  <td className="px-4 py-3 text-ink/60">{z.durationEn}</td>
                   <td className="px-4 py-3">
-                    <span className={`text-xs px-2 py-1 rounded-full ${z.published ? "bg-[#00b86a]/15 text-[#33d68a]" : "bg-white/8 text-white/40"}`}>
+                    <span className={`text-xs px-2 py-1 rounded-full ${z.published ? "bg-brand/15 text-accent" : "bg-ink/8 text-ink/40"}`}>
                       {z.published ? "Published" : "Hidden"}
                     </span>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => openEdit(z)} className="text-white/60 hover:text-white text-xs px-2 py-1 rounded border border-[#25344c] hover:bg-white/5">Edit</button>
-                      <button onClick={() => onDelete(z)} className="text-red-300/80 hover:text-red-300 text-xs px-2 py-1 rounded border border-red-500/25 hover:bg-red-500/10">Delete</button>
+                      <button onClick={() => openEdit(z)} className="text-ink/60 hover:text-ink text-xs px-2 py-1 rounded border border-line hover:bg-ink/5">Edit</button>
+                      <button onClick={() => onDelete(z)} className="text-red-600/80 hover:text-red-600 dark:text-red-300/80 dark:hover:text-red-300 text-xs px-2 py-1 rounded border border-red-500/25 hover:bg-red-500/10">Delete</button>
                     </div>
                   </td>
                 </tr>

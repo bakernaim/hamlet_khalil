@@ -20,7 +20,8 @@ function getCountdown(target: Date): Countdown {
   };
 }
 
-// Visual variants; both keep the dark navy base of the site.
+// Visual variants; banners stay photo-backed with a dark overlay (like the hero)
+// so they read as accent panels on the light page.
 const THEMES = {
   amber: {
     overlay: "bg-[#0f0300]/88",
@@ -38,17 +39,17 @@ const THEMES = {
   },
   green: {
     overlay: "bg-[#02120a]/88",
-    glow: "bg-[#00b86a]/12",
-    badge: "bg-[#00b86a]/12 border-[#00b86a]/35 text-[#33d68a]/90",
-    title: "text-[#33d68a]",
+    glow: "bg-brand/12",
+    badge: "bg-brand/12 border-brand/35 text-brand-hover/90",
+    title: "text-brand-hover",
     text: "text-white/60",
-    digitBox: "border-[#00b86a]/30",
-    digitLabel: "text-[#33d68a]/60",
-    colon: "text-[#00b86a]/50",
-    countLabel: "text-[#33d68a]/55",
-    priceBox: "border-[#00b86a]/25",
-    price: "text-[#33d68a]",
-    priceDivider: "bg-[#00b86a]/25",
+    digitBox: "border-brand/30",
+    digitLabel: "text-brand-hover/60",
+    colon: "text-brand/50",
+    countLabel: "text-brand-hover/55",
+    priceBox: "border-brand/25",
+    price: "text-brand-hover",
+    priceDivider: "bg-brand/25",
   },
 } as const;
 
@@ -106,10 +107,10 @@ export default function PromoBanner({
         {banner.image ? (
           <Image src={banner.image} alt={title} fill className="object-cover object-center" sizes="100vw" />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-[#0b1828] to-[#040d18]" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#0e2018] to-[#06120c]" />
         )}
         <div className={`absolute inset-0 ${t.overlay}`} />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#040d18]/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
       </div>
 
       {/* Soft glow */}

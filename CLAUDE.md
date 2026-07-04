@@ -70,9 +70,20 @@ Verify changes with `npm run build` **and** `npm run lint`. The first admin is `
 - **Settings**: key/value `Setting` rows merged over defaults in
   [src/lib/settings.ts](src/lib/settings.ts). Add a new setting by extending `SETTING_DEFAULTS`
   + the `SiteSettings` type.
-- **Theme**: dark navy (`#040d18`, cards `#0b1828`, borders `#162035`) + green accent
-  `#00b86a`/`#33d68a`. Custom animations/utilities live in
-  [src/app/globals.css](src/app/globals.css). Public site is RTL-capable; admin is LTR.
+- **Theme**: dual light/dark driven by semantic tokens in
+  [src/app/globals.css](src/app/globals.css) — `:root` = light (warm off-white), `html.dark`
+  = the original dark navy. Use the token utilities (`bg-page`, `bg-page-alt`, `bg-card`,
+  `border-line`, `text-ink`, `text-muted`, `text-soft`, `text-accent`, `bg-brand`,
+  `bg-brand-hover`) instead of hex colors. A class-based `dark:` variant (`@custom-variant`)
+  exists for the few cases a token swap can't cover. The initial theme comes from
+  localStorage `theme` / device preference via the inline script in
+  [layout.tsx](src/app/layout.tsx) (no-flash) and is toggled by
+  [ThemeToggle](src/components/site/ThemeToggle.tsx) (public navbar, admin sidebar, login).
+  The **accent color is a dashboard setting** (`themeColor`): the root layout derives
+  hover/text/sheen shades via [src/lib/color.ts](src/lib/color.ts) and injects them as CSS
+  vars, so never hardcode the green. Hero and promo banners keep photo backgrounds with dark
+  overlays in both themes. Public site is RTL-capable; admin is LTR and follows the same
+  theme.
 - **Admin UI primitives**: reuse `Field`, `Input`, `Textarea`, `Select`, `Toggle`, `Button`,
   `Modal`, `ErrorText`, `ImageUpload` from [src/components/admin/ui.tsx](src/components/admin/ui.tsx).
 - **Route handler input coercion**: use helpers in [src/lib/api.ts](src/lib/api.ts)

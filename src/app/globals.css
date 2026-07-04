@@ -1,21 +1,62 @@
 @import "tailwindcss";
 
+/* ── Theme tokens ─────────────────────────────────────────────
+   Light (default) = warm off-white + green; .dark = the original
+   dark-navy palette. The .dark class is set on <html> before paint
+   by the inline script in app/layout.tsx (localStorage "theme",
+   falling back to the device preference) and toggled by
+   components/site/ThemeToggle.tsx. */
 :root {
-  --navy:        #040d18;
-  --navy-mid:    #081422;
-  --navy-card:   #0b1828;
-  --navy-border: #162035;
+  --page:        #eef4f0;
+  --page-alt:    #e3ece6;
+  --card:        #ffffff;
+  --line:        #d9e3dd;
+  --ink:         #0c1a14;
+  --muted:       #5b6b63;
+  --soft:        #3d4b44;
   --green:       #00b86a;
+  --green-text:  #00995a;
   --green-hover: #33d68a;
-  --green-dim:   #007a46;
-  --green-faint: rgba(0,184,106,0.10);
+  --green-sheen: #7dffc0;
+  --shimmer-mid: #00995a;
+}
+
+.dark {
+  --page:        #040d18;
+  --page-alt:    #060e1a;
+  --card:        #0b1828;
+  --line:        #162035;
+  --ink:         #ffffff;
+  --muted:       rgba(255, 255, 255, 0.45);
+  --soft:        rgba(255, 255, 255, 0.6);
+  --green-text:  #00b86a;
+  --shimmer-mid: #7dffc0;
+}
+
+/* class-based dark variant (html.dark), used for the few spots
+   that need more than a token swap */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* expose tokens as Tailwind color utilities: bg-page, bg-page-alt,
+   bg-card, border-line, text-ink, text-muted, text-soft, text-accent */
+@theme inline {
+  --color-page:     var(--page);
+  --color-page-alt: var(--page-alt);
+  --color-card:     var(--card);
+  --color-line:     var(--line);
+  --color-ink:      var(--ink);
+  --color-muted:    var(--muted);
+  --color-soft:     var(--soft);
+  --color-accent:   var(--green-text);
+  --color-brand:    var(--green);
+  --color-brand-hover: var(--green-hover);
 }
 
 html { scroll-behavior: smooth; }
 
 body {
-  background: var(--navy);
-  color: white;
+  background: var(--page);
+  color: var(--ink);
   overflow-x: hidden;
 }
 
@@ -39,7 +80,7 @@ body {
 }
 
 /* ── Accent color helpers ── */
-.accent { color: var(--green); }
+.accent { color: var(--green-text); }
 
 /* ── WhatsApp pulse (functional indicator only) ── */
 @keyframes wa-pulse {
@@ -62,13 +103,16 @@ body {
 }
 .package-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 0 0 1px rgba(0,184,106,.35), 0 16px 36px rgba(0,0,0,.5);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--green-text) 30%, transparent), 0 16px 36px rgba(8,32,22,.14);
+}
+.dark .package-card:hover {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--green) 35%, transparent), 0 16px 36px rgba(0,0,0,.5);
 }
 
 /* ── Section divider ── */
 .section-divider {
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(0,184,106,.4), transparent);
+  background: linear-gradient(to right, transparent, color-mix(in srgb, var(--green-text) 45%, transparent), transparent);
 }
 .gold-divider {
   height: 1px;
@@ -86,16 +130,19 @@ body {
   content: '';
   flex: 1;
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(0,184,106,.35));
+  background: linear-gradient(to right, transparent, color-mix(in srgb, var(--green-text) 40%, transparent));
 }
 .ornate-divider::after {
-  background: linear-gradient(to left, transparent, rgba(0,184,106,.35));
+  background: linear-gradient(to left, transparent, color-mix(in srgb, var(--green-text) 40%, transparent));
 }
 
 /* ── Islamic geometric pattern — 8-pointed star (khatam) tile ── */
 .pattern-overlay {
-  background-image: url("data:image/svg+xml,%3Csvg width='96' height='96' viewBox='0 0 96 96' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%2300b86a' stroke-opacity='0.055' stroke-width='1'%3E%3Cpath d='M48 10 L58 38 L86 48 L58 58 L48 86 L38 58 L10 48 L38 38 Z'/%3E%3Crect x='34' y='34' width='28' height='28' transform='rotate(45 48 48)'/%3E%3Ccircle cx='48' cy='48' r='5'/%3E%3Ccircle cx='0' cy='0' r='7'/%3E%3Ccircle cx='96' cy='0' r='7'/%3E%3Ccircle cx='0' cy='96' r='7'/%3E%3Ccircle cx='96' cy='96' r='7'/%3E%3C/g%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg width='96' height='96' viewBox='0 0 96 96' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%2300995a' stroke-opacity='0.09' stroke-width='1'%3E%3Cpath d='M48 10 L58 38 L86 48 L58 58 L48 86 L38 58 L10 48 L38 38 Z'/%3E%3Crect x='34' y='34' width='28' height='28' transform='rotate(45 48 48)'/%3E%3Ccircle cx='48' cy='48' r='5'/%3E%3Ccircle cx='0' cy='0' r='7'/%3E%3Ccircle cx='96' cy='0' r='7'/%3E%3Ccircle cx='0' cy='96' r='7'/%3E%3Ccircle cx='96' cy='96' r='7'/%3E%3C/g%3E%3C/svg%3E");
   background-size: 96px 96px;
+}
+.dark .pattern-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg width='96' height='96' viewBox='0 0 96 96' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%2300b86a' stroke-opacity='0.055' stroke-width='1'%3E%3Cpath d='M48 10 L58 38 L86 48 L58 58 L48 86 L38 58 L10 48 L38 38 Z'/%3E%3Crect x='34' y='34' width='28' height='28' transform='rotate(45 48 48)'/%3E%3Ccircle cx='48' cy='48' r='5'/%3E%3Ccircle cx='0' cy='0' r='7'/%3E%3Ccircle cx='96' cy='0' r='7'/%3E%3Ccircle cx='0' cy='96' r='7'/%3E%3Ccircle cx='96' cy='96' r='7'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 /* ── Scroll-reveal ── */
@@ -127,7 +174,7 @@ body {
 }
 .hero-kenburns { animation: kenburns 20s ease-out forwards; }
 
-/* ── Aurora glow blobs behind hero content ── */
+/* ── Aurora glow blobs behind hero content (hero keeps its dark overlay) ── */
 @keyframes aurora-drift {
   0%,100% { transform: translate(0, 0) scale(1);      }
   33%      { transform: translate(6%, -4%) scale(1.15); }
@@ -142,13 +189,13 @@ body {
 .aurora-1 {
   width: 40vw; height: 40vw;
   top: 10%; left: 8%;
-  background: rgba(0, 184, 106, 0.16);
+  background: color-mix(in srgb, var(--green) 16%, transparent);
   animation: aurora-drift 18s ease-in-out infinite;
 }
 .aurora-2 {
   width: 34vw; height: 34vw;
   bottom: 8%; right: 10%;
-  background: rgba(0, 122, 70, 0.18);
+  background: color-mix(in srgb, var(--green-text) 18%, transparent);
   animation: aurora-drift 22s ease-in-out infinite reverse;
 }
 
@@ -161,16 +208,26 @@ body {
   background-image: linear-gradient(
     110deg,
     var(--green) 30%,
-    #7dffc0 45%,
+    var(--green-sheen) 45%,
     var(--green) 60%
   );
   background-size: 220% 100%;
   animation: shimmer-badge 2.6s linear infinite;
 }
 
-/* ── Shimmer sweep clipped to text (navbar logo) ── */
+/* ── Shimmer sweep clipped to text (navbar logo) ──
+   .shimmer-text follows the theme (ink-colored); .shimmer-text-light is
+   always white, used while the navbar floats over the dark hero photo. */
 .shimmer-text {
-  background-image: linear-gradient(100deg, #ffffff 35%, #7dffc0 50%, #ffffff 65%);
+  background-image: linear-gradient(100deg, var(--ink) 35%, var(--shimmer-mid) 50%, var(--ink) 65%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer-badge 5s linear infinite;
+}
+.shimmer-text-light {
+  background-image: linear-gradient(100deg, #ffffff 35%, var(--green-sheen) 50%, #ffffff 65%);
   background-size: 220% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -199,14 +256,14 @@ body {
 
 /* ── Pulsing glow ring for the featured (Arbaeen) card ── */
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 0 1px rgba(0,184,106,.30), 0 0 18px rgba(0,184,106,.10); }
-  50%      { box-shadow: 0 0 0 1px rgba(0,184,106,.55), 0 0 34px rgba(0,184,106,.22); }
+  0%, 100% { box-shadow: 0 0 0 1px color-mix(in srgb, var(--green-text) 35%, transparent), 0 0 18px color-mix(in srgb, var(--green) 14%, transparent); }
+  50%      { box-shadow: 0 0 0 1px color-mix(in srgb, var(--green-text) 60%, transparent), 0 0 34px color-mix(in srgb, var(--green) 26%, transparent); }
 }
 .glow-ring { animation: glow-pulse 3.5s ease-in-out infinite; }
 
 /* ── Pointed-arch (mihrab) frame for the verse banner ── */
 .arch-frame {
-  border: 1px solid rgba(0,184,106,.22);
+  border: 1px solid color-mix(in srgb, var(--green-text) 28%, transparent);
   border-radius: 50% 50% 1rem 1rem / 18% 18% 1rem 1rem;
 }
 
@@ -222,10 +279,11 @@ body {
 /* ── Respect reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   .hero-kenburns, .aurora, .shimmer-badge, .bounce-soft, .whatsapp-pulse,
-  .shimmer-text, .float-slow, .spin-slow, .glow-ring {
+  .shimmer-text, .shimmer-text-light, .float-slow, .spin-slow, .glow-ring {
     animation: none !important;
   }
-  .shimmer-text { color: white; background: none; }
+  .shimmer-text { color: var(--ink); background: none; }
+  .shimmer-text-light { color: white; background: none; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .hero-fade { opacity: 1; animation: none; }
   .faq-body { transition: none; }
@@ -233,5 +291,6 @@ body {
 
 /* ── Scrollbar ── */
 ::-webkit-scrollbar       { width: 4px; }
-::-webkit-scrollbar-track { background: var(--navy); }
-::-webkit-scrollbar-thumb { background: var(--green-dim); border-radius: 4px; }
+::-webkit-scrollbar-track { background: var(--page); }
+::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--green-text) 45%, transparent); border-radius: 4px; }
+.dark ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--green) 60%, black); }

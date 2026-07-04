@@ -80,4 +80,5 @@ export interface SiteSettings {
   addressAr: string;
   addressEn: string;
   instagramUrl: string;
+  themeColor: string; // brand accent hex, e.g. "#00b86a"
 }

@@ -138,8 +138,8 @@ export default function BannersManager() {
     <div>
       <header className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-white">Banners</h1>
-          <p className="text-white/45 text-sm mt-1">
+          <h1 className="text-2xl font-bold text-ink">Banners</h1>
+          <p className="text-ink/45 text-sm mt-1">
             Promo sections on the homepage — countdowns, campaigns, special offers.
           </p>
         </div>
@@ -149,13 +149,13 @@ export default function BannersManager() {
       <ErrorText>{error}</ErrorText>
 
       {loading ? (
-        <p className="text-white/40 text-sm">Loading…</p>
+        <p className="text-ink/40 text-sm">Loading…</p>
       ) : items.length === 0 ? (
-        <p className="text-white/40 text-sm">No banners yet. Add your first one.</p>
+        <p className="text-ink/40 text-sm">No banners yet. Add your first one.</p>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-[#1e2b40]">
+        <div className="overflow-x-auto rounded-2xl border border-line">
           <table className="w-full text-sm">
-            <thead className="bg-[#0a1220] text-white/50 text-left text-xs uppercase">
+            <thead className="bg-page-alt text-ink/50 text-left text-xs uppercase">
               <tr>
                 <th className="px-4 py-3 font-medium">Banner</th>
                 <th className="px-4 py-3 font-medium">Theme</th>
@@ -166,23 +166,23 @@ export default function BannersManager() {
             </thead>
             <tbody className="divide-y divide-[#16223a]">
               {items.map((b) => (
-                <tr key={b.id} className="hover:bg-white/[0.02]">
+                <tr key={b.id} className="hover:bg-ink/[0.02]">
                   <td className="px-4 py-3">
-                    <div className="text-white font-medium">{b.titleEn || b.titleAr}</div>
-                    <div className="text-white/40 text-xs" dir="rtl">{b.titleAr}</div>
+                    <div className="text-ink font-medium">{b.titleEn || b.titleAr}</div>
+                    <div className="text-ink/40 text-xs" dir="rtl">{b.titleAr}</div>
                   </td>
                   <td className="px-4 py-3">
                     <span
                       className={`text-xs px-2 py-1 rounded-full border ${
                         b.theme === "amber"
-                          ? "bg-amber-500/10 text-amber-300 border-amber-500/25"
-                          : "bg-[#00b86a]/10 text-[#33d68a] border-[#00b86a]/25"
+                          ? "bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/25"
+                          : "bg-brand/10 text-accent border-brand/25"
                       }`}
                     >
                       {b.theme}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-white/60">{fmt(b.targetDate)}</td>
+                  <td className="px-4 py-3 text-ink/60">{fmt(b.targetDate)}</td>
                   <td className="px-4 py-3">
                     <Toggle
                       checked={b.published}
@@ -192,8 +192,8 @@ export default function BannersManager() {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => openEdit(b)} className="text-white/60 hover:text-white text-xs px-2 py-1 rounded border border-[#25344c] hover:bg-white/5">Edit</button>
-                      <button onClick={() => onDelete(b)} className="text-red-300/80 hover:text-red-300 text-xs px-2 py-1 rounded border border-red-500/25 hover:bg-red-500/10">Delete</button>
+                      <button onClick={() => openEdit(b)} className="text-ink/60 hover:text-ink text-xs px-2 py-1 rounded border border-line hover:bg-ink/5">Edit</button>
+                      <button onClick={() => onDelete(b)} className="text-red-600/80 hover:text-red-600 dark:text-red-300/80 dark:hover:text-red-300 text-xs px-2 py-1 rounded border border-red-500/25 hover:bg-red-500/10">Delete</button>
                     </div>
                   </td>
                 </tr>
