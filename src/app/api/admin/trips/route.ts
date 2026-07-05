@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { badRequest, str, optionalStr, int, optionalInt, bool, optionalDate } from "@/lib/api";
 
 const STATUSES = ["OPEN", "ALMOST_FULL", "DEPARTED", "CLOSED"];
+const FREQUENCIES = ["ONCE", "WEEKLY", "BIWEEKLY", "MONTHLY"];
 
 export async function GET() {
   const rows = await prisma.currentTrip.findMany({
@@ -20,6 +21,7 @@ export async function POST(req: Request) {
   if (!departureDate) return badRequest("A valid departure date is required");
 
   const status = STATUSES.includes(str(body.status)) ? str(body.status) : "OPEN";
+  const frequency = FREQUENCIES.includes(str(body.frequency)) ? str(body.frequency) : "ONCE";
 
   const created = await prisma.currentTrip.create({
     data: {
@@ -29,6 +31,8 @@ export async function POST(req: Request) {
       destinationEn: str(body.destinationEn),
       departureDate,
       returnDate: optionalDate(body.returnDate),
+      frequency,
+      recurEndDate: frequency === "ONCE" ? null : optionalDate(body.recurEndDate),
       price: int(body.price),
       seatsLeft: optionalInt(body.seatsLeft),
       status,

@@ -32,11 +32,14 @@ export const ziyaratPackages = [
     flag: "🇮🇶",
     name: { ar: "العراق — نجف وكربلاء والكاظمية", en: "Iraq — Najaf, Karbala & Kadhimiya" },
     duration: { ar: "٧ أيام", en: "7 Days" },
-    price: 650,
     badge: null,
     highlights: {
       ar: ["ضريح الإمام علي (ع)", "ضريح الإمام الحسين (ع)", "ضريح الإمامين الكاظمين (ع)"],
       en: ["Imam Ali Shrine", "Imam Hussain Shrine", "Kadhimain Shrine"],
+    },
+    info: {
+      ar: "<h3>برنامج الزيارة</h3><p>رحلة روحانية لمدة سبعة أيام تشمل زيارة العتبات المقدسة في النجف الأشرف وكربلاء المقدسة والكاظمية، برفقة مرشد ديني متخصص.</p><ul><li>زيارة ضريح الإمام علي عليه السلام في النجف الأشرف</li><li>زيارة ضريحي الإمام الحسين وأبي الفضل العباس عليهما السلام</li><li>زيارة الإمامين الكاظمين عليهما السلام وجامع براثا</li></ul><p>تشمل الباقة تذاكر الطيران والإقامة الفندقية قرب الحرم والتنقلات والوجبات.</p>",
+      en: "<h3>Ziyarat Itinerary</h3><p>A seven-day spiritual journey covering the holy shrines of Najaf, Karbala and Kadhimiya, accompanied by a specialist religious guide.</p><ul><li>Visit the shrine of Imam Ali (a.s.) in Holy Najaf</li><li>Visit the shrines of Imam Hussain and Abbas (a.s.) in Karbala</li><li>Visit the Kadhimain shrine and Buratha Mosque</li></ul><p>The package includes flights, hotel accommodation near the shrine, transfers and meals.</p>",
     },
     color: "from-[#1a2444] to-[#0a0f2c]",
   },
@@ -45,11 +48,14 @@ export const ziyaratPackages = [
     flag: "🇮🇷",
     name: { ar: "إيران — مشهد وقم المقدسة", en: "Iran — Mashhad & Holy Qom" },
     duration: { ar: "١٠ أيام", en: "10 Days" },
-    price: 950,
     badge: null,
     highlights: {
       ar: ["ضريح الإمام الرضا (ع)", "ضريح السيدة فاطمة المعصومة (ع)", "جامعة قم الدينية"],
       en: ["Imam Reza Shrine", "Lady Fatima Masumeh Shrine", "Qom Seminary"],
+    },
+    info: {
+      ar: "<h3>برنامج الزيارة</h3><p>عشرة أيام بين مشهد المقدسة وقم المشرفة، مع برنامج زيارات يومي وجلسات دعاء.</p><ul><li>زيارة ضريح الإمام الرضا عليه السلام والمشاركة في صلاة الجماعة</li><li>زيارة السيدة فاطمة المعصومة عليها السلام في قم</li><li>زيارة مسجد جمكران المبارك</li></ul><p>الباقة شاملة الطيران والإقامة والتنقلات والوجبات والمرشد الديني.</p>",
+      en: "<h3>Ziyarat Itinerary</h3><p>Ten days between Holy Mashhad and Qom, with a daily ziyarat program and supplication gatherings.</p><ul><li>Visit the shrine of Imam Reza (a.s.) and join congregational prayers</li><li>Visit Lady Fatima Masumeh (a.s.) in Qom</li><li>Visit the blessed Jamkaran Mosque</li></ul><p>The package covers flights, accommodation, transfers, meals and a religious guide.</p>",
     },
     color: "from-[#1a2444] to-[#0a0f2c]",
   },
@@ -58,11 +64,14 @@ export const ziyaratPackages = [
     flag: "🇮🇶",
     name: { ar: "زيارة الأربعين — العراق", en: "Arbaeen Ziyarat — Iraq" },
     duration: { ar: "١٤ يوماً", en: "14 Days" },
-    price: 1100,
     badge: { ar: "الأكثر طلباً 🔥", en: "Most Popular 🔥" },
     highlights: {
       ar: ["مسيرة الأربعين الكبرى", "كربلاء المقدسة", "النجف الأشرف", "تنظيم متكامل"],
       en: ["Grand Arbaeen Walk", "Holy Karbala", "Holy Najaf", "Full Organization"],
+    },
+    info: {
+      ar: "<h3>مسيرة الأربعين</h3><p>أربعة عشر يوماً لإحياء زيارة الأربعين، من النجف الأشرف إلى كربلاء المقدسة سيراً على الأقدام مع خدمة لوجستية متكاملة على طول الطريق.</p><ul><li>المشي من النجف إلى كربلاء مع فريق مرافقة طبي ولوجستي</li><li>الاستراحة في مواكب مجهزة على الطريق</li><li>زيارة الأربعين يوم العشرين من صفر في كربلاء</li></ul><p>يُنصح بالتسجيل المبكر لمحدودية الأماكن في موسم الأربعين.</p>",
+      en: "<h3>The Arbaeen Walk</h3><p>Fourteen days for the Arbaeen pilgrimage, walking from Holy Najaf to Holy Karbala with full logistical support along the route.</p><ul><li>Walk from Najaf to Karbala with a medical and logistics team</li><li>Rest stops at equipped mawakib along the way</li><li>Arbaeen ziyarat in Karbala on the 20th of Safar</li></ul><p>Early registration is recommended — places are limited during the Arbaeen season.</p>",
     },
     color: "from-[#2a1a00] to-[#1a0f00]",
   },
@@ -71,11 +80,14 @@ export const ziyaratPackages = [
     flag: "🇸🇾",
     name: { ar: "سوريا — السيدة زينب والسيدة رقية", en: "Syria — Sayyida Zaynab & Sayyida Ruqayya" },
     duration: { ar: "٥ أيام", en: "5 Days" },
-    price: 450,
     badge: null,
     highlights: {
       ar: ["ضريح السيدة زينب (ع)", "ضريح السيدة رقية (ع)", "جامع الأموي"],
       en: ["Sayyida Zaynab Shrine", "Sayyida Ruqayya Shrine", "Umayyad Mosque"],
+    },
+    info: {
+      ar: "<h3>برنامج الزيارة</h3><p>خمسة أيام في الشام لزيارة مقامات أهل البيت عليهم السلام في دمشق ومحيطها.</p><ul><li>زيارة مقام السيدة زينب عليها السلام</li><li>زيارة مقام السيدة رقية عليها السلام</li><li>زيارة الجامع الأموي ومقام رأس الحسين عليه السلام</li></ul><p>الباقة تشمل النقل البري المكيف والإقامة الفندقية والوجبات.</p>",
+      en: "<h3>Ziyarat Itinerary</h3><p>Five days in Syria visiting the shrines of Ahl al-Bayt (a.s.) in and around Damascus.</p><ul><li>Visit the shrine of Sayyida Zaynab (a.s.)</li><li>Visit the shrine of Sayyida Ruqayya (a.s.)</li><li>Visit the Umayyad Mosque and the Ras al-Hussain shrine</li></ul><p>The package includes air-conditioned land transport, hotel accommodation and meals.</p>",
     },
     color: "from-[#1a2444] to-[#0a0f2c]",
   },
@@ -110,32 +122,44 @@ export const tourismPackages = [
     flag: "🇹🇷",
     name: { ar: "تركيا", en: "Turkey" },
     duration: { ar: "٧ أيام", en: "7 Days" },
-    price: 780,
     desc: { ar: "إسطنبول، كابادوكيا، طرابزون", en: "Istanbul, Cappadocia, Trabzon" },
+    info: {
+      ar: "<h3>برنامج الرحلة</h3><p>سبعة أيام بين إسطنبول وكابادوكيا وطرابزون، برنامج عائلي متكامل يجمع بين المدينة والطبيعة.</p><ul><li>جولات في معالم إسطنبول: آيا صوفيا، الجامع الأزرق، البوسفور</li><li>رحلة المناطيد الشهيرة في كابادوكيا</li><li>مرتفعات السلطان مراد وبحيرة أوزنجول في طرابزون</li></ul><p>الباقة تشمل الطيران والفنادق والإفطار والتنقلات مع سائق خاص.</p>",
+      en: "<h3>Trip Program</h3><p>Seven days across Istanbul, Cappadocia and Trabzon — a family-friendly program mixing city and nature.</p><ul><li>Istanbul landmarks: Hagia Sophia, the Blue Mosque, the Bosphorus</li><li>The famous hot-air balloon ride in Cappadocia</li><li>Sultan Murad highlands and Uzungöl lake in Trabzon</li></ul><p>The package includes flights, hotels, breakfast and private-driver transfers.</p>",
+    },
   },
   {
     id: "dubai",
     flag: "🇦🇪",
     name: { ar: "دبي", en: "Dubai" },
     duration: { ar: "٥ أيام", en: "5 Days" },
-    price: 550,
     desc: { ar: "برج خليفة، الصحراء، مول دبي", en: "Burj Khalifa, Desert Safari, Dubai Mall" },
+    info: {
+      ar: "<h3>برنامج الرحلة</h3><p>خمسة أيام في دبي بين ناطحات السحاب والصحراء والأسواق.</p><ul><li>صعود برج خليفة وزيارة دبي مول ونافورة دبي</li><li>سفاري صحراوي مع عشاء بدوي وعروض تراثية</li><li>جولة بحرية في دبي مارينا وزيارة سوق الذهب</li></ul><p>الباقة تشمل الطيران والإقامة الفندقية مع الإفطار والتنقلات.</p>",
+      en: "<h3>Trip Program</h3><p>Five days in Dubai between skyscrapers, desert and souks.</p><ul><li>Burj Khalifa observation deck, Dubai Mall and the Dubai Fountain</li><li>Desert safari with a Bedouin dinner and heritage shows</li><li>Dubai Marina cruise and the Gold Souk</li></ul><p>The package includes flights, hotel with breakfast and transfers.</p>",
+    },
   },
   {
     id: "georgia",
     flag: "🇬🇪",
     name: { ar: "جورجيا", en: "Georgia" },
     duration: { ar: "٦ أيام", en: "6 Days" },
-    price: 620,
     desc: { ar: "تبليسي، باتومي، الطبيعة الخلابة", en: "Tbilisi, Batumi, Stunning Nature" },
+    info: {
+      ar: "<h3>برنامج الرحلة</h3><p>ستة أيام في جورجيا بين العاصمة تبليسي وساحل باتومي وطبيعة القوقاز.</p><ul><li>جولة في المدينة القديمة في تبليسي وقلعة ناريكالا</li><li>رحلة إلى كازبيجي وجبال القوقاز</li><li>باتومي: الكورنيش والحديقة النباتية</li></ul><p>الباقة تشمل الطيران والفنادق والإفطار وسيارة مع سائق.</p>",
+      en: "<h3>Trip Program</h3><p>Six days in Georgia between the capital Tbilisi, the Batumi coast and the Caucasus mountains.</p><ul><li>Old Tbilisi walking tour and Narikala Fortress</li><li>Day trip to Kazbegi and the Caucasus range</li><li>Batumi: the boulevard and the botanical garden</li></ul><p>The package includes flights, hotels, breakfast and a car with driver.</p>",
+    },
   },
   {
     id: "egypt",
     flag: "🇪🇬",
     name: { ar: "مصر", en: "Egypt" },
     duration: { ar: "٨ أيام", en: "8 Days" },
-    price: 700,
     desc: { ar: "الأهرامات، الأقصر، شرم الشيخ", en: "Pyramids, Luxor, Sharm El Sheikh" },
+    info: {
+      ar: "<h3>برنامج الرحلة</h3><p>ثمانية أيام في مصر بين القاهرة التاريخية وآثار الأقصر وشواطئ شرم الشيخ.</p><ul><li>أهرامات الجيزة وأبو الهول والمتحف المصري</li><li>معابد الأقصر ووادي الملوك</li><li>الاستجمام والغوص في شرم الشيخ</li></ul><p>الباقة تشمل الطيران الداخلي والفنادق والإفطار وجولات مع مرشد سياحي.</p>",
+      en: "<h3>Trip Program</h3><p>Eight days in Egypt between historic Cairo, the monuments of Luxor and the beaches of Sharm El Sheikh.</p><ul><li>The Giza Pyramids, the Sphinx and the Egyptian Museum</li><li>Luxor temples and the Valley of the Kings</li><li>Relaxation and diving in Sharm El Sheikh</li></ul><p>The package includes domestic flights, hotels, breakfast and guided tours.</p>",
+    },
   },
 ];
 

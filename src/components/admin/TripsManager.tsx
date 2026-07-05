@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useResource } from "@/components/admin/useResource";
 import { Field, Input, Select, Button, Modal, Toggle, ErrorText, ImageUpload } from "@/components/admin/ui";
+
+// Minimal shape for the linked-package dropdowns.
+type PkgOption = { slug: string; nameEn: string; nameAr: string };
 
 interface Trip {
   id: string;
@@ -12,6 +15,8 @@ interface Trip {
   destinationEn: string;
   departureDate: string;
   returnDate: string | null;
+  frequency: string;
+  recurEndDate: string | null;
   price: number;
   seatsLeft: number | null;
   status: string;
@@ -29,6 +34,8 @@ type FormState = {
   destinationEn: string;
   departureDate: string;
   returnDate: string;
+  frequency: string;
+  recurEndDate: string;
   price: string;
   seatsLeft: string;
   status: string;
@@ -46,6 +53,8 @@ const empty: FormState = {
   destinationEn: "",
   departureDate: "",
   returnDate: "",
+  frequency: "ONCE",
+  recurEndDate: "",
   price: "0",
   seatsLeft: "",
   status: "OPEN",
@@ -63,6 +72,13 @@ const STATUS_LABEL: Record<string, string> = {
   CLOSED: "Closed",
 };
 
+const FREQUENCY_LABEL: Record<string, string> = {
+  ONCE: "One-time",
+  WEEKLY: "Weekly",
+  BIWEEKLY: "Every 2 weeks",
+  MONTHLY: "Monthly",
+};
+
 const isoToInput = (iso: string | null) => (iso ? iso.slice(0, 10) : "");
 
 function toForm(t: Trip): FormState {
@@ -73,6 +89,8 @@ function toForm(t: Trip): FormState {
     destinationEn: t.destinationEn,
     departureDate: isoToInput(t.departureDate),
     returnDate: isoToInput(t.returnDate),
+    frequency: t.frequency ?? "ONCE",
+    recurEndDate: isoToInput(t.recurEndDate),
     price: String(t.price),
     seatsLeft: t.seatsLeft == null ? "" : String(t.seatsLeft),
     status: t.status,
@@ -85,15 +103,37 @@ function toForm(t: Trip): FormState {
 }
 
 export default function TripsManager() {
-  const { items, loading, error, save, remove } = useResource<Trip>("/api/admin/trips");
+  const { items, loading, error, save, remove, reload } = useResource<Trip>("/api/admin/trips");
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<FormState>(empty);
   const [formError, setFormError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [reordering, setReordering] = useState(false);
+  const [ziyaratPkgs, setZiyaratPkgs] = useState<PkgOption[]>([]);
+  const [tourismPkgs, setTourismPkgs] = useState<PkgOption[]>([]);
+
+  // Load package lists once so the "linked package" field is a real dropdown.
+  useEffect(() => {
+    (async () => {
+      const [z, t] = await Promise.all([
+        fetch("/api/admin/ziyarat", { cache: "no-store" }).then((r) => (r.ok ? r.json() : [])),
+        fetch("/api/admin/tourism", { cache: "no-store" }).then((r) => (r.ok ? r.json() : [])),
+      ]);
+      setZiyaratPkgs(z);
+      setTourismPkgs(t);
+    })().catch(() => undefined);
+  }, []);
 
   const set = <K extends keyof FormState>(k: K, v: FormState[K]) =>
     setForm((f) => ({ ...f, [k]: v }));
+
+  const linkedOptions = form.packageType === "ziyarat" ? ziyaratPkgs : form.packageType === "tourism" ? tourismPkgs : [];
+
+  // Changing the type clears any slug that no longer belongs to it.
+  function setPackageType(type: string) {
+    setForm((f) => ({ ...f, packageType: type, packageSlug: "" }));
+  }
 
   function openNew() {
     setEditingId(null);
@@ -131,6 +171,34 @@ export default function TripsManager() {
     if (!res.ok) alert(res.error);
   }
 
+  // Move a trip up/down in the public display order. Persists sortOrder for any
+  // row whose position changed, then reloads once.
+  async function move(index: number, dir: -1 | 1) {
+    const target = index + dir;
+    if (reordering || target < 0 || target >= items.length) return;
+    setReordering(true);
+    const ordered = [...items];
+    const [moved] = ordered.splice(index, 1);
+    ordered.splice(target, 0, moved);
+    try {
+      await Promise.all(
+        ordered
+          .map((t, i) => ({ t, i }))
+          .filter(({ t, i }) => t.sortOrder !== i)
+          .map(({ t, i }) =>
+            fetch(`/api/admin/trips/${t.id}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ ...t, sortOrder: i }),
+            })
+          )
+      );
+      await reload();
+    } finally {
+      setReordering(false);
+    }
+  }
+
   const fmt = (iso: string | null) =>
     iso ? new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : "—";
 
@@ -139,7 +207,7 @@ export default function TripsManager() {
       <header className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-ink">Current Trips</h1>
-          <p className="text-ink/45 text-sm mt-1">Upcoming departures with live availability.</p>
+          <p className="text-ink/45 text-sm mt-1">Upcoming departures with live availability. Use the ▲▼ arrows to set the order shown on the website.</p>
         </div>
         <Button onClick={openNew}>+ New Trip</Button>
       </header>
@@ -155,8 +223,10 @@ export default function TripsManager() {
           <table className="w-full text-sm">
             <thead className="bg-page-alt text-ink/50 text-left text-xs uppercase">
               <tr>
+                <th className="px-2 py-3 font-medium text-center" title="Order shown on the website">Order</th>
                 <th className="px-4 py-3 font-medium">Trip</th>
                 <th className="px-4 py-3 font-medium">Departs</th>
+                <th className="px-4 py-3 font-medium">Repeats</th>
                 <th className="px-4 py-3 font-medium">Price</th>
                 <th className="px-4 py-3 font-medium">Seats</th>
                 <th className="px-4 py-3 font-medium">Status</th>
@@ -164,13 +234,34 @@ export default function TripsManager() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#16223a]">
-              {items.map((t) => (
+              {items.map((t, i) => (
                 <tr key={t.id} className="hover:bg-ink/[0.02]">
+                  <td className="px-2 py-3">
+                    <div className="flex flex-col items-center">
+                      <button
+                        onClick={() => move(i, -1)}
+                        disabled={i === 0 || reordering}
+                        title="Move up"
+                        className="text-ink/50 hover:text-ink disabled:opacity-25 disabled:cursor-not-allowed leading-none px-1"
+                      >
+                        ▲
+                      </button>
+                      <button
+                        onClick={() => move(i, 1)}
+                        disabled={i === items.length - 1 || reordering}
+                        title="Move down"
+                        className="text-ink/50 hover:text-ink disabled:opacity-25 disabled:cursor-not-allowed leading-none px-1"
+                      >
+                        ▼
+                      </button>
+                    </div>
+                  </td>
                   <td className="px-4 py-3">
                     <div className="text-ink font-medium">{t.titleEn}</div>
                     <div className="text-ink/40 text-xs">{t.destinationEn}{!t.published && " · hidden"}</div>
                   </td>
                   <td className="px-4 py-3 text-ink/60">{fmt(t.departureDate)}</td>
+                  <td className="px-4 py-3 text-ink/60 text-xs">{FREQUENCY_LABEL[t.frequency] ?? "One-time"}</td>
                   <td className="px-4 py-3 text-accent font-semibold">${t.price}</td>
                   <td className="px-4 py-3 text-ink/60">{t.seatsLeft ?? "—"}</td>
                   <td className="px-4 py-3">
@@ -210,12 +301,26 @@ export default function TripsManager() {
             </Field>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Departure date">
+            <Field label={form.frequency === "ONCE" ? "Departure date" : "First departure date"}>
               <Input type="date" value={form.departureDate} onChange={(e) => set("departureDate", e.target.value)} required />
             </Field>
             <Field label="Return date" hint="Optional">
               <Input type="date" value={form.returnDate} onChange={(e) => set("returnDate", e.target.value)} />
             </Field>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="Repeats" hint="Auto-generates the bookable departure dates">
+              <Select value={form.frequency} onChange={(e) => set("frequency", e.target.value)}>
+                {Object.entries(FREQUENCY_LABEL).map(([v, l]) => (
+                  <option key={v} value={v}>{l}</option>
+                ))}
+              </Select>
+            </Field>
+            {form.frequency !== "ONCE" && (
+              <Field label="Repeat until" hint="Last date departures are generated">
+                <Input type="date" value={form.recurEndDate} onChange={(e) => set("recurEndDate", e.target.value)} />
+              </Field>
+            )}
           </div>
           <div className="grid grid-cols-3 gap-4">
             <Field label="Price (USD)">
@@ -234,14 +339,29 @@ export default function TripsManager() {
           </div>
           <div className="grid grid-cols-3 gap-4">
             <Field label="Linked package type" hint="Optional">
-              <Select value={form.packageType} onChange={(e) => set("packageType", e.target.value)}>
+              <Select value={form.packageType} onChange={(e) => setPackageType(e.target.value)}>
                 <option value="">None</option>
                 <option value="ziyarat">Ziyarat</option>
                 <option value="tourism">Tourism</option>
               </Select>
             </Field>
-            <Field label="Linked package slug" hint="e.g. iraq">
-              <Input value={form.packageSlug} onChange={(e) => set("packageSlug", e.target.value)} />
+            <Field label="Linked package" hint={form.packageType ? "Shown via the trip's Details button" : "Pick a type first"}>
+              <Select
+                value={form.packageSlug}
+                onChange={(e) => set("packageSlug", e.target.value)}
+                disabled={!form.packageType}
+              >
+                <option value="">{form.packageType ? "None" : "—"}</option>
+                {linkedOptions.map((p) => (
+                  <option key={p.slug} value={p.slug}>
+                    {p.nameEn || p.nameAr} ({p.slug})
+                  </option>
+                ))}
+                {/* Keep a stale slug visible so editing an existing trip never silently drops it. */}
+                {form.packageSlug && !linkedOptions.some((p) => p.slug === form.packageSlug) && (
+                  <option value={form.packageSlug}>{form.packageSlug}</option>
+                )}
+              </Select>
             </Field>
             <Field label="Sort order">
               <Input type="number" value={form.sortOrder} onChange={(e) => set("sortOrder", e.target.value)} />

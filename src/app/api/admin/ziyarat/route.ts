@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { stringifyList } from "@/lib/serialize";
 import { badRequest, str, optionalStr, int, bool } from "@/lib/api";
+import { sanitizeRichText } from "@/lib/sanitize";
 
 export async function GET() {
   const rows = await prisma.ziyaratPackage.findMany({
@@ -30,11 +31,12 @@ export async function POST(req: Request) {
       nameEn,
       durationAr: str(body.durationAr),
       durationEn: str(body.durationEn),
-      price: int(body.price),
       badgeAr: optionalStr(body.badgeAr),
       badgeEn: optionalStr(body.badgeEn),
       highlightsAr: stringifyList(body.highlightsAr),
       highlightsEn: stringifyList(body.highlightsEn),
+      infoAr: sanitizeRichText(str(body.infoAr)),
+      infoEn: sanitizeRichText(str(body.infoEn)),
       image: str(body.image, "/shrines/hussain-karbala.jpg"),
       color: str(body.color, "from-[#1a2444] to-[#0a0f2c]"),
       sortOrder: int(body.sortOrder),

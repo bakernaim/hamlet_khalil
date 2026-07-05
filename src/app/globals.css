@@ -145,6 +145,48 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg width='96' height='96' viewBox='0 0 96 96' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%2300b86a' stroke-opacity='0.055' stroke-width='1'%3E%3Cpath d='M48 10 L58 38 L86 48 L58 58 L48 86 L38 58 L10 48 L38 38 Z'/%3E%3Crect x='34' y='34' width='28' height='28' transform='rotate(45 48 48)'/%3E%3Ccircle cx='48' cy='48' r='5'/%3E%3Ccircle cx='0' cy='0' r='7'/%3E%3Ccircle cx='96' cy='0' r='7'/%3E%3Ccircle cx='0' cy='96' r='7'/%3E%3Ccircle cx='96' cy='96' r='7'/%3E%3C/g%3E%3C/svg%3E");
 }
 
+/* ── Rich text (package info: editor + public details modal) ──
+   Tailwind's preflight strips heading/list styles; restore them for the
+   admin-authored HTML. */
+.rich-text h2,
+.rich-text h3,
+.rich-text h4 {
+  color: var(--ink);
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 1.1em 0 0.45em;
+}
+.rich-text h2 { font-size: 1.25em; }
+.rich-text h3 { font-size: 1.1em; }
+.rich-text h4 { font-size: 1em; }
+.rich-text p,
+.rich-text div {
+  margin: 0.55em 0;
+}
+.rich-text ul,
+.rich-text ol {
+  margin: 0.55em 0;
+  padding-inline-start: 1.4em;
+}
+.rich-text ul { list-style: disc; }
+.rich-text ol { list-style: decimal; }
+.rich-text li { margin: 0.25em 0; }
+.rich-text li::marker {
+  color: var(--green-text);
+}
+.rich-text blockquote {
+  border-inline-start: 3px solid color-mix(in srgb, var(--green-text) 45%, transparent);
+  padding-inline-start: 0.9em;
+  margin: 0.8em 0;
+  color: var(--muted);
+}
+.rich-text a {
+  color: var(--green-text);
+  text-decoration: underline;
+}
+.rich-text > :first-child { margin-top: 0; }
+.rich-text > :last-child { margin-bottom: 0; }
+
 /* ── Scroll-reveal ── */
 .reveal {
   opacity: 0;

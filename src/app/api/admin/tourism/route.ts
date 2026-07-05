@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { badRequest, str, int, bool } from "@/lib/api";
+import { sanitizeRichText } from "@/lib/sanitize";
 
 export async function GET() {
   const rows = await prisma.tourismPackage.findMany({
@@ -28,9 +29,10 @@ export async function POST(req: Request) {
       nameEn: str(body.nameEn),
       durationAr: str(body.durationAr),
       durationEn: str(body.durationEn),
-      price: int(body.price),
       descAr: str(body.descAr),
       descEn: str(body.descEn),
+      infoAr: sanitizeRichText(str(body.infoAr)),
+      infoEn: sanitizeRichText(str(body.infoEn)),
       image: str(body.image, "/shrines/turkey-istanbul.jpg"),
       sortOrder: int(body.sortOrder),
       published: bool(body.published),

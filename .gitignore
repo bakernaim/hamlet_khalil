@@ -48,3 +48,6 @@ next-env.d.ts
 
 # admin-uploaded images
 /public/uploads
+
+# Private passport uploads (PII — never commit)
+/private_uploads
