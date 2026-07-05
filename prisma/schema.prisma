@@ -29,11 +29,12 @@ model ZiyaratPackage {
   nameEn       String
   durationAr   String
   durationEn   String
-  price        Int
   badgeAr      String?
   badgeEn      String?
   highlightsAr String   @default("[]") // JSON string[]
   highlightsEn String   @default("[]") // JSON string[]
+  infoAr       String   @default("") // rich-text HTML (sanitized on save)
+  infoEn       String   @default("") // rich-text HTML (sanitized on save)
   image        String
   color        String   @default("from-[#1a2444] to-[#0a0f2c]")
   sortOrder    Int      @default(0)
@@ -50,9 +51,10 @@ model TourismPackage {
   nameEn     String
   durationAr String
   durationEn String
-  price      Int
   descAr     String
   descEn     String
+  infoAr     String   @default("") // rich-text HTML (sanitized on save)
+  infoEn     String   @default("") // rich-text HTML (sanitized on save)
   image      String
   sortOrder  Int      @default(0)
   published  Boolean  @default(true)
@@ -66,8 +68,10 @@ model CurrentTrip {
   titleEn       String
   destinationAr String
   destinationEn String
-  departureDate DateTime
+  departureDate DateTime // for recurring trips this is the first departure
   returnDate    DateTime?
+  frequency     String    @default("ONCE") // ONCE | WEEKLY | BIWEEKLY | MONTHLY
+  recurEndDate  DateTime? // repeating trips generate departures up to this date (inclusive)
   price         Int
   seatsLeft     Int?
   status        String    @default("OPEN") // OPEN | ALMOST_FULL | DEPARTED | CLOSED
@@ -78,6 +82,26 @@ model CurrentTrip {
   published     Boolean   @default(true)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  bookings      Booking[]
+}
+
+// A booking request submitted from the public site. Reviewed by an admin
+// (status starts PENDING); seats are not auto-decremented.
+model Booking {
+  id            String       @id @default(cuid())
+  tripId        String?
+  trip          CurrentTrip? @relation(fields: [tripId], references: [id], onDelete: SetNull)
+  tripTitleAr   String // snapshot so the record survives trip deletion
+  tripTitleEn   String
+  departureDate DateTime // the specific departure the customer chose
+  fullName      String
+  phone         String
+  partySize     Int
+  passports     String       @default("[]") // JSON string[] of private passport file tokens
+  notes         String?
+  status        String       @default("PENDING") // PENDING | CONFIRMED | CANCELLED
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
 }
 
 // Promo banners rendered between homepage sections (Arbaeen countdown, offers…).

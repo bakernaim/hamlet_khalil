@@ -1,24 +1,21 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { useLang } from "@/context/LanguageContext";
-import { waHref } from "@/lib/whatsapp";
 import type { ZiyaratPackageDTO } from "@/lib/types";
 import Reveal from "@/components/site/Reveal";
+import PackageInfoModal from "@/components/site/PackageInfoModal";
 
 export default function ZiyaratPackages({
   packages,
-  whatsappNumber,
 }: {
   packages: ZiyaratPackageDTO[];
-  whatsappNumber: string;
 }) {
   const { isRTL } = useLang();
-
-  const bookMsg = (name: string) =>
-    isRTL
-      ? `السلام عليكم، أريد الاستفسار عن باقة: ${name}`
-      : `Hello, I'd like to inquire about: ${name}`;
+  const [infoPkg, setInfoPkg] = useState<ZiyaratPackageDTO | null>(null);
+  const pkgInfo = (pkg: ZiyaratPackageDTO) =>
+    isRTL ? pkg.infoAr || pkg.infoEn : pkg.infoEn || pkg.infoAr;
 
   return (
     <section id="ziyarat" dir={isRTL ? "rtl" : "ltr"} className="relative py-16 sm:py-24 px-4">
@@ -53,15 +50,12 @@ export default function ZiyaratPackages({
               const duration = isRTL ? pkg.durationAr : pkg.durationEn;
               const badge = isRTL ? pkg.badgeAr : pkg.badgeEn;
               const highlights = isRTL ? pkg.highlightsAr : pkg.highlightsEn;
-              const isArbaeen = pkg.slug === "arbaeen" || Boolean(badge);
 
               return (
                 <Reveal key={pkg.id} delay={i * 80}>
                   <article
                     id={`ziyarat-${pkg.slug}`}
-                    className={`package-card group flex flex-col rounded-2xl overflow-hidden border ${
-                      isArbaeen ? "border-brand/40 glow-ring" : "border-line"
-                    } bg-card h-full`}
+                    className="package-card group flex flex-col rounded-2xl overflow-hidden border border-line bg-card h-full"
                   >
                     {/* Photo */}
                     <div className="relative h-44 sm:h-48 shrink-0 overflow-hidden">
@@ -90,13 +84,7 @@ export default function ZiyaratPackages({
 
                     {/* Body */}
                     <div className="flex flex-col flex-1 p-4 sm:p-5">
-                      <div className="flex items-start justify-between gap-2 mb-3">
-                        <h3 className="text-ink font-bold text-sm leading-snug flex-1">{name}</h3>
-                        <div className="text-end shrink-0">
-                          <div className="text-accent text-lg font-bold leading-none">${pkg.price}</div>
-                          <div className="text-muted/80 text-[10px] mt-0.5">{isRTL ? "/شخص" : "/person"}</div>
-                        </div>
-                      </div>
+                      <h3 className="text-ink font-bold text-sm leading-snug mb-3">{name}</h3>
 
                       <div className="h-px bg-line mb-3" />
 
@@ -120,18 +108,14 @@ export default function ZiyaratPackages({
                         ))}
                       </div>
 
-                      <a
-                        href={waHref(whatsappNumber, bookMsg(name))}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`block w-full text-center text-sm font-semibold py-3 rounded-xl transition-colors duration-200 min-h-[44px] flex items-center justify-center ${
-                          isArbaeen
-                            ? "bg-brand text-[#040d18] hover:bg-brand-hover"
-                            : "bg-brand/10 border border-brand/30 text-accent hover:bg-brand hover:text-[#040d18] hover:border-brand"
-                        }`}
-                      >
-                        {isRTL ? "احجز الآن" : "Book Now"}
-                      </a>
+                      {pkgInfo(pkg) && (
+                        <button
+                          onClick={() => setInfoPkg(pkg)}
+                          className="block w-full text-center text-sm font-semibold py-3 rounded-xl border border-brand/30 text-accent bg-brand/8 hover:bg-brand hover:text-[#040d18] hover:border-brand transition-colors duration-200 min-h-[44px] flex items-center justify-center"
+                        >
+                          {isRTL ? "التفاصيل الكاملة 📖" : "Full Details 📖"}
+                        </button>
+                      )}
                     </div>
                   </article>
                 </Reveal>
@@ -140,6 +124,18 @@ export default function ZiyaratPackages({
           </div>
         )}
       </div>
+
+      {infoPkg && (
+        <PackageInfoModal
+          open
+          onClose={() => setInfoPkg(null)}
+          title={isRTL ? infoPkg.nameAr : infoPkg.nameEn}
+          flag={infoPkg.flag}
+          duration={isRTL ? infoPkg.durationAr : infoPkg.durationEn}
+          image={infoPkg.image}
+          html={pkgInfo(infoPkg)}
+        />
+      )}
     </section>
   );
 }

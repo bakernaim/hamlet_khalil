@@ -4,6 +4,7 @@ import { badRequest, notFound, str, optionalStr, int, optionalInt, bool, optiona
 import { removeUpload } from "@/lib/uploads";
 
 const STATUSES = ["OPEN", "ALMOST_FULL", "DEPARTED", "CLOSED"];
+const FREQUENCIES = ["ONCE", "WEEKLY", "BIWEEKLY", "MONTHLY"];
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -24,6 +25,7 @@ export async function PUT(req: Request, { params }: Ctx) {
 
   const departureDate = optionalDate(body.departureDate) ?? existing.departureDate;
   const status = STATUSES.includes(str(body.status)) ? str(body.status) : existing.status;
+  const frequency = FREQUENCIES.includes(str(body.frequency)) ? str(body.frequency) : existing.frequency;
   const image = optionalStr(body.image);
 
   const updated = await prisma.currentTrip.update({
@@ -35,6 +37,8 @@ export async function PUT(req: Request, { params }: Ctx) {
       destinationEn: str(body.destinationEn),
       departureDate,
       returnDate: optionalDate(body.returnDate),
+      frequency,
+      recurEndDate: frequency === "ONCE" ? null : optionalDate(body.recurEndDate),
       price: int(body.price, existing.price),
       seatsLeft: optionalInt(body.seatsLeft),
       status,

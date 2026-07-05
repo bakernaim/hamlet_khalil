@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { parseList } from "@/lib/serialize";
 import { buildSettings } from "@/lib/settings";
+import { computeDepartures } from "@/lib/recurrence";
 import type {
   ZiyaratPackageDTO,
   TourismPackageDTO,
@@ -8,6 +9,7 @@ import type {
   BannerDTO,
   SiteSettings,
   TripStatus,
+  TripFrequency,
 } from "@/lib/types";
 
 export async function getZiyaratPackages(publishedOnly = true): Promise<ZiyaratPackageDTO[]> {
@@ -23,11 +25,12 @@ export async function getZiyaratPackages(publishedOnly = true): Promise<ZiyaratP
     nameEn: p.nameEn,
     durationAr: p.durationAr,
     durationEn: p.durationEn,
-    price: p.price,
     badgeAr: p.badgeAr,
     badgeEn: p.badgeEn,
     highlightsAr: parseList(p.highlightsAr),
     highlightsEn: parseList(p.highlightsEn),
+    infoAr: p.infoAr,
+    infoEn: p.infoEn,
     image: p.image,
     color: p.color,
   }));
@@ -46,9 +49,10 @@ export async function getTourismPackages(publishedOnly = true): Promise<TourismP
     nameEn: p.nameEn,
     durationAr: p.durationAr,
     durationEn: p.durationEn,
-    price: p.price,
     descAr: p.descAr,
     descEn: p.descEn,
+    infoAr: p.infoAr,
+    infoEn: p.infoEn,
     image: p.image,
   }));
 }
@@ -66,6 +70,11 @@ export async function getCurrentTrips(publishedOnly = true): Promise<CurrentTrip
     destinationEn: t.destinationEn,
     departureDate: t.departureDate.toISOString(),
     returnDate: t.returnDate ? t.returnDate.toISOString() : null,
+    frequency: t.frequency as TripFrequency,
+    recurEndDate: t.recurEndDate ? t.recurEndDate.toISOString() : null,
+    departures: computeDepartures(t.departureDate, t.frequency, t.recurEndDate).map((d) =>
+      d.toISOString()
+    ),
     price: t.price,
     seatsLeft: t.seatsLeft,
     status: t.status as TripStatus,

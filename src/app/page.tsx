@@ -40,11 +40,11 @@ export default async function Home() {
       <Navbar whatsappNumber={wa} />
       <main>
         <Hero settings={settings} />
-        <CurrentTrips trips={trips} whatsappNumber={wa} />
-        <ZiyaratPackages packages={ziyarat} whatsappNumber={wa} />
+        <CurrentTrips trips={trips} whatsappNumber={wa} ziyarat={ziyarat} tourism={tourism} />
+        <ZiyaratPackages packages={ziyarat} />
         <TrustBar />
         <VerseBanner />
-        <TourismPackages packages={tourism} whatsappNumber={wa} />
+        <TourismPackages packages={tourism} />
         {banners.map((b) => (
           <PromoBanner key={b.id} banner={b} whatsappNumber={wa} />
         ))}

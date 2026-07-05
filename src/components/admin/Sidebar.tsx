@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   LayoutDashboard,
   Landmark,
@@ -16,11 +16,13 @@ import {
   Menu,
   X,
   KeyRound,
+  Ticket,
 } from "lucide-react";
 import ThemeToggle from "@/components/site/ThemeToggle";
 
 const NAV = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { href: "/admin/bookings", label: "Bookings", icon: Ticket },
   { href: "/admin/ziyarat", label: "Ziyarat Packages", icon: Landmark },
   { href: "/admin/tourism", label: "Tourism Packages", icon: Plane },
   { href: "/admin/trips", label: "Current Trips", icon: CalendarClock },
@@ -34,6 +36,28 @@ export default function Sidebar({ userName }: { userName: string }) {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [pendingCount, setPendingCount] = useState(0);
+
+  // Poll for pending bookings so staff notice new requests without a refresh.
+  useEffect(() => {
+    let active = true;
+    const fetchPending = async () => {
+      try {
+        const res = await fetch("/api/admin/bookings", { cache: "no-store" });
+        if (!res.ok || !active) return;
+        const data: { status: string }[] = await res.json();
+        setPendingCount(data.filter((b) => b.status === "PENDING").length);
+      } catch {
+        /* ignore transient errors */
+      }
+    };
+    fetchPending();
+    const t = setInterval(fetchPending, 30000);
+    return () => {
+      active = false;
+      clearInterval(t);
+    };
+  }, [pathname]);
 
   async function logout() {
     await fetch("/api/auth/logout", { method: "POST" });
@@ -49,6 +73,7 @@ export default function Sidebar({ userName }: { userName: string }) {
       {NAV.map((item) => {
         const Icon = item.icon;
         const active = isActive(item.href, item.exact);
+        const badge = item.href === "/admin/bookings" && pendingCount > 0 ? pendingCount : null;
         return (
           <Link
             key={item.href}
@@ -61,7 +86,12 @@ export default function Sidebar({ userName }: { userName: string }) {
             }`}
           >
             <Icon size={17} />
-            {item.label}
+            <span className="flex-1">{item.label}</span>
+            {badge && (
+              <span className="text-[10px] font-bold min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-amber-500 text-[#040d18]">
+                {badge}
+              </span>
+            )}
           </Link>
         );
       })}

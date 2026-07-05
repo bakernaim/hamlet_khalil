@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { badRequest, notFound, str, int, bool } from "@/lib/api";
+import { sanitizeRichText } from "@/lib/sanitize";
 import { removeUpload } from "@/lib/uploads";
 
 type Ctx = { params: Promise<{ id: string }> };
@@ -36,9 +37,10 @@ export async function PUT(req: Request, { params }: Ctx) {
       nameEn: str(body.nameEn),
       durationAr: str(body.durationAr),
       durationEn: str(body.durationEn),
-      price: int(body.price, existing.price),
       descAr: str(body.descAr),
       descEn: str(body.descEn),
+      infoAr: sanitizeRichText(str(body.infoAr)),
+      infoEn: sanitizeRichText(str(body.infoEn)),
       image,
       sortOrder: int(body.sortOrder, existing.sortOrder),
       published: bool(body.published),

@@ -41,10 +41,35 @@ Verify changes with `npm run build` **and** `npm run lint`. The first admin is `
 - **Admin** [src/app/admin/](src/app/admin/): `login/` is public; the `(panel)/` route group
   has a session-guarded layout with a sidebar. Each panel page renders a client "Manager"
   component from [src/components/admin/](src/components/admin/) that fetches its own data from
-  the API via the [useResource](src/components/admin/useResource.ts) hook.
+  the API via the [useResource](src/components/admin/useResource.ts) hook. Most Managers keep
+  create/edit in a `<Modal>`, but **Ziyarat & Tourism** use dedicated form **pages** instead
+  (the form is long): the Manager is list-only and links to `ziyarat|tourism/new` and
+  `ziyarat|tourism/[id]` (edit), which render `ZiyaratForm`/`TourismForm`. Those forms are a
+  fixed-height flex column — header + Save/Cancel footer stay pinned while the fields scroll
+  internally — and `router.push` back to the list on save.
 - **API** [src/app/api/](src/app/api/): `auth/{login,logout}` set/clear the session cookie;
-  `admin/{ziyarat,tourism,trips,banners,users,settings}` are the CRUD handlers (collection `route.ts`
-  + item `[id]/route.ts`).
+  `admin/{ziyarat,tourism,trips,banners,users,settings,bookings}` are the CRUD handlers (collection
+  `route.ts` + item `[id]/route.ts`). **Public** (unguarded) endpoints live under `api/booking/`:
+  `booking/upload` (stores a passport privately, returns a token) and `booking` (creates a PENDING
+  `Booking`). `admin/passport/[name]` streams a private passport file and is session-guarded.
+- **Recurring trips & bookings**: a `CurrentTrip` is one-off or repeats (`frequency` +
+  `recurEndDate`). [src/lib/recurrence.ts](src/lib/recurrence.ts) turns that into the bookable
+  departure dates (`computeDepartures`, future-only, capped); `server/data.ts` puts them on the DTO
+  as `departures[]`. The public [BookingModal](src/components/site/BookingModal.tsx) lets a visitor
+  pick a departure, enter phone + party size, and upload **one passport per traveler** (required).
+  Passports are PII: stored in `/private_uploads` (gitignored, **never** in `public/`) via
+  `savePassport`/`readPassport`/`removePassport` in [uploads.ts](src/lib/uploads.ts), viewable only
+  through the guarded `admin/passport/[name]` route. Bookings start PENDING and are reviewed in the
+  admin [BookingsManager](src/components/admin/BookingsManager.tsx) (filterable by status, trip/
+  package, and departure date); the sidebar polls for the pending count. A trip's "Details" button opens the linked package's
+  [PackageInfoModal](src/components/site/PackageInfoModal.tsx), and each card also has a small
+  WhatsApp quick-book button (the [BookingModal](src/components/site/BookingModal.tsx) offers a
+  WhatsApp contact option too). A trip with no image falls back to its linked package's image
+  (`trip.image ?? pkg?.image`). The booking date picker shows the first 4 departures with a
+  "+N more" toggle. Admins reorder trips with the ▲▼ arrows in
+  [TripsManager](src/components/admin/TripsManager.tsx) (persists `sortOrder`; the linked package
+  is chosen from a dropdown, not free text). Known gap: passport uploads from abandoned booking
+  forms are not auto-pruned.
 - **Auth guard** [src/proxy.ts](src/proxy.ts) (Next 16 renamed `middleware` → `proxy`)
   protects `/admin/**` (redirect to login) and `/api/admin/**` (401).
 
@@ -55,6 +80,14 @@ Verify changes with `npm run build` **and** `npm run lint`. The first admin is `
 - **List fields** (e.g. `highlights`) are stored as JSON strings; parse/serialize with
   [src/lib/serialize.ts](src/lib/serialize.ts) (`parseList` / `stringifyList`). DTOs exposed
   to components use real arrays.
+- **Package info (rich text)**: Ziyarat/Tourism packages have **no price**; they carry
+  bilingual `infoAr`/`infoEn` HTML edited with
+  [RichTextEditor](src/components/admin/RichTextEditor.tsx) (contentEditable, no editor libs).
+  API handlers must pass it through `sanitizeRichText`
+  ([src/lib/sanitize.ts](src/lib/sanitize.ts)) before storing. The public cards' only CTA opens
+  [PackageInfoModal](src/components/site/PackageInfoModal.tsx), which renders the HTML with the
+  `.rich-text` styles (globals.css) and offers read-aloud via the browser's `speechSynthesis`
+  (voice language follows `isRTL`).
 - **DTOs**: server → client props use the plain serializable types in
   [src/lib/types.ts](src/lib/types.ts). Convert Prisma rows to DTOs in `server/data.ts`
   (dates → ISO strings, JSON → arrays). Don't pass raw Prisma rows to client components.
