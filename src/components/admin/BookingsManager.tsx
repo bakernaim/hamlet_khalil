@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useResource } from "@/components/admin/useResource";
 import { Button, ErrorText, Select } from "@/components/admin/ui";
-import type { BookingDTO, BookingStatus } from "@/lib/types";
+import type { BookingDTO, BookingStatus, RoomType } from "@/lib/types";
 
 const dayKey = (iso: string) => iso.slice(0, 10); // YYYY-MM-DD
 
@@ -11,6 +11,13 @@ const STATUS_META: Record<BookingStatus, { label: string; chip: string }> = {
   PENDING: { label: "Pending", chip: "bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30" },
   CONFIRMED: { label: "Confirmed", chip: "bg-brand/15 text-accent border border-brand/30" },
   CANCELLED: { label: "Cancelled", chip: "bg-ink/8 text-ink/45 border border-line" },
+};
+
+const ROOM_LABELS: Record<RoomType, string> = {
+  SINGLE: "Single room",
+  DOUBLE: "Double room",
+  TRIPLE: "Triple room",
+  QUAD: "Quad room",
 };
 
 const fmtDate = (iso: string) =>
@@ -203,6 +210,7 @@ export default function BookingsManager() {
                     </div>
                     <div className="text-ink/50 text-xs mt-1 flex flex-wrap gap-x-4 gap-y-1">
                       <span>👥 {b.partySize} {b.partySize === 1 ? "traveler" : "travelers"}</span>
+                      {b.roomType && <span>🛏️ {ROOM_LABELS[b.roomType]}</span>}
                       <a href={`tel:${b.phone}`} className="hover:text-ink">📞 {b.phone}</a>
                       <a
                         href={`https://wa.me/${b.phone.replace(/[^0-9]/g, "")}`}

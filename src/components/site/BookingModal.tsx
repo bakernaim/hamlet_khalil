@@ -4,9 +4,17 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useLang } from "@/context/LanguageContext";
 import { waHref } from "@/lib/whatsapp";
-import type { CurrentTripDTO } from "@/lib/types";
+import { ROOM_TYPES, type CurrentTripDTO, type RoomType } from "@/lib/types";
 
 type Passport = { token: string; preview: string; uploading: boolean; error: string };
+
+// Bilingual labels for the hotel room preference.
+const ROOM_LABELS: Record<RoomType, { ar: string; en: string; bedsAr: string; bedsEn: string }> = {
+  SINGLE: { ar: "غرفة مفردة", en: "Single room", bedsAr: "سرير واحد", bedsEn: "1 bed" },
+  DOUBLE: { ar: "غرفة ثنائية", en: "Double room", bedsAr: "سريران",   bedsEn: "2 beds" },
+  TRIPLE: { ar: "غرفة ثلاثية", en: "Triple room", bedsAr: "٣ أسرّة",  bedsEn: "3 beds" },
+  QUAD:   { ar: "غرفة رباعية", en: "Quad room",   bedsAr: "٤ أسرّة",  bedsEn: "4 beds" },
+};
 
 const emptyPassport = (): Passport => ({ token: "", preview: "", uploading: false, error: "" });
 
@@ -29,6 +37,7 @@ export default function BookingModal({
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
+  const [roomType, setRoomType] = useState<RoomType | null>(null);
   const [passports, setPassports] = useState<Passport[]>([emptyPassport()]);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -101,6 +110,7 @@ export default function BookingModal({
     if (!date) return setError(isRTL ? "يرجى اختيار تاريخ المغادرة" : "Please choose a departure date");
     if (!fullName.trim()) return setError(isRTL ? "يرجى إدخال الاسم" : "Please enter your name");
     if (!phone.trim()) return setError(isRTL ? "يرجى إدخال رقم الهاتف" : "Please enter your phone number");
+    if (!roomType) return setError(isRTL ? "يرجى اختيار نوع الغرفة" : "Please choose a room type");
     if (!allUploaded)
       return setError(isRTL ? "يرجى رفع صورة جواز سفر لكل مسافر" : "Please upload a passport image for every traveler");
 
@@ -114,6 +124,7 @@ export default function BookingModal({
         fullName: fullName.trim(),
         phone: phone.trim(),
         partySize,
+        roomType,
         passports: passports.map((p) => p.token),
         notes: notes.trim() || undefined,
       }),
@@ -290,6 +301,35 @@ export default function BookingModal({
                     >
                       +
                     </button>
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm text-soft mb-1.5">🛏️ {isRTL ? "نوع الغرفة" : "Room type"}</div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {ROOM_TYPES.map((rt) => {
+                      const l = ROOM_LABELS[rt];
+                      const selected = roomType === rt;
+                      return (
+                        <button
+                          key={rt}
+                          type="button"
+                          onClick={() => setRoomType(rt)}
+                          className={`rounded-xl border px-3 py-2.5 text-start transition ${
+                            selected
+                              ? "bg-brand/10 border-brand text-ink shadow-sm"
+                              : "border-line bg-page-alt text-soft hover:border-brand/50 hover:text-ink"
+                          }`}
+                        >
+                          <span className="flex items-center justify-between gap-2">
+                            <span className="text-xs font-semibold">{isRTL ? l.ar : l.en}</span>
+                            {selected && <span className="text-accent text-xs">✓</span>}
+                          </span>
+                          <span className="block text-[11px] text-muted mt-0.5">
+                            {isRTL ? l.bedsAr : l.bedsEn}
+                          </span>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               </div>

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { badRequest, str, optionalStr, int, optionalInt, bool, optionalDate } from "@/lib/api";
 
 const THEMES = ["green", "amber"];
+const DISPLAY_MODES = ["bar", "modal", "both"];
 
 export async function GET() {
   const rows = await prisma.banner.findMany({
@@ -27,6 +28,7 @@ export async function POST(req: Request) {
       textEn: str(body.textEn),
       image: optionalStr(body.image),
       theme: THEMES.includes(str(body.theme)) ? str(body.theme) : "green",
+      displayMode: DISPLAY_MODES.includes(str(body.displayMode)) ? str(body.displayMode) : "bar",
       targetDate: optionalDate(body.targetDate),
       priceFrom: optionalInt(body.priceFrom),
       noteAr: optionalStr(body.noteAr),

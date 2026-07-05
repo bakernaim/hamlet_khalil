@@ -4,6 +4,7 @@ import { badRequest, notFound, str, optionalStr, int, optionalInt, bool, optiona
 import { removeUpload } from "@/lib/uploads";
 
 const THEMES = ["green", "amber"];
+const DISPLAY_MODES = ["bar", "modal", "both"];
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -34,6 +35,7 @@ export async function PUT(req: Request, { params }: Ctx) {
       textEn: str(body.textEn),
       image,
       theme: THEMES.includes(str(body.theme)) ? str(body.theme) : existing.theme,
+      displayMode: DISPLAY_MODES.includes(str(body.displayMode)) ? str(body.displayMode) : existing.displayMode,
       targetDate: optionalDate(body.targetDate),
       priceFrom: optionalInt(body.priceFrom),
       noteAr: optionalStr(body.noteAr),

@@ -14,6 +14,7 @@ interface Banner {
   textEn: string;
   image: string | null;
   theme: string;
+  displayMode: string;
   targetDate: string | null;
   priceFrom: number | null;
   noteAr: string | null;
@@ -33,6 +34,7 @@ type FormState = {
   textEn: string;
   image: string;
   theme: string;
+  displayMode: string;
   targetDate: string;
   priceFrom: string;
   noteAr: string;
@@ -52,6 +54,7 @@ const empty: FormState = {
   textEn: "",
   image: "",
   theme: "green",
+  displayMode: "bar",
   targetDate: "",
   priceFrom: "",
   noteAr: "",
@@ -74,6 +77,7 @@ function toForm(b: Banner): FormState {
     textEn: b.textEn,
     image: b.image ?? "",
     theme: b.theme,
+    displayMode: b.displayMode,
     targetDate: isoToInput(b.targetDate),
     priceFrom: b.priceFrom == null ? "" : String(b.priceFrom),
     noteAr: b.noteAr ?? "",
@@ -159,6 +163,7 @@ export default function BannersManager() {
               <tr>
                 <th className="px-4 py-3 font-medium">Banner</th>
                 <th className="px-4 py-3 font-medium">Theme</th>
+                <th className="px-4 py-3 font-medium">Display</th>
                 <th className="px-4 py-3 font-medium">Countdown</th>
                 <th className="px-4 py-3 font-medium">Visible</th>
                 <th className="px-4 py-3 font-medium text-right">Actions</th>
@@ -180,6 +185,11 @@ export default function BannersManager() {
                       }`}
                     >
                       {b.theme}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className="text-xs px-2 py-1 rounded-full border border-line text-ink/60">
+                      {b.displayMode === "modal" ? "Popup" : b.displayMode === "both" ? "Bar + Popup" : "Bottom bar"}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-ink/60">{fmt(b.targetDate)}</td>
@@ -229,13 +239,22 @@ export default function BannersManager() {
               <Textarea rows={2} dir="rtl" value={form.textAr} onChange={(e) => set("textAr", e.target.value)} />
             </Field>
           </div>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             <Field label="Theme">
               <Select value={form.theme} onChange={(e) => set("theme", e.target.value)}>
                 <option value="green">Green</option>
                 <option value="amber">Amber (Arbaeen style)</option>
               </Select>
             </Field>
+            <Field label="Display as" hint="Popup opens once per visit, over the page">
+              <Select value={form.displayMode} onChange={(e) => set("displayMode", e.target.value)}>
+                <option value="bar">Bottom bar</option>
+                <option value="modal">Popup (modal)</option>
+                <option value="both">Both (bar + popup)</option>
+              </Select>
+            </Field>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
             <Field label="Countdown date" hint="Optional — shows a live countdown">
               <Input type="date" value={form.targetDate} onChange={(e) => set("targetDate", e.target.value)} />
             </Field>
@@ -261,8 +280,8 @@ export default function BannersManager() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <ImageUpload
-              label="Background image"
-              hint="Optional — dark gradient is used when empty"
+              label="Photo"
+              hint="Optional — used as the popup's header photo (the bar shows no image)"
               value={form.image}
               onChange={(p) => set("image", p)}
             />

@@ -7,6 +7,8 @@ import type {
   TourismPackageDTO,
   CurrentTripDTO,
   BannerDTO,
+  ReviewDTO,
+  GalleryItemDTO,
   SiteSettings,
   TripStatus,
   TripFrequency,
@@ -99,12 +101,44 @@ export async function getBanners(publishedOnly = true): Promise<BannerDTO[]> {
     textEn: b.textEn,
     image: b.image,
     theme: b.theme,
+    displayMode: b.displayMode,
     targetDate: b.targetDate ? b.targetDate.toISOString() : null,
     priceFrom: b.priceFrom,
     noteAr: b.noteAr,
     noteEn: b.noteEn,
     ctaAr: b.ctaAr,
     ctaEn: b.ctaEn,
+  }));
+}
+
+// Approved reviews, newest first, for the public reviews section.
+export async function getApprovedReviews(): Promise<ReviewDTO[]> {
+  const rows = await prisma.review.findMany({
+    where: { approved: true },
+    orderBy: { createdAt: "desc" },
+  });
+  return rows.map((r) => ({
+    id: r.id,
+    name: r.name,
+    tripLabel: r.tripLabel,
+    rating: r.rating,
+    text: r.text,
+    createdAt: r.createdAt.toISOString(),
+  }));
+}
+
+// Published gallery media for the public gallery section.
+export async function getGalleryItems(): Promise<GalleryItemDTO[]> {
+  const rows = await prisma.galleryItem.findMany({
+    where: { published: true },
+    orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
+  });
+  return rows.map((g) => ({
+    id: g.id,
+    type: g.type,
+    src: g.src,
+    captionAr: g.captionAr,
+    captionEn: g.captionEn,
   }));
 }
 

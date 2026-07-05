@@ -5,7 +5,8 @@
       "Bash(sed -i \"s/rgba\\(201,168,76,0.15\\)/rgba\\(0,201,212,0.15\\)/g\" /home/baker/Projects/hamlet_khalil/src/components/Hero.tsx)",
       "Bash(sed -i \"s/#06091e/#040d18/g\" /home/baker/Projects/hamlet_khalil/src/components/Hero.tsx)",
       "Bash(sed -i \"s/#06091e/#040d18/g\" /home/baker/Projects/hamlet_khalil/src/components/Footer.tsx)",
-      "Bash(npx prisma *)"
+      "Bash(npx prisma *)",
+      "Bash(python3 -)"
     ]
   }
 }

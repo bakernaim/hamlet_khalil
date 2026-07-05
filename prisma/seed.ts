@@ -5,6 +5,7 @@ import { PrismaClient } from "../src/generated/prisma/index.js";
 import {
   ziyaratPackages,
   tourismPackages,
+  testimonials,
 } from "../src/data/content.js";
 import { stringifyList } from "../src/lib/serialize.js";
 import { SETTING_DEFAULTS, SETTING_KEYS } from "../src/lib/settings.js";
@@ -192,6 +193,20 @@ async function main() {
       },
     });
     console.log("✔ Seeded the Arbaeen promo banner");
+  }
+
+  // ── Starter reviews (only if none exist) ─────────────────────────
+  const reviewCount = await prisma.review.count();
+  if (reviewCount === 0) {
+    await prisma.review.createMany({
+      data: testimonials.map((t) => ({
+        name: t.name.ar,
+        tripLabel: t.destination.ar,
+        rating: t.stars,
+        text: t.quote.ar,
+        approved: true,
+      })),
+    });
   }
 
   // ── Settings ─────────────────────────────────────────────────────

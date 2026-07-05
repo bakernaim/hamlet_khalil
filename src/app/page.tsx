@@ -5,9 +5,11 @@ import ZiyaratPackages from "@/components/site/ZiyaratPackages";
 import TrustBar from "@/components/site/TrustBar";
 import VerseBanner from "@/components/site/VerseBanner";
 import TourismPackages from "@/components/site/TourismPackages";
-import PromoBanner from "@/components/site/PromoBanner";
+import PromoBannerCarousel from "@/components/site/PromoBannerCarousel";
+import PromoModal from "@/components/site/PromoModal";
 import HowItWorks from "@/components/site/HowItWorks";
-import Testimonials from "@/components/site/Testimonials";
+import Reviews from "@/components/site/Reviews";
+import Gallery from "@/components/site/Gallery";
 import FAQ from "@/components/site/FAQ";
 import InstagramFeed from "@/components/site/InstagramFeed";
 import Footer from "@/components/site/Footer";
@@ -18,6 +20,8 @@ import {
   getTourismPackages,
   getCurrentTrips,
   getBanners,
+  getApprovedReviews,
+  getGalleryItems,
   getSettings,
 } from "@/server/data";
 
@@ -25,15 +29,21 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const [settings, ziyarat, tourism, trips, banners] = await Promise.all([
+  const [settings, ziyarat, tourism, trips, banners, reviews, gallery] = await Promise.all([
     getSettings(),
     getZiyaratPackages(),
     getTourismPackages(),
     getCurrentTrips(),
     getBanners(),
+    getApprovedReviews(),
+    getGalleryItems(),
   ]);
 
   const wa = settings.whatsappNumber;
+
+  // displayMode routes each banner to the bottom bar, the on-load popup, or both.
+  const barBanners = banners.filter((b) => b.displayMode !== "modal");
+  const modalBanner = banners.find((b) => b.displayMode === "modal" || b.displayMode === "both");
 
   return (
     <LanguageWrapper>
@@ -45,15 +55,15 @@ export default async function Home() {
         <TrustBar />
         <VerseBanner />
         <TourismPackages packages={tourism} />
-        {banners.map((b) => (
-          <PromoBanner key={b.id} banner={b} whatsappNumber={wa} />
-        ))}
         <HowItWorks />
-        <Testimonials />
+        <Gallery items={gallery} />
+        <Reviews reviews={reviews} />
         <FAQ />
         <InstagramFeed instagramUrl={settings.instagramUrl} />
       </main>
       <Footer settings={settings} />
+      <PromoBannerCarousel banners={barBanners} whatsappNumber={wa} />
+      {modalBanner && <PromoModal banner={modalBanner} whatsappNumber={wa} />}
       <FloatingButtons whatsappNumber={wa} />
     </LanguageWrapper>
   );

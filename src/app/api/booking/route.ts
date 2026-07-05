@@ -4,6 +4,7 @@ import { badRequest, str, optionalStr, int } from "@/lib/api";
 import { stringifyList } from "@/lib/serialize";
 import { isBookableDeparture } from "@/lib/recurrence";
 import { passportExists } from "@/lib/uploads";
+import { ROOM_TYPES, type RoomType } from "@/lib/types";
 
 const MAX_PARTY = 30;
 
@@ -31,6 +32,11 @@ export async function POST(req: Request) {
     return badRequest(`Number of travelers must be between 1 and ${MAX_PARTY}`);
   }
 
+  const roomType = str(body.roomType).toUpperCase();
+  if (!ROOM_TYPES.includes(roomType as RoomType)) {
+    return badRequest("Please choose a room type");
+  }
+
   const passports = Array.isArray(body.passports) ? body.passports.map((p: unknown) => str(p)) : [];
   if (passports.length !== partySize) {
     return badRequest("Please upload one passport image for each traveler");
@@ -50,6 +56,7 @@ export async function POST(req: Request) {
       fullName,
       phone,
       partySize,
+      roomType,
       passports: stringifyList(passports),
       notes: optionalStr(body.notes),
       status: "PENDING",

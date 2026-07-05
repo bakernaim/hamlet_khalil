@@ -61,6 +61,10 @@ export interface CurrentTripDTO {
 
 export type BookingStatus = "PENDING" | "CONFIRMED" | "CANCELLED";
 
+// Hotel room preference chosen while booking (beds per room).
+export const ROOM_TYPES = ["SINGLE", "DOUBLE", "TRIPLE", "QUAD"] as const;
+export type RoomType = (typeof ROOM_TYPES)[number];
+
 export interface BookingDTO {
   id: string;
   tripId: string | null;
@@ -70,6 +74,7 @@ export interface BookingDTO {
   fullName: string;
   phone: string;
   partySize: number;
+  roomType: RoomType | null; // null on bookings made before room selection existed
   passports: string[]; // private file tokens; view via /api/admin/passport/<token>
   notes: string | null;
   status: BookingStatus;
@@ -86,12 +91,36 @@ export interface BannerDTO {
   textEn: string;
   image: string | null;
   theme: string; // "green" | "amber"
+  displayMode: string; // "bar" (thin bottom bar) | "modal" (popup on page load) | "both"
   targetDate: string | null; // ISO — countdown when in the future
   priceFrom: number | null;
   noteAr: string | null;
   noteEn: string | null;
   ctaAr: string | null;
   ctaEn: string | null;
+}
+
+// A visitor-submitted review (single language — shown as written).
+export interface ReviewDTO {
+  id: string;
+  name: string;
+  tripLabel: string | null;
+  rating: number; // 1–5
+  text: string;
+  createdAt: string; // ISO
+}
+
+// Admin view of a review adds the moderation flag.
+export interface AdminReviewDTO extends ReviewDTO {
+  approved: boolean;
+}
+
+export interface GalleryItemDTO {
+  id: string;
+  type: string; // "image" | "video"
+  src: string; // /api/media/… path
+  captionAr: string | null;
+  captionEn: string | null;
 }
 
 export interface SiteSettings {

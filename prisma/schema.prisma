@@ -97,6 +97,7 @@ model Booking {
   fullName      String
   phone         String
   partySize     Int
+  roomType      String? // SINGLE | DOUBLE | TRIPLE | QUAD — hotel room preference
   passports     String       @default("[]") // JSON string[] of private passport file tokens
   notes         String?
   status        String       @default("PENDING") // PENDING | CONFIRMED | CANCELLED
@@ -106,25 +107,51 @@ model Booking {
 
 // Promo banners rendered between homepage sections (Arbaeen countdown, offers…).
 model Banner {
-  id         String    @id @default(cuid())
-  titleAr    String
-  titleEn    String
-  badgeAr    String? // small uppercase chip above the title
-  badgeEn    String?
-  textAr     String
-  textEn     String
-  image      String? // background photo (uploaded)
-  theme      String    @default("green") // "green" | "amber"
-  targetDate DateTime? // when set and in the future, shows a live countdown
-  priceFrom  Int? // when set, shows a "From $X" box
-  noteAr     String? // extra line next to the price, e.g. "١٤ يوماً"
-  noteEn     String?
-  ctaAr      String? // CTA label; defaults to "تواصل معنا" / "Contact Us"
-  ctaEn      String?
-  sortOrder  Int       @default(0)
-  published  Boolean   @default(true)
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  id          String    @id @default(cuid())
+  titleAr     String
+  titleEn     String
+  badgeAr     String? // small uppercase chip above the title
+  badgeEn     String?
+  textAr      String
+  textEn      String
+  image       String? // background photo (uploaded)
+  theme       String    @default("green") // "green" | "amber"
+  displayMode String    @default("bar") // "bar" (thin bottom bar) | "modal" (popup on page load) | "both"
+  targetDate  DateTime? // when set and in the future, shows a live countdown
+  priceFrom   Int? // when set, shows a "From $X" box
+  noteAr      String? // extra line next to the price, e.g. "١٤ يوماً"
+  noteEn      String?
+  ctaAr       String? // CTA label; defaults to "تواصل معنا" / "Contact Us"
+  ctaEn       String?
+  sortOrder   Int       @default(0)
+  published   Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// Visitor-submitted reviews. Hidden until an admin approves them.
+model Review {
+  id        String   @id @default(cuid())
+  name      String
+  tripLabel String? // optional free-text "which trip was this about"
+  rating    Int // 1–5 stars
+  text      String
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Admin-uploaded gallery media (trip photos & short videos) shown on the site.
+model GalleryItem {
+  id        String   @id @default(cuid())
+  type      String // "image" | "video"
+  src       String // /api/media/… upload path
+  captionAr String?
+  captionEn String?
+  sortOrder Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Setting {

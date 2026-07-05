@@ -17,6 +17,8 @@ import {
   X,
   KeyRound,
   Ticket,
+  Star,
+  Images,
 } from "lucide-react";
 import ThemeToggle from "@/components/site/ThemeToggle";
 
@@ -27,6 +29,8 @@ const NAV = [
   { href: "/admin/tourism", label: "Tourism Packages", icon: Plane },
   { href: "/admin/trips", label: "Current Trips", icon: CalendarClock },
   { href: "/admin/banners", label: "Banners", icon: Megaphone },
+  { href: "/admin/gallery", label: "Gallery", icon: Images },
+  { href: "/admin/reviews", label: "Reviews", icon: Star },
   { href: "/admin/users", label: "Staff Users", icon: Users },
   { href: "/admin/settings", label: "Site Settings", icon: Settings },
   { href: "/admin/account", label: "My Account", icon: KeyRound },

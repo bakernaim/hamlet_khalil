@@ -56,7 +56,7 @@ Verify changes with `npm run build` **and** `npm run lint`. The first admin is `
   `recurEndDate`). [src/lib/recurrence.ts](src/lib/recurrence.ts) turns that into the bookable
   departure dates (`computeDepartures`, future-only, capped); `server/data.ts` puts them on the DTO
   as `departures[]`. The public [BookingModal](src/components/site/BookingModal.tsx) lets a visitor
-  pick a departure, enter phone + party size, and upload **one passport per traveler** (required).
+  pick a departure, enter phone + party size + a room type (`roomType`: SINGLE/DOUBLE/TRIPLE/QUAD, shared `ROOM_TYPES` in lib/types.ts), and upload **one passport per traveler** (required).
   Passports are PII: stored in `/private_uploads` (gitignored, **never** in `public/`) via
   `savePassport`/`readPassport`/`removePassport` in [uploads.ts](src/lib/uploads.ts), viewable only
   through the guarded `admin/passport/[name]` route. Bookings start PENDING and are reviewed in the
@@ -114,18 +114,26 @@ Verify changes with `npm run build` **and** `npm run lint`. The first admin is `
   [ThemeToggle](src/components/site/ThemeToggle.tsx) (public navbar, admin sidebar, login).
   The **accent color is a dashboard setting** (`themeColor`): the root layout derives
   hover/text/sheen shades via [src/lib/color.ts](src/lib/color.ts) and injects them as CSS
-  vars, so never hardcode the green. Hero and promo banners keep photo backgrounds with dark
-  overlays in both themes. Public site is RTL-capable; admin is LTR and follows the same
-  theme.
+  vars, so never hardcode the green. Hero and promo surfaces keep dark backgrounds in both
+  themes. Public site is RTL-capable; admin is LTR and follows the same theme.
+- **Promo banners** have a `displayMode` ("bar" | "modal" | "both", picked in the admin form):
+  "bar"/"both" banners cycle in the fixed bottom
+  [PromoBannerCarousel](src/components/site/PromoBannerCarousel.tsx) as thin gradient rows (no
+  image; shared accent themes exported as `promoTheme` from
+  [PromoBanner](src/components/site/PromoBanner.tsx)); the first published "modal"/"both" banner
+  also pops up once per browser session via [PromoModal](src/components/site/PromoModal.tsx),
+  which uses the uploaded image as its header photo.
 - **Admin UI primitives**: reuse `Field`, `Input`, `Textarea`, `Select`, `Toggle`, `Button`,
   `Modal`, `ErrorText`, `ImageUpload` from [src/components/admin/ui.tsx](src/components/admin/ui.tsx).
 - **Route handler input coercion**: use helpers in [src/lib/api.ts](src/lib/api.ts)
   (`str`, `int`, `bool`, `optionalDate`, `badRequest`, …).
 - **Image uploads**: admin forms use `ImageUpload`, which POSTs to `api/admin/upload` and
-  stores files in `public/uploads/` (gitignored). Use `saveUpload`/`removeUpload` from
+  stores files in `private_uploads/images/` (gitignored, outside `public/`). They are served
+  as public marketing content through the **unguarded** `api/media/[name]` route (`readMedia`),
+  so stored paths look like `/api/media/…`. Use `saveUpload`/`removeUpload` from
   [src/lib/uploads.ts](src/lib/uploads.ts); item DELETE/PUT handlers call `removeUpload` so
   deleting a record (or replacing its image) also deletes the uploaded file. `removeUpload`
-  never touches anything outside `/uploads/` (seed images in `/shrines` are safe).
+  never touches anything not served from `/api/media/` (seed images in `public/shrines` are safe).
 
 ## Adding things (recipes)
 

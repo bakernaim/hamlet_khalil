@@ -209,6 +209,33 @@ body {
   animation: hero-fade 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
+/* ── Promo bar slide-up entrance ── */
+@keyframes promo-slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+.promo-slide-up { animation: promo-slide-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* Light sheen that periodically sweeps across the promo bar */
+@keyframes promo-sheen {
+  0%        { left: -20%; }
+  55%, 100% { left: 120%; }
+}
+.promo-sheen { animation: promo-sheen 4.5s ease-in-out 1s infinite; }
+
+/* ── Promo popup entrance (backdrop fade + card pop) ── */
+@keyframes promo-modal-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.promo-modal-fade { animation: promo-modal-fade 0.3s ease-out both; }
+
+@keyframes promo-modal-pop {
+  from { opacity: 0; transform: translateY(24px) scale(0.94); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.promo-modal-pop { animation: promo-modal-pop 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
 /* ── Hero slow zoom (Ken Burns) ── */
 @keyframes kenburns {
   0%   { transform: scale(1);    }
