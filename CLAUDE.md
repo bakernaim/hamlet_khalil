@@ -48,10 +48,11 @@ Verify changes with `npm run build` **and** `npm run lint`. The first admin is `
   fixed-height flex column — header + Save/Cancel footer stay pinned while the fields scroll
   internally — and `router.push` back to the list on save.
 - **API** [src/app/api/](src/app/api/): `auth/{login,logout}` set/clear the session cookie;
-  `admin/{ziyarat,tourism,trips,banners,users,settings,bookings}` are the CRUD handlers (collection
-  `route.ts` + item `[id]/route.ts`). **Public** (unguarded) endpoints live under `api/booking/`:
-  `booking/upload` (stores a passport privately, returns a token) and `booking` (creates a PENDING
-  `Booking`). `admin/passport/[name]` streams a private passport file and is session-guarded.
+  `admin/{ziyarat,tourism,trips,banners,gallery,reviews,users,settings,bookings}` are the CRUD handlers
+  (collection `route.ts` + item `[id]/route.ts`). **Public** (unguarded) endpoints: `api/booking/upload`
+  (stores a passport privately, returns a token), `api/booking` (creates a PENDING `Booking`) and
+  `api/reviews` (visitor submits a review, stored with `approved: false`). `admin/passport/[name]`
+  streams a private passport file and is session-guarded.
 - **Recurring trips & bookings**: a `CurrentTrip` is one-off or repeats (`frequency` +
   `recurEndDate`). [src/lib/recurrence.ts](src/lib/recurrence.ts) turns that into the bookable
   departure dates (`computeDepartures`, future-only, capped); `server/data.ts` puts them on the DTO
@@ -70,6 +71,12 @@ Verify changes with `npm run build` **and** `npm run lint`. The first admin is `
   [TripsManager](src/components/admin/TripsManager.tsx) (persists `sortOrder`; the linked package
   is chosen from a dropdown, not free text). Known gap: passport uploads from abandoned booking
   forms are not auto-pruned.
+- **Reviews & gallery**: visitor reviews (`Review` model, single-language text) are hidden until
+  approved in [ReviewsManager](src/components/admin/ReviewsManager.tsx); the public
+  [Reviews](src/components/site/Reviews.tsx) section (replaced the old static Testimonials) shows
+  approved ones and has the submit form. The trip gallery (`GalleryItem`: image or video) is managed
+  in [GalleryManager](src/components/admin/GalleryManager.tsx) and rendered by
+  [Gallery](src/components/site/Gallery.tsx) (grid + lightbox; section hidden when empty).
 - **Auth guard** [src/proxy.ts](src/proxy.ts) (Next 16 renamed `middleware` → `proxy`)
   protects `/admin/**` (redirect to login) and `/api/admin/**` (401).
 
@@ -129,8 +136,9 @@ Verify changes with `npm run build` **and** `npm run lint`. The first admin is `
   (`str`, `int`, `bool`, `optionalDate`, `badRequest`, …).
 - **Image uploads**: admin forms use `ImageUpload`, which POSTs to `api/admin/upload` and
   stores files in `private_uploads/images/` (gitignored, outside `public/`). They are served
-  as public marketing content through the **unguarded** `api/media/[name]` route (`readMedia`),
-  so stored paths look like `/api/media/…`. Use `saveUpload`/`removeUpload` from
+  as public marketing content through the **unguarded** `api/media/[name]` route (`statMedia` +
+  Range-aware streaming, so gallery videos can seek), so stored paths look like `/api/media/…`.
+  The upload endpoint is image-only unless the form sends `video=1` (gallery: MP4/WebM ≤ 100 MB). Use `saveUpload`/`removeUpload` from
   [src/lib/uploads.ts](src/lib/uploads.ts); item DELETE/PUT handlers call `removeUpload` so
   deleting a record (or replacing its image) also deletes the uploaded file. `removeUpload`
   never touches anything not served from `/api/media/` (seed images in `public/shrines` are safe).
