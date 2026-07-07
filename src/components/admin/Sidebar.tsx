@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
@@ -106,7 +107,12 @@ export default function Sidebar({ userName }: { userName: string }) {
     <>
       {/* Mobile top bar */}
       <div className="lg:hidden flex items-center justify-between px-4 h-14 border-b border-line bg-page-alt sticky top-0 z-40">
-        <span className="font-bold text-accent">🕌 Admin</span>
+        <span className="flex items-center gap-2 font-bold text-accent">
+          <span className="relative w-6 h-6 rounded-md overflow-hidden bg-white border border-brand/25 shrink-0">
+            <Image src="/logo.png" alt="Logo" fill className="object-contain p-0.5" sizes="24px" />
+          </span>
+          Admin
+        </span>
         <div className="flex items-center gap-2">
           <ThemeToggle className="w-7 h-7 flex items-center justify-center rounded-full border border-ink/15 text-ink/60 hover:text-ink" />
           <button onClick={() => setOpen((o) => !o)} className="text-ink/70 p-1">
@@ -127,7 +133,9 @@ export default function Sidebar({ userName }: { userName: string }) {
       <aside className="hidden lg:flex flex-col w-64 shrink-0 bg-page-alt border-r border-line p-4 min-h-screen sticky top-0">
         <div className="px-2 py-3 mb-4">
           <div className="flex items-center gap-2">
-            <span className="text-xl">🕌</span>
+            <span className="relative w-8 h-8 rounded-lg overflow-hidden bg-white border border-brand/25 shrink-0">
+              <Image src="/logo.png" alt="Logo" fill className="object-contain p-1" sizes="32px" />
+            </span>
             <span className="font-bold text-accent">Hamlet Al Khalil</span>
           </div>
           <p className="text-ink/35 text-[11px] mt-1">Admin Dashboard</p>

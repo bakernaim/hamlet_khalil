@@ -25,7 +25,7 @@ export default function ZiyaratPackages({
 
         {/* Heading */}
         <div className="text-center mb-10 sm:mb-14">
-          <span className="text-accent text-xs font-medium tracking-[0.2em] uppercase mb-2 block">
+          <span className="text-ziyarat-red text-xs font-medium tracking-[0.2em] uppercase mb-2 block">
             {isRTL ? "باقاتنا المقدسة" : "Sacred Packages"}
           </span>
           <h2 className="text-2xl sm:text-4xl font-bold text-ink mb-3">
@@ -76,7 +76,7 @@ export default function ZiyaratPackages({
                       </div>
 
                       {badge && (
-                        <div className="absolute bottom-3 start-3 bg-brand text-[#040d18] text-[10px] font-bold px-2.5 py-1 rounded-full shimmer-badge">
+                        <div className="absolute bottom-3 start-3 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shimmer-badge-red">
                           {badge}
                         </div>
                       )}

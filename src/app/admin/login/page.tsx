@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useState } from "react";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input, Button, ErrorText } from "@/components/admin/ui";
 import ThemeToggle from "@/components/site/ThemeToggle";
@@ -44,8 +45,10 @@ function LoginForm() {
       <ThemeToggle className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full border border-ink/15 text-ink/60 hover:text-ink transition-colors" />
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 mb-3">
-            <span className="text-2xl">🕌</span>
+          <div className="inline-flex flex-col items-center gap-3 mb-3">
+            <span className="relative w-20 h-20 rounded-2xl overflow-hidden bg-white border border-brand/25 shrink-0">
+              <Image src="/logo.png" alt="Logo" fill className="object-contain p-2" sizes="80px" />
+            </span>
             <span className="text-lg font-bold text-accent">Hamlet Al Khalil</span>
           </div>
           <h1 className="text-xl font-semibold text-ink">Admin Dashboard</h1>

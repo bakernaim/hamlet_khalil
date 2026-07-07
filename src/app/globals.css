@@ -19,6 +19,8 @@
   --green-hover: #33d68a;
   --green-sheen: #7dffc0;
   --shimmer-mid: #00995a;
+  --red:         #bb181b;
+  --red-hover:   #d92024;
 }
 
 .dark {
@@ -50,6 +52,8 @@
   --color-accent:   var(--green-text);
   --color-brand:    var(--green);
   --color-brand-hover: var(--green-hover);
+  --color-ziyarat-red: var(--red);
+  --color-ziyarat-red-hover: var(--red-hover);
 }
 
 html { scroll-behavior: smooth; }
@@ -284,6 +288,17 @@ body {
   animation: shimmer-badge 2.6s linear infinite;
 }
 
+.shimmer-badge-red {
+  background-image: linear-gradient(
+    110deg,
+    var(--red) 30%,
+    var(--red-hover) 45%,
+    var(--red) 60%
+  );
+  background-size: 220% 100%;
+  animation: shimmer-badge 2.6s linear infinite;
+}
+
 /* ── Shimmer sweep clipped to text (navbar logo) ──
    .shimmer-text follows the theme (ink-colored); .shimmer-text-light is
    always white, used while the navbar floats over the dark hero photo. */
@@ -347,7 +362,7 @@ body {
 
 /* ── Respect reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
-  .hero-kenburns, .aurora, .shimmer-badge, .bounce-soft, .whatsapp-pulse,
+  .hero-kenburns, .aurora, .shimmer-badge, .shimmer-badge-red, .bounce-soft, .whatsapp-pulse,
   .shimmer-text, .shimmer-text-light, .float-slow, .spin-slow, .glow-ring {
     animation: none !important;
   }
