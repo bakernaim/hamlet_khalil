@@ -1,12 +1,25 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { useLang } from "@/context/LanguageContext";
-import type { SiteSettings } from "@/lib/types";
+import type { HeroImageDTO, SiteSettings } from "@/lib/types";
 import CountUp from "@/components/site/CountUp";
 
-export default function Hero({ settings }: { settings: SiteSettings }) {
+const DEFAULT_IMAGE = "/shrines/hussain-karbala.jpg";
+const SLIDE_MS = 6000;
+
+export default function Hero({ settings, images }: { settings: SiteSettings; images: HeroImageDTO[] }) {
   const { isRTL } = useLang();
+  const slides = images.length > 0 ? images.map((i) => i.src) : [DEFAULT_IMAGE];
+  const [active, setActive] = useState(0);
+
+  // Cycle background photos with a crossfade; a single photo just stays put.
+  useEffect(() => {
+    if (slides.length < 2) return;
+    const t = setInterval(() => setActive((i) => (i + 1) % slides.length), SLIDE_MS);
+    return () => clearInterval(t);
+  }, [slides.length]);
 
   const heading = isRTL ? settings.heroHeadingAr : settings.heroHeadingEn;
   const subheading = isRTL ? settings.heroSubheadingAr : settings.heroSubheadingEn;
@@ -23,16 +36,21 @@ export default function Hero({ settings }: { settings: SiteSettings }) {
       dir={isRTL ? "rtl" : "ltr"}
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Background */}
+      {/* Background — crossfades between admin-uploaded hero photos */}
       <div className="absolute inset-0">
-        <Image
-          src="/shrines/hussain-karbala.jpg"
-          alt="Imam Hussain Shrine, Karbala"
-          fill
-          priority
-          className="object-cover object-center hero-kenburns"
-          sizes="100vw"
-        />
+        {slides.map((src, i) => (
+          <Image
+            key={src + i}
+            src={src}
+            alt="Hero background"
+            fill
+            priority={i === 0}
+            className={`object-cover object-center hero-kenburns transition-opacity duration-[1500ms] ease-in-out ${
+              i === active ? "opacity-100" : "opacity-0"
+            }`}
+            sizes="100vw"
+          />
+        ))}
         <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/65" />
       </div>
 

@@ -20,12 +20,14 @@ import {
   Ticket,
   Star,
   Images,
+  GalleryHorizontal,
 } from "lucide-react";
 import ThemeToggle from "@/components/site/ThemeToggle";
 
 const NAV = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/bookings", label: "Bookings", icon: Ticket },
+  { href: "/admin/hero-images", label: "Hero Images", icon: GalleryHorizontal },
   { href: "/admin/ziyarat", label: "Ziyarat Packages", icon: Landmark },
   { href: "/admin/tourism", label: "Tourism Packages", icon: Plane },
   { href: "/admin/trips", label: "Current Trips", icon: CalendarClock },
@@ -129,9 +131,10 @@ export default function Sidebar({ userName }: { userName: string }) {
         </div>
       )}
 
-      {/* Desktop sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 shrink-0 bg-page-alt border-r border-line p-4 min-h-screen sticky top-0">
-        <div className="px-2 py-3 mb-4">
+      {/* Desktop sidebar — fixed to the viewport height; only the nav list scrolls
+          internally if it overflows, so the header and sign-out footer stay visible. */}
+      <aside className="hidden lg:flex flex-col w-64 shrink-0 bg-page-alt border-r border-line p-4 h-screen sticky top-0">
+        <div className="px-2 py-3 mb-4 shrink-0">
           <div className="flex items-center gap-2">
             <span className="relative w-8 h-8 rounded-lg overflow-hidden bg-white border border-brand/25 shrink-0">
               <Image src="/logo.png" alt="Logo" fill className="object-contain p-1" sizes="32px" />
@@ -141,9 +144,9 @@ export default function Sidebar({ userName }: { userName: string }) {
           <p className="text-ink/35 text-[11px] mt-1">Admin Dashboard</p>
         </div>
 
-        {links}
+        <div className="flex-1 min-h-0 overflow-y-auto">{links}</div>
 
-        <div className="mt-auto pt-4 border-t border-line space-y-1">
+        <div className="shrink-0 pt-4 border-t border-line space-y-1">
           <Link
             href="/"
             target="_blank"

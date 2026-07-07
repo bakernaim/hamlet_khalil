@@ -9,6 +9,7 @@ import type {
   BannerDTO,
   ReviewDTO,
   GalleryItemDTO,
+  HeroImageDTO,
   SiteSettings,
   TripStatus,
   TripFrequency,
@@ -140,6 +141,15 @@ export async function getGalleryItems(): Promise<GalleryItemDTO[]> {
     captionAr: g.captionAr,
     captionEn: g.captionEn,
   }));
+}
+
+// Published hero images, in display order, for the homepage background carousel.
+export async function getHeroImages(): Promise<HeroImageDTO[]> {
+  const rows = await prisma.heroImage.findMany({
+    where: { published: true },
+    orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
+  });
+  return rows.map((h) => ({ id: h.id, src: h.src }));
 }
 
 export async function getSettings(): Promise<SiteSettings> {

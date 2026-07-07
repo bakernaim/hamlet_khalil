@@ -123,6 +123,11 @@ export interface GalleryItemDTO {
   captionEn: string | null;
 }
 
+export interface HeroImageDTO {
+  id: string;
+  src: string; // /api/media/… path
+}
+
 export interface SiteSettings {
   whatsappNumber: string;
   heroHeadingAr: string;

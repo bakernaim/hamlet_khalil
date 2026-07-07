@@ -22,6 +22,7 @@ import {
   getBanners,
   getApprovedReviews,
   getGalleryItems,
+  getHeroImages,
   getSettings,
 } from "@/server/data";
 
@@ -29,7 +30,7 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const [settings, ziyarat, tourism, trips, banners, reviews, gallery] = await Promise.all([
+  const [settings, ziyarat, tourism, trips, banners, reviews, gallery, heroImages] = await Promise.all([
     getSettings(),
     getZiyaratPackages(),
     getTourismPackages(),
@@ -37,6 +38,7 @@ export default async function Home() {
     getBanners(),
     getApprovedReviews(),
     getGalleryItems(),
+    getHeroImages(),
   ]);
 
   const wa = settings.whatsappNumber;
@@ -49,7 +51,7 @@ export default async function Home() {
     <LanguageWrapper>
       <Navbar whatsappNumber={wa} />
       <main>
-        <Hero settings={settings} />
+        <Hero settings={settings} images={heroImages} />
         <CurrentTrips trips={trips} whatsappNumber={wa} ziyarat={ziyarat} tourism={tourism} />
         <ZiyaratPackages packages={ziyarat} />
         <TrustBar />
