@@ -91,7 +91,7 @@ export default function ZiyaratPackages({
                       <ul className="space-y-2 mb-4 flex-1">
                         {highlights.map((h) => (
                           <li key={h} className="flex items-start gap-2 text-soft text-xs leading-snug">
-                            <span className="w-1.5 h-1.5 rounded-full bg-brand shrink-0 mt-1" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-ziyarat-red shrink-0 mt-1" />
                             {h}
                           </li>
                         ))}

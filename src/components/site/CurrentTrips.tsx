@@ -230,7 +230,7 @@ export default function CurrentTrips({
                       {isBookable ? (
                         <button
                           onClick={() => setBookingTrip(trip)}
-                          className="flex-1 text-center text-sm font-semibold py-2.5 rounded-xl bg-brand text-[#040d18] hover:bg-brand-hover transition-colors duration-200 min-h-[42px] flex items-center justify-center"
+                          className="flex-1 text-center text-sm font-semibold py-2.5 rounded-xl bg-brand/10 border border-brand/30 text-accent hover:bg-brand-hover transition-colors duration-200 min-h-[42px] flex items-center justify-center"
                         >
                           {isRTL ? "احجز مقعدك" : "Book a Seat"}
                         </button>

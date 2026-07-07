@@ -20,7 +20,7 @@ export default async function DashboardPage() {
     tripsByStatus.find((r) => r.status === s)?._count._all ?? 0;
 
   const cards = [
-    { label: "Ziyarat Packages", value: ziyarat, href: "/admin/ziyarat", icon: Landmark, color: "text-accent" },
+    { label: "Ziyarat Packages", value: ziyarat, href: "/admin/ziyarat", icon: Landmark, color: "text-ziyarat-red" },
     { label: "Tourism Packages", value: tourism, href: "/admin/tourism", icon: Plane, color: "text-sky-600 dark:text-sky-300" },
     { label: "Current Trips", value: tripsAll, href: "/admin/trips", icon: CalendarClock, color: "text-amber-600 dark:text-amber-300" },
     { label: "Staff Users", value: users, href: "/admin/users", icon: Users, color: "text-violet-600 dark:text-violet-300" },
