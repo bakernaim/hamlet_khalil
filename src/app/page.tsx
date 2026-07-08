@@ -5,6 +5,7 @@ import ZiyaratPackages from "@/components/site/ZiyaratPackages";
 import TrustBar from "@/components/site/TrustBar";
 import VerseBanner from "@/components/site/VerseBanner";
 import TourismPackages from "@/components/site/TourismPackages";
+import HotelBooking from "@/components/site/HotelBooking";
 import PromoBannerCarousel from "@/components/site/PromoBannerCarousel";
 import PromoModal from "@/components/site/PromoModal";
 import HowItWorks from "@/components/site/HowItWorks";
@@ -23,6 +24,7 @@ import {
   getApprovedReviews,
   getGalleryItems,
   getHeroImages,
+  getHotels,
   getSettings,
 } from "@/server/data";
 
@@ -30,7 +32,7 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const [settings, ziyarat, tourism, trips, banners, reviews, gallery, heroImages] = await Promise.all([
+  const [settings, ziyarat, tourism, trips, banners, reviews, gallery, heroImages, hotels] = await Promise.all([
     getSettings(),
     getZiyaratPackages(),
     getTourismPackages(),
@@ -39,6 +41,7 @@ export default async function Home() {
     getApprovedReviews(),
     getGalleryItems(),
     getHeroImages(),
+    getHotels(),
   ]);
 
   const wa = settings.whatsappNumber;
@@ -57,6 +60,7 @@ export default async function Home() {
         <TrustBar />
         <VerseBanner />
         <TourismPackages packages={tourism} />
+        <HotelBooking hotels={hotels} whatsappNumber={wa} />
         <HowItWorks />
         <Gallery items={gallery} />
         <Reviews reviews={reviews} />

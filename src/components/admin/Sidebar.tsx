@@ -21,6 +21,7 @@ import {
   Star,
   Images,
   GalleryHorizontal,
+  BedDouble,
 } from "lucide-react";
 import ThemeToggle from "@/components/site/ThemeToggle";
 
@@ -31,6 +32,8 @@ const NAV = [
   { href: "/admin/ziyarat", label: "Ziyarat Packages", icon: Landmark },
   { href: "/admin/tourism", label: "Tourism Packages", icon: Plane },
   { href: "/admin/trips", label: "Current Trips", icon: CalendarClock },
+  { href: "/admin/hotels", label: "Hotels", icon: BedDouble },
+  { href: "/admin/hotel-bookings", label: "Hotel Bookings", icon: Ticket },
   { href: "/admin/banners", label: "Banners", icon: Megaphone },
   { href: "/admin/gallery", label: "Gallery", icon: Images },
   { href: "/admin/reviews", label: "Reviews", icon: Star },
@@ -44,6 +47,7 @@ export default function Sidebar({ userName }: { userName: string }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [pendingCount, setPendingCount] = useState(0);
+  const [hotelPendingCount, setHotelPendingCount] = useState(0);
 
   // Poll for pending bookings so staff notice new requests without a refresh.
   useEffect(() => {
@@ -58,8 +62,22 @@ export default function Sidebar({ userName }: { userName: string }) {
         /* ignore transient errors */
       }
     };
+    const fetchHotelPending = async () => {
+      try {
+        const res = await fetch("/api/admin/hotel-bookings", { cache: "no-store" });
+        if (!res.ok || !active) return;
+        const data: { status: string }[] = await res.json();
+        setHotelPendingCount(data.filter((b) => b.status === "PENDING").length);
+      } catch {
+        /* ignore transient errors */
+      }
+    };
     fetchPending();
-    const t = setInterval(fetchPending, 30000);
+    fetchHotelPending();
+    const t = setInterval(() => {
+      fetchPending();
+      fetchHotelPending();
+    }, 30000);
     return () => {
       active = false;
       clearInterval(t);
@@ -80,7 +98,12 @@ export default function Sidebar({ userName }: { userName: string }) {
       {NAV.map((item) => {
         const Icon = item.icon;
         const active = isActive(item.href, item.exact);
-        const badge = item.href === "/admin/bookings" && pendingCount > 0 ? pendingCount : null;
+        const badge =
+          item.href === "/admin/bookings" && pendingCount > 0
+            ? pendingCount
+            : item.href === "/admin/hotel-bookings" && hotelPendingCount > 0
+              ? hotelPendingCount
+              : null;
         return (
           <Link
             key={item.href}

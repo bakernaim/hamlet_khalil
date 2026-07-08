@@ -164,6 +164,46 @@ model HeroImage {
   updatedAt DateTime @updatedAt
 }
 
+// A hotel we can help a customer book, in Iran/Iraq (or elsewhere). Managed in
+// the admin "Hotels" section — separate from trip packages/bookings.
+model Hotel {
+  id          String                @id @default(cuid())
+  countryAr   String
+  countryEn   String
+  cityAr      String
+  cityEn      String
+  nameAr      String
+  nameEn      String
+  addressAr   String?
+  addressEn   String?
+  image       String? // /api/media/… upload path, optional
+  roomTypesAr String                @default("[]") // JSON string[] — room types this hotel offers
+  roomTypesEn String                @default("[]")
+  website     String? // link to the hotel's website, if any
+  sortOrder   Int                   @default(0)
+  published   Boolean               @default(true)
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+  requests    HotelBookingRequest[]
+}
+
+// A hotel-booking request submitted from the public site. Kept separate from
+// the trip Booking model — no departures/passports/payment step, just enough
+// to let staff follow up over WhatsApp.
+model HotelBookingRequest {
+  id          String   @id @default(cuid())
+  hotelId     String?
+  hotel       Hotel?   @relation(fields: [hotelId], references: [id], onDelete: SetNull)
+  hotelNameAr String // snapshot so the record survives hotel deletion
+  hotelNameEn String
+  fullName    String
+  phone       String
+  rooms       String   @default("[]") // JSON string[] of room types, one entry per room
+  status      String   @default("PENDING") // PENDING | CONTACTED | CLOSED
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 model Setting {
   key   String @id
   value String

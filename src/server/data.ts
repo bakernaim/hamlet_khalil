@@ -10,6 +10,7 @@ import type {
   ReviewDTO,
   GalleryItemDTO,
   HeroImageDTO,
+  HotelDTO,
   SiteSettings,
   TripStatus,
   TripFrequency,
@@ -150,6 +151,29 @@ export async function getHeroImages(): Promise<HeroImageDTO[]> {
     orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
   });
   return rows.map((h) => ({ id: h.id, src: h.src }));
+}
+
+// Published hotels for the public "help you book your hotel" section.
+export async function getHotels(publishedOnly = true): Promise<HotelDTO[]> {
+  const rows = await prisma.hotel.findMany({
+    where: publishedOnly ? { published: true } : undefined,
+    orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
+  });
+  return rows.map((h) => ({
+    id: h.id,
+    countryAr: h.countryAr,
+    countryEn: h.countryEn,
+    cityAr: h.cityAr,
+    cityEn: h.cityEn,
+    nameAr: h.nameAr,
+    nameEn: h.nameEn,
+    addressAr: h.addressAr,
+    addressEn: h.addressEn,
+    image: h.image,
+    roomTypesAr: parseList(h.roomTypesAr),
+    roomTypesEn: parseList(h.roomTypesEn),
+    website: h.website,
+  }));
 }
 
 export async function getSettings(): Promise<SiteSettings> {

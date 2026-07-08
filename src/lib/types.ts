@@ -128,6 +128,43 @@ export interface HeroImageDTO {
   src: string; // /api/media/… path
 }
 
+// A hotel we can help a customer book (admin-managed, shown on the public
+// "help you book your hotel" section).
+export interface HotelDTO {
+  id: string;
+  countryAr: string;
+  countryEn: string;
+  cityAr: string;
+  cityEn: string;
+  nameAr: string;
+  nameEn: string;
+  addressAr: string | null;
+  addressEn: string | null;
+  image: string | null; // /api/media/… path, optional
+  roomTypesAr: string[];
+  roomTypesEn: string[];
+  website: string | null;
+}
+
+// Room type chosen per room in a hotel-booking request — distinct from the
+// trip-booking ROOM_TYPES above.
+export const HOTEL_ROOM_TYPES = ["SINGLE", "DOUBLE", "TRIPLE", "SUITE"] as const;
+export type HotelRoomType = (typeof HOTEL_ROOM_TYPES)[number];
+
+export type HotelBookingStatus = "PENDING" | "CONTACTED" | "CLOSED";
+
+export interface HotelBookingRequestDTO {
+  id: string;
+  hotelId: string | null;
+  hotelNameAr: string;
+  hotelNameEn: string;
+  fullName: string;
+  phone: string;
+  rooms: HotelRoomType[];
+  status: HotelBookingStatus;
+  createdAt: string; // ISO
+}
+
 export interface SiteSettings {
   whatsappNumber: string;
   heroHeadingAr: string;
