@@ -1,10 +1,29 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { useLang } from "@/context/LanguageContext";
 import { nav, footer } from "@/data/content";
 import { waHref } from "@/lib/whatsapp";
+import { parseWorkingSchedule, parseWorkingExceptions, isOpenAt, formatScheduleLines } from "@/lib/workingHours";
 import type { SiteSettings } from "@/lib/types";
+
+function useIsOpenNow(settings: SiteSettings) {
+  const [open, setOpen] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    function compute() {
+      const schedule = parseWorkingSchedule(settings.workingSchedule);
+      const exceptions = parseWorkingExceptions(settings.workingExceptions);
+      setOpen(isOpenAt(schedule, new Date(), exceptions));
+    }
+    compute();
+    const id = setInterval(compute, 60000);
+    return () => clearInterval(id);
+  }, [settings]);
+
+  return open;
+}
 
 const WA_ICON = (
   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -15,6 +34,7 @@ const WA_ICON = (
 export default function Footer({ settings }: { settings: SiteSettings }) {
   const { isRTL } = useLang();
   const WHATSAPP_URL = waHref(settings.whatsappNumber);
+  const isOpen = useIsOpenNow(settings);
 
   return (
     <footer id="contact" dir={isRTL ? "rtl" : "ltr"} className="bg-page-alt border-t border-line">
@@ -115,6 +135,28 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
                 <a href={`tel:${settings.phone.replace(/\s/g, "")}`} className="text-muted hover:text-ink text-xs transition-colors" dir="ltr">
                   {settings.phone}
                 </a>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <span className="text-accent text-sm mt-0.5 shrink-0">🕒</span>
+                <span className="text-muted text-xs leading-relaxed">
+                  {formatScheduleLines(parseWorkingSchedule(settings.workingSchedule), isRTL ? "ar" : "en").map(
+                    (line) => (
+                      <span key={line} className="block">{line}</span>
+                    )
+                  )}
+                  {isOpen !== null && (
+                    <span
+                      className={`inline-flex items-center gap-1 text-[11px] font-medium ${
+                        isOpen ? "text-green-700 dark:text-green-400" : "text-red-600 dark:text-red-400"
+                      }`}
+                    >
+                      <span className={`w-1.5 h-1.5 rounded-full ${isOpen ? "bg-green-600" : "bg-red-500"}`} />
+                      {isOpen
+                        ? isRTL ? "مفتوح الآن" : "Open now"
+                        : isRTL ? "مغلق الآن" : "Closed now"}
+                    </span>
+                  )}
+                </span>
               </li>
               <li className="flex items-center gap-2.5">
                 <span className="text-green-700 dark:text-green-400 text-sm shrink-0">💬</span>

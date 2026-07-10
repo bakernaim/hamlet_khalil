@@ -1,4 +1,5 @@
 import type { SiteSettings } from "./types";
+import { DEFAULT_WORKING_SCHEDULE, stringifyWorkingSchedule } from "./workingHours";
 
 // Keys stored in the Setting table, with sensible defaults used when a row is
 // missing. Keeping defaults here means the site renders fine on a fresh DB.
@@ -12,6 +13,8 @@ export const SETTING_DEFAULTS: SiteSettings = {
   phone: "+961 71 234 567",
   addressAr: "بيروت، لبنان — شارع الحمراء، مبنى الخليل، الطابق الثالث",
   addressEn: "Beirut, Lebanon — Hamra Street, Khalil Building, 3rd Floor",
+  workingSchedule: stringifyWorkingSchedule(DEFAULT_WORKING_SCHEDULE),
+  workingExceptions: "[]",
   instagramUrl: "https://instagram.com/hamlet_alkhalil",
   themeColor: "#00b86a",
 };

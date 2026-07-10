@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Field, Input, Textarea, Button, ErrorText } from "@/components/admin/ui";
+import WorkingHoursCard from "@/components/admin/WorkingHoursCard";
 import type { SiteSettings } from "@/lib/types";
 
 export default function SettingsManager() {
@@ -84,6 +85,7 @@ export default function SettingsManager() {
           </Field>
         </section>
 
+        <WorkingHoursCard form={form} set={set} />
 
         <section className="rounded-2xl bg-card border border-line p-5 space-y-4">
           <h2 className="text-ink font-semibold text-sm">Hero section</h2>

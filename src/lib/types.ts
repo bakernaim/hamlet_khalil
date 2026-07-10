@@ -165,6 +165,24 @@ export interface HotelBookingRequestDTO {
   createdAt: string; // ISO
 }
 
+export interface WorkingHoursRange {
+  start: string; // "HH:MM" 24h
+  end: string; // "HH:MM" 24h
+}
+
+export interface WorkingDaySchedule {
+  day: number; // 0=Sun..6=Sat
+  closed: boolean;
+  ranges: WorkingHoursRange[]; // 0, 1, or 2 ranges (a second range covers a midday closure)
+}
+
+export interface WorkingHoursException {
+  date: string; // "YYYY-MM-DD", local
+  closed: boolean;
+  ranges: WorkingHoursRange[]; // custom hours for this date; ignored when closed
+  label?: string; // optional note, e.g. "Eid holiday"
+}
+
 export interface SiteSettings {
   whatsappNumber: string;
   heroHeadingAr: string;
@@ -174,6 +192,8 @@ export interface SiteSettings {
   phone: string;
   addressAr: string;
   addressEn: string;
+  workingSchedule: string; // JSON-encoded WorkingDaySchedule[], see lib/workingHours.ts
+  workingExceptions: string; // JSON-encoded WorkingHoursException[], date-specific overrides (holidays etc.)
   instagramUrl: string;
   themeColor: string; // brand accent hex, e.g. "#00b86a"
 }
