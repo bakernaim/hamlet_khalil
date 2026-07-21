@@ -23,25 +23,61 @@ import {
   GalleryHorizontal,
   BedDouble,
   Camera,
+  ChevronDown,
+  Package,
+  type LucideIcon,
 } from "lucide-react";
 import ThemeToggle from "@/components/site/ThemeToggle";
 
-const NAV = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { href: "/admin/bookings", label: "Bookings", icon: Ticket },
-  { href: "/admin/hero-images", label: "Hero Images", icon: GalleryHorizontal },
-  { href: "/admin/ziyarat", label: "Ziyarat Packages", icon: Landmark },
-  { href: "/admin/tourism", label: "Tourism Packages", icon: Plane },
-  { href: "/admin/trips", label: "Current Trips", icon: CalendarClock },
-  { href: "/admin/hotels", label: "Hotels", icon: BedDouble },
-  { href: "/admin/hotel-bookings", label: "Hotel Bookings", icon: Ticket },
-  { href: "/admin/banners", label: "Banners", icon: Megaphone },
-  { href: "/admin/gallery", label: "Gallery", icon: Images },
-  { href: "/admin/instagram", label: "Instagram", icon: Camera },
-  { href: "/admin/reviews", label: "Reviews", icon: Star },
-  { href: "/admin/users", label: "Staff Users", icon: Users },
-  { href: "/admin/settings", label: "Site Settings", icon: Settings },
-  { href: "/admin/account", label: "My Account", icon: KeyRound },
+type NavItem = { href: string; label: string; icon: LucideIcon; exact?: boolean };
+type NavGroup = { id: string; label: string; icon: LucideIcon; items: NavItem[] };
+
+// A single always-visible top link, then collapsible groups.
+const DASHBOARD: NavItem = { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true };
+
+const GROUPS: NavGroup[] = [
+  {
+    id: "bookings",
+    label: "Bookings",
+    icon: Ticket,
+    items: [
+      { href: "/admin/bookings", label: "Trip Bookings", icon: Ticket },
+      { href: "/admin/hotel-bookings", label: "Hotel Bookings", icon: BedDouble },
+    ],
+  },
+  {
+    id: "offerings",
+    label: "Trips & Packages",
+    icon: Package,
+    items: [
+      { href: "/admin/ziyarat", label: "Ziyarat Packages", icon: Landmark },
+      { href: "/admin/tourism", label: "Tourism Packages", icon: Plane },
+      { href: "/admin/trips", label: "Current Trips", icon: CalendarClock },
+      { href: "/admin/hotels", label: "Hotels", icon: BedDouble },
+    ],
+  },
+  {
+    id: "content",
+    label: "Content",
+    icon: Images,
+    items: [
+      { href: "/admin/hero-images", label: "Hero Images", icon: GalleryHorizontal },
+      { href: "/admin/banners", label: "Banners", icon: Megaphone },
+      { href: "/admin/gallery", label: "Gallery", icon: Images },
+      { href: "/admin/instagram", label: "Instagram", icon: Camera },
+      { href: "/admin/reviews", label: "Reviews", icon: Star },
+    ],
+  },
+  {
+    id: "settings",
+    label: "Settings",
+    icon: Settings,
+    items: [
+      { href: "/admin/users", label: "Staff Users", icon: Users },
+      { href: "/admin/settings", label: "Site Settings", icon: Settings },
+      { href: "/admin/account", label: "My Account", icon: KeyRound },
+    ],
+  },
 ];
 
 export default function Sidebar({ userName }: { userName: string }) {
@@ -95,36 +131,74 @@ export default function Sidebar({ userName }: { userName: string }) {
   const isActive = (href: string, exact?: boolean) =>
     exact ? pathname === href : pathname === href || pathname.startsWith(href + "/");
 
+  const badgeFor = (href: string) =>
+    href === "/admin/bookings" ? pendingCount : href === "/admin/hotel-bookings" ? hotelPendingCount : 0;
+
+  // Which group (if any) contains the current route — used to auto-open it.
+  const activeGroupId = GROUPS.find((g) => g.items.some((it) => isActive(it.href, it.exact)))?.id;
+
+  // Explicit per-group open state; `undefined` means "untouched" → defaults to
+  // open when it's the active group, so navigating auto-reveals the section.
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
+  const groupOpen = (id: string) => openGroups[id] ?? id === activeGroupId;
+  const toggleGroup = (id: string) =>
+    setOpenGroups((prev) => ({ ...prev, [id]: !(prev[id] ?? id === activeGroupId) }));
+
+  const badgeEl = (n: number) => (
+    <span className="text-[10px] font-bold min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-amber-500 text-[#040d18]">
+      {n}
+    </span>
+  );
+
+  const leaf = (item: NavItem, nested?: boolean) => {
+    const Icon = item.icon;
+    const active = isActive(item.href, item.exact);
+    const badge = badgeFor(item.href);
+    return (
+      <Link
+        key={item.href}
+        href={item.href}
+        onClick={() => setOpen(false)}
+        className={`flex items-center gap-3 rounded-lg transition-colors ${
+          nested ? "px-2.5 py-2 text-[13px]" : "px-3 py-2.5 text-sm"
+        } ${active ? "bg-brand/15 text-accent font-medium" : "text-ink/55 hover:text-ink hover:bg-ink/5"}`}
+      >
+        <Icon size={nested ? 16 : 17} />
+        <span className="flex-1">{item.label}</span>
+        {badge > 0 && badgeEl(badge)}
+      </Link>
+    );
+  };
+
   const links = (
     <nav className="flex flex-col gap-1">
-      {NAV.map((item) => {
-        const Icon = item.icon;
-        const active = isActive(item.href, item.exact);
-        const badge =
-          item.href === "/admin/bookings" && pendingCount > 0
-            ? pendingCount
-            : item.href === "/admin/hotel-bookings" && hotelPendingCount > 0
-              ? hotelPendingCount
-              : null;
+      {leaf(DASHBOARD)}
+      {GROUPS.map((g) => {
+        const GIcon = g.icon;
+        const isOpen = groupOpen(g.id);
+        const hasActive = g.id === activeGroupId;
+        const groupBadge = g.items.reduce((sum, it) => sum + badgeFor(it.href), 0);
         return (
-          <Link
-            key={item.href}
-            href={item.href}
-            onClick={() => setOpen(false)}
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
-              active
-                ? "bg-brand/15 text-accent font-medium"
-                : "text-ink/55 hover:text-ink hover:bg-ink/5"
-            }`}
-          >
-            <Icon size={17} />
-            <span className="flex-1">{item.label}</span>
-            {badge && (
-              <span className="text-[10px] font-bold min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-amber-500 text-[#040d18]">
-                {badge}
-              </span>
+          <div key={g.id}>
+            <button
+              type="button"
+              onClick={() => toggleGroup(g.id)}
+              aria-expanded={isOpen}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
+                hasActive && !isOpen ? "text-accent" : "text-ink/55 hover:text-ink hover:bg-ink/5"
+              }`}
+            >
+              <GIcon size={17} />
+              <span className="flex-1 text-start">{g.label}</span>
+              {groupBadge > 0 && !isOpen && badgeEl(groupBadge)}
+              <ChevronDown size={15} className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />
+            </button>
+            {isOpen && (
+              <div className="mt-1 ms-4 ps-2 border-s border-line flex flex-col gap-1">
+                {g.items.map((item) => leaf(item, true))}
+              </div>
             )}
-          </Link>
+          </div>
         );
       })}
     </nav>
