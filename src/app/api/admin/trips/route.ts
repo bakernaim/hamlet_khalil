@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { badRequest, str, optionalStr, int, optionalInt, bool, optionalDate } from "@/lib/api";
+import { stringifyList } from "@/lib/serialize";
 
 const STATUSES = ["OPEN", "ALMOST_FULL", "DEPARTED", "CLOSED"];
 const FREQUENCIES = ["ONCE", "WEEKLY", "BIWEEKLY", "MONTHLY"];
@@ -37,6 +38,7 @@ export async function POST(req: Request) {
       seatsLeft: optionalInt(body.seatsLeft),
       status,
       image: optionalStr(body.image),
+      images: stringifyList(body.images),
       packageType: optionalStr(body.packageType),
       packageSlug: optionalStr(body.packageSlug),
       sortOrder: int(body.sortOrder),

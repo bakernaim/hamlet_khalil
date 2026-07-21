@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { badRequest, notFound, str, optionalStr, int, bool } from "@/lib/api";
-import { stringifyList } from "@/lib/serialize";
-import { removeUpload } from "@/lib/uploads";
+import { badRequest, notFound, str, optionalStr, int, optionalInt, bool } from "@/lib/api";
+import { parseList, stringifyList } from "@/lib/serialize";
+import { removeUpload, removeUploads } from "@/lib/uploads";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -36,12 +36,19 @@ export async function PUT(req: Request, { params }: Ctx) {
       image,
       roomTypesAr: stringifyList(body.roomTypesAr),
       roomTypesEn: stringifyList(body.roomTypesEn),
+      images: stringifyList(body.images),
+      priceStart: optionalInt(body.priceStart),
+      mealBreakfast: bool(body.mealBreakfast, false),
+      mealLunch: bool(body.mealLunch, false),
+      mealDinner: bool(body.mealDinner, false),
       website: optionalStr(body.website),
       sortOrder: int(body.sortOrder, existing.sortOrder),
       published: bool(body.published),
     },
   });
   if (image !== existing.image) await removeUpload(existing.image);
+  const keptImages = new Set(parseList(updated.images));
+  await removeUploads(parseList(existing.images).filter((p) => !keptImages.has(p)));
   return NextResponse.json(updated);
 }
 
@@ -51,5 +58,6 @@ export async function DELETE(_req: Request, { params }: Ctx) {
   if (!existing) return notFound();
   await prisma.hotel.delete({ where: { id } });
   await removeUpload(existing.image);
+  await removeUploads(parseList(existing.images));
   return NextResponse.json({ ok: true });
 }

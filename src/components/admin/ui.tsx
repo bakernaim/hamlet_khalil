@@ -36,6 +36,75 @@ export function Select(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
   return <select {...props} className={`${baseInput} ${props.className ?? ""}`} />;
 }
 
+// Tag/chip input: type a value and press Enter or comma to add it as a chip;
+// Backspace on an empty input removes the last chip. Stores/returns a string[].
+export function ChipsInput({
+  value,
+  onChange,
+  placeholder,
+  dir,
+}: {
+  value: string[];
+  onChange: (v: string[]) => void;
+  placeholder?: string;
+  dir?: "ltr" | "rtl";
+}) {
+  const [draft, setDraft] = useState("");
+
+  function commit(raw: string) {
+    const parts = raw
+      .split(/[\n,]/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (parts.length === 0) return;
+    const next = [...value];
+    for (const p of parts) if (!next.includes(p)) next.push(p);
+    onChange(next);
+    setDraft("");
+  }
+
+  function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault();
+      commit(draft);
+    } else if (e.key === "Backspace" && draft === "" && value.length > 0) {
+      onChange(value.slice(0, -1));
+    }
+  }
+
+  return (
+    <div
+      dir={dir}
+      className="w-full rounded-lg bg-card border border-line px-2 py-1.5 flex flex-wrap gap-1.5 focus-within:border-brand/60 focus-within:ring-1 focus-within:ring-brand/40 transition-colors"
+    >
+      {value.map((chip, i) => (
+        <span
+          key={`${chip}-${i}`}
+          className="inline-flex items-center gap-1 rounded-md bg-brand/15 text-ink text-sm px-2 py-1 leading-none"
+        >
+          {chip}
+          <button
+            type="button"
+            onClick={() => onChange(value.filter((_, idx) => idx !== i))}
+            className="text-ink/40 hover:text-ink text-base leading-none"
+            aria-label={`Remove ${chip}`}
+          >
+            ×
+          </button>
+        </span>
+      ))}
+      <input
+        value={draft}
+        onChange={(e) => setDraft(e.target.value)}
+        onKeyDown={onKeyDown}
+        onBlur={() => commit(draft)}
+        placeholder={value.length === 0 ? placeholder : ""}
+        className="flex-1 min-w-[6rem] bg-transparent text-ink text-sm px-1 py-1 outline-none placeholder:text-ink/25"
+      />
+    </div>
+  );
+}
+
 export function Toggle({
   checked,
   onChange,
@@ -159,6 +228,115 @@ export function ImageUpload({
         accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
         className="hidden"
         onChange={onFile}
+      />
+    </div>
+  );
+}
+
+// Multi-image picker: uploads one or more files to /api/admin/upload and stores
+// the returned paths in an ordered string[]. Use for a gallery of extra images
+// (the cover stays a separate single ImageUpload).
+export function MultiImageUpload({
+  label,
+  value,
+  onChange,
+  hint,
+}: {
+  label: string;
+  value: string[];
+  onChange: (paths: string[]) => void;
+  hint?: string;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState("");
+
+  async function onFiles(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? []);
+    e.target.value = ""; // allow re-picking the same files
+    if (files.length === 0) return;
+    setUploading(true);
+    setError("");
+    const added: string[] = [];
+    for (const file of files) {
+      try {
+        const fd = new FormData();
+        fd.append("file", file);
+        const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
+        const data = await res.json();
+        if (!res.ok) setError(data.error || "Upload failed");
+        else added.push(data.path);
+      } catch {
+        setError("Network error");
+      }
+    }
+    if (added.length) onChange([...value, ...added]);
+    setUploading(false);
+  }
+
+  function removeAt(i: number) {
+    onChange(value.filter((_, idx) => idx !== i));
+  }
+  function move(i: number, dir: -1 | 1) {
+    const j = i + dir;
+    if (j < 0 || j >= value.length) return;
+    const next = [...value];
+    [next[i], next[j]] = [next[j], next[i]];
+    onChange(next);
+  }
+
+  return (
+    <div>
+      <span className="block text-xs font-medium text-ink/70 mb-1.5">{label}</span>
+      {value.length > 0 && (
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-2">
+          {value.map((src, i) => (
+            <div key={`${src}-${i}`} className="relative group aspect-video rounded-lg overflow-hidden border border-line bg-card">
+              <Image src={src} alt="" fill className="object-cover" sizes="120px" />
+              <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-black/55 px-1 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button
+                  type="button"
+                  onClick={() => move(i, -1)}
+                  disabled={i === 0}
+                  aria-label="Move left"
+                  className="text-white/90 text-xs px-1 disabled:opacity-30"
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  onClick={() => removeAt(i)}
+                  aria-label="Remove image"
+                  className="text-red-300 hover:text-red-200 text-xs px-1"
+                >
+                  ✕
+                </button>
+                <button
+                  type="button"
+                  onClick={() => move(i, 1)}
+                  disabled={i === value.length - 1}
+                  aria-label="Move right"
+                  className="text-white/90 text-xs px-1 disabled:opacity-30"
+                >
+                  ›
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      <Button type="button" variant="ghost" onClick={() => inputRef.current?.click()} disabled={uploading}>
+        {uploading ? "Uploading…" : "+ Add images"}
+      </Button>
+      {hint && <span className="block text-[11px] text-ink/35 mt-1">{hint}</span>}
+      {error && <span className="block text-[11px] text-red-600 dark:text-red-300 mt-1">{error}</span>}
+      <input
+        ref={inputRef}
+        type="file"
+        multiple
+        accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
+        className="hidden"
+        onChange={onFiles}
       />
     </div>
   );

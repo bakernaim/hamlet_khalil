@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Field, Input, Textarea, Button, Toggle, ErrorText, ImageUpload } from "@/components/admin/ui";
+import { Field, Input, Textarea, Button, Toggle, ErrorText, ImageUpload, MultiImageUpload } from "@/components/admin/ui";
 import RichTextEditor from "@/components/admin/RichTextEditor";
+import { parseList } from "@/lib/serialize";
 
 interface Tourism {
   id: string;
@@ -19,6 +20,7 @@ interface Tourism {
   infoAr: string;
   infoEn: string;
   image: string;
+  images: string; // JSON string from the raw row
   sortOrder: number;
   published: boolean;
 }
@@ -35,6 +37,7 @@ type FormState = {
   infoAr: string;
   infoEn: string;
   image: string;
+  images: string[];
   sortOrder: string;
   published: boolean;
 };
@@ -51,6 +54,7 @@ const empty: FormState = {
   infoAr: "",
   infoEn: "",
   image: "/shrines/turkey-istanbul.jpg",
+  images: [],
   sortOrder: "0",
   published: true,
 };
@@ -68,6 +72,7 @@ function toForm(t: Tourism): FormState {
     infoAr: t.infoAr,
     infoEn: t.infoEn,
     image: t.image,
+    images: parseList(t.images),
     sortOrder: String(t.sortOrder),
     published: t.published,
   };
@@ -186,7 +191,7 @@ export default function TourismForm({ id }: { id?: string }) {
           </Field>
           <div className="grid grid-cols-2 gap-4">
             <ImageUpload
-              label="Image"
+              label="Cover image"
               hint="Shown on the package card"
               value={form.image}
               onChange={(p) => set("image", p)}
@@ -195,6 +200,12 @@ export default function TourismForm({ id }: { id?: string }) {
               <Input type="number" value={form.sortOrder} onChange={(e) => set("sortOrder", e.target.value)} />
             </Field>
           </div>
+          <MultiImageUpload
+            label="More images"
+            hint="Optional — extra photos shown in a gallery on the package details"
+            value={form.images}
+            onChange={(v) => set("images", v)}
+          />
           <Toggle checked={form.published} onChange={(v) => set("published", v)} label="Published (visible on site)" />
 
             <ErrorText>{formError}</ErrorText>

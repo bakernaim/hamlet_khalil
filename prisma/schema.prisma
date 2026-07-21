@@ -36,6 +36,7 @@ model ZiyaratPackage {
   infoAr       String   @default("") // rich-text HTML (sanitized on save)
   infoEn       String   @default("") // rich-text HTML (sanitized on save)
   image        String
+  images       String   @default("[]") // JSON string[] of extra gallery image paths (cover is `image`)
   color        String   @default("from-[#1a2444] to-[#0a0f2c]")
   sortOrder    Int      @default(0)
   published    Boolean  @default(true)
@@ -56,6 +57,7 @@ model TourismPackage {
   infoAr     String   @default("") // rich-text HTML (sanitized on save)
   infoEn     String   @default("") // rich-text HTML (sanitized on save)
   image      String
+  images     String   @default("[]") // JSON string[] of extra gallery image paths (cover is `image`)
   sortOrder  Int      @default(0)
   published  Boolean  @default(true)
   createdAt  DateTime @default(now())
@@ -76,6 +78,7 @@ model CurrentTrip {
   seatsLeft     Int?
   status        String    @default("OPEN") // OPEN | ALMOST_FULL | DEPARTED | CLOSED
   image         String?
+  images        String    @default("[]") // JSON string[] of extra gallery image paths (cover is `image`)
   packageType   String? // "ziyarat" | "tourism"
   packageSlug   String? // links to a package card via #anchor
   sortOrder     Int       @default(0)
@@ -154,6 +157,19 @@ model GalleryItem {
   updatedAt DateTime @updatedAt
 }
 
+// Admin-managed Instagram posts shown in the homepage feed grid.
+model InstagramPost {
+  id        String   @id @default(cuid())
+  image     String // /api/media/… upload path
+  permalink String   @default("") // link to the post on Instagram (optional)
+  captionAr String?
+  captionEn String?
+  sortOrder Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 // Admin-uploaded photos cycled as the homepage hero background.
 model HeroImage {
   id        String   @id @default(cuid())
@@ -179,6 +195,11 @@ model Hotel {
   image       String? // /api/media/… upload path, optional
   roomTypesAr String                @default("[]") // JSON string[] — room types this hotel offers
   roomTypesEn String                @default("[]")
+  images      String                @default("[]") // JSON string[] of extra gallery image paths (cover is `image`)
+  priceStart  Int? // starting price in USD (shows "From $X"), optional
+  mealBreakfast Boolean             @default(false)
+  mealLunch     Boolean             @default(false)
+  mealDinner    Boolean             @default(false)
   website     String? // link to the hotel's website, if any
   sortOrder   Int                   @default(0)
   published   Boolean               @default(true)
@@ -199,6 +220,9 @@ model HotelBookingRequest {
   fullName    String
   phone       String
   rooms       String   @default("[]") // JSON string[] of room types, one entry per room
+  meals       String   @default("[]") // JSON string[] of requested meals: BREAKFAST | LUNCH | DINNER
+  checkIn     DateTime? // requested check-in date
+  nights      Int? // number of nights, optional
   status      String   @default("PENDING") // PENDING | CONTACTED | CLOSED
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

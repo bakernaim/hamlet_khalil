@@ -26,6 +26,7 @@ import {
   getHeroImages,
   getHotels,
   getSettings,
+  getInstagramPosts,
 } from "@/server/data";
 
 // Content is edited from the admin dashboard, so always render fresh.
@@ -43,6 +44,9 @@ export default async function Home() {
     getHeroImages(),
     getHotels(),
   ]);
+
+  // Admin-managed Instagram posts; empty → the section shows static fallback.
+  const instagram = await getInstagramPosts();
 
   const wa = settings.whatsappNumber;
 
@@ -65,7 +69,7 @@ export default async function Home() {
         <Gallery items={gallery} />
         <Reviews reviews={reviews} />
         <FAQ />
-        <InstagramFeed instagramUrl={settings.instagramUrl} />
+        <InstagramFeed instagramUrl={settings.instagramUrl} items={instagram} />
       </main>
       <Footer settings={settings} />
       <PromoBannerCarousel banners={barBanners} whatsappNumber={wa} />

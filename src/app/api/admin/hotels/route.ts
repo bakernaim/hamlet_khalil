@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { badRequest, str, optionalStr, int, bool } from "@/lib/api";
+import { badRequest, str, optionalStr, int, optionalInt, bool } from "@/lib/api";
 import { stringifyList } from "@/lib/serialize";
 
 export async function GET() {
@@ -31,6 +31,11 @@ export async function POST(req: Request) {
       image: optionalStr(body.image),
       roomTypesAr: stringifyList(body.roomTypesAr),
       roomTypesEn: stringifyList(body.roomTypesEn),
+      images: stringifyList(body.images),
+      priceStart: optionalInt(body.priceStart),
+      mealBreakfast: bool(body.mealBreakfast, false),
+      mealLunch: bool(body.mealLunch, false),
+      mealDinner: bool(body.mealDinner, false),
       website: optionalStr(body.website),
       sortOrder: int(body.sortOrder),
       published: bool(body.published),

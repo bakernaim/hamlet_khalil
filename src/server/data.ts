@@ -11,6 +11,7 @@ import type {
   GalleryItemDTO,
   HeroImageDTO,
   HotelDTO,
+  InstagramPostDTO,
   SiteSettings,
   TripStatus,
   TripFrequency,
@@ -36,6 +37,7 @@ export async function getZiyaratPackages(publishedOnly = true): Promise<ZiyaratP
     infoAr: p.infoAr,
     infoEn: p.infoEn,
     image: p.image,
+    images: parseList(p.images),
     color: p.color,
   }));
 }
@@ -58,6 +60,7 @@ export async function getTourismPackages(publishedOnly = true): Promise<TourismP
     infoAr: p.infoAr,
     infoEn: p.infoEn,
     image: p.image,
+    images: parseList(p.images),
   }));
 }
 
@@ -83,6 +86,7 @@ export async function getCurrentTrips(publishedOnly = true): Promise<CurrentTrip
     seatsLeft: t.seatsLeft,
     status: t.status as TripStatus,
     image: t.image,
+    images: parseList(t.images),
     packageType: t.packageType,
     packageSlug: t.packageSlug,
   }));
@@ -144,6 +148,21 @@ export async function getGalleryItems(): Promise<GalleryItemDTO[]> {
   }));
 }
 
+// Published Instagram posts, in display order, for the homepage feed grid.
+export async function getInstagramPosts(): Promise<InstagramPostDTO[]> {
+  const rows = await prisma.instagramPost.findMany({
+    where: { published: true },
+    orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
+  });
+  return rows.map((p) => ({
+    id: p.id,
+    image: p.image,
+    permalink: p.permalink,
+    captionAr: p.captionAr,
+    captionEn: p.captionEn,
+  }));
+}
+
 // Published hero images, in display order, for the homepage background carousel.
 export async function getHeroImages(): Promise<HeroImageDTO[]> {
   const rows = await prisma.heroImage.findMany({
@@ -170,8 +189,13 @@ export async function getHotels(publishedOnly = true): Promise<HotelDTO[]> {
     addressAr: h.addressAr,
     addressEn: h.addressEn,
     image: h.image,
+    images: parseList(h.images),
     roomTypesAr: parseList(h.roomTypesAr),
     roomTypesEn: parseList(h.roomTypesEn),
+    priceStart: h.priceStart,
+    mealBreakfast: h.mealBreakfast,
+    mealLunch: h.mealLunch,
+    mealDinner: h.mealDinner,
     website: h.website,
   }));
 }

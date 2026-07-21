@@ -1,17 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useLang } from "@/context/LanguageContext";
 import { waHref } from "@/lib/whatsapp";
-import { HOTEL_ROOM_TYPES, type HotelDTO, type HotelRoomType } from "@/lib/types";
+import { HOTEL_ROOM_TYPES, type HotelDTO, type HotelMeal } from "@/lib/types";
 
-// Bilingual labels for the hotel room type.
-const ROOM_LABELS: Record<HotelRoomType, { ar: string; en: string }> = {
+// Fallback bilingual labels used only when a hotel has no custom room types.
+const FALLBACK_ROOM_LABELS: Record<string, { ar: string; en: string }> = {
   SINGLE: { ar: "مفردة", en: "Single" },
   DOUBLE: { ar: "ثنائية", en: "Double" },
   TRIPLE: { ar: "ثلاثية", en: "Triple" },
   SUITE: { ar: "جناح", en: "Suite" },
+};
+
+const MEAL_LABELS: Record<HotelMeal, { ar: string; en: string; icon: string }> = {
+  BREAKFAST: { ar: "فطور", en: "Breakfast", icon: "🥐" },
+  LUNCH: { ar: "غداء", en: "Lunch", icon: "🍲" },
+  DINNER: { ar: "عشاء", en: "Dinner", icon: "🍽️" },
 };
 
 export default function HotelBookingModal({
@@ -27,9 +33,38 @@ export default function HotelBookingModal({
 }) {
   const { isRTL } = useLang();
 
+  // Room type options: the hotel's own list (paired EN/AR), falling back to the
+  // generic enum when the hotel defines none. `value` is the language-neutral
+  // stored value; `label` follows the current language.
+  const roomOptions = useMemo(() => {
+    const count = Math.max(hotel.roomTypesEn.length, hotel.roomTypesAr.length);
+    const opts = Array.from({ length: count }, (_, i) => {
+      const en = hotel.roomTypesEn[i] || "";
+      const ar = hotel.roomTypesAr[i] || "";
+      return { value: en || ar, label: isRTL ? ar || en : en || ar };
+    }).filter((o) => o.value);
+    if (opts.length > 0) return opts;
+    return HOTEL_ROOM_TYPES.map((rt) => ({
+      value: rt,
+      label: isRTL ? FALLBACK_ROOM_LABELS[rt].ar : FALLBACK_ROOM_LABELS[rt].en,
+    }));
+  }, [hotel.roomTypesEn, hotel.roomTypesAr, isRTL]);
+
+  // Meals this hotel offers, in a stable order.
+  const offeredMeals = useMemo(
+    () =>
+      (["BREAKFAST", "LUNCH", "DINNER"] as HotelMeal[]).filter((m) =>
+        m === "BREAKFAST" ? hotel.mealBreakfast : m === "LUNCH" ? hotel.mealLunch : hotel.mealDinner
+      ),
+    [hotel.mealBreakfast, hotel.mealLunch, hotel.mealDinner]
+  );
+
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
-  const [rooms, setRooms] = useState<HotelRoomType[]>(["SINGLE"]);
+  const [checkIn, setCheckIn] = useState("");
+  const [nights, setNights] = useState("");
+  const [rooms, setRooms] = useState<string[]>([roomOptions[0].value]);
+  const [meals, setMeals] = useState<HotelMeal[]>([]);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
@@ -49,13 +84,16 @@ export default function HotelBookingModal({
   const city = isRTL ? hotel.cityAr : hotel.cityEn;
 
   function addRoom() {
-    setRooms((prev) => (prev.length >= 20 ? prev : [...prev, "SINGLE"]));
+    setRooms((prev) => (prev.length >= 20 ? prev : [...prev, roomOptions[0].value]));
   }
   function removeRoom(i: number) {
     setRooms((prev) => (prev.length <= 1 ? prev : prev.filter((_, idx) => idx !== i)));
   }
-  function setRoomType(i: number, type: HotelRoomType) {
+  function setRoomType(i: number, type: string) {
     setRooms((prev) => prev.map((r, idx) => (idx === i ? type : r)));
+  }
+  function toggleMeal(m: HotelMeal) {
+    setMeals((prev) => (prev.includes(m) ? prev.filter((x) => x !== m) : [...prev, m]));
   }
 
   async function onSubmit(e: React.FormEvent) {
@@ -63,6 +101,7 @@ export default function HotelBookingModal({
     setError("");
     if (!fullName.trim()) return setError(isRTL ? "يرجى إدخال الاسم" : "Please enter your name");
     if (!phone.trim()) return setError(isRTL ? "يرجى إدخال رقم الهاتف" : "Please enter your phone number");
+    if (!checkIn) return setError(isRTL ? "يرجى اختيار تاريخ الوصول" : "Please choose a check-in date");
 
     setSubmitting(true);
     const res = await fetch("/api/hotel-booking", {
@@ -72,7 +111,10 @@ export default function HotelBookingModal({
         hotelId: hotel.id,
         fullName: fullName.trim(),
         phone: phone.trim(),
+        checkIn,
+        nights: nights.trim() ? Number(nights) : null,
         rooms,
+        meals,
       }),
     });
     const data = await res.json().catch(() => ({}));
@@ -170,6 +212,36 @@ export default function HotelBookingModal({
                   onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
+              <div className="grid grid-cols-3 gap-2.5">
+                <label className="col-span-2 block">
+                  <span className="text-[11px] font-medium text-muted block mb-1">
+                    {isRTL ? "تاريخ الوصول" : "Check-in date"}
+                  </span>
+                  <input
+                    className={inputBase}
+                    type="date"
+                    dir="ltr"
+                    min={new Date().toISOString().slice(0, 10)}
+                    value={checkIn}
+                    onChange={(e) => setCheckIn(e.target.value)}
+                  />
+                </label>
+                <label className="block">
+                  <span className="text-[11px] font-medium text-muted block mb-1">
+                    {isRTL ? "الليالي" : "Nights"}
+                  </span>
+                  <input
+                    className={inputBase}
+                    type="number"
+                    min="1"
+                    max="365"
+                    dir="ltr"
+                    placeholder={isRTL ? "اختياري" : "Optional"}
+                    value={nights}
+                    onChange={(e) => setNights(e.target.value)}
+                  />
+                </label>
+              </div>
             </div>
 
             <div>
@@ -192,19 +264,19 @@ export default function HotelBookingModal({
                     <span className="text-xs font-medium text-soft w-16 shrink-0 ps-1.5">
                       {isRTL ? `غرفة ${i + 1}` : `Room ${i + 1}`}
                     </span>
-                    <div className="grid grid-cols-4 gap-1.5 flex-1">
-                      {HOTEL_ROOM_TYPES.map((rt) => (
+                    <div className="flex flex-wrap gap-1.5 flex-1">
+                      {roomOptions.map((opt) => (
                         <button
-                          key={rt}
+                          key={opt.value}
                           type="button"
-                          onClick={() => setRoomType(i, rt)}
-                          className={`text-[11px] font-semibold px-1.5 py-2 rounded-lg border transition ${
-                            r === rt
+                          onClick={() => setRoomType(i, opt.value)}
+                          className={`text-[11px] font-semibold px-2.5 py-2 rounded-lg border transition ${
+                            r === opt.value
                               ? "bg-brand text-[#040d18] border-brand"
                               : "border-line text-soft hover:border-brand/50 hover:text-ink"
                           }`}
                         >
-                          {isRTL ? ROOM_LABELS[rt].ar : ROOM_LABELS[rt].en}
+                          {opt.label}
                         </button>
                       ))}
                     </div>
@@ -222,6 +294,35 @@ export default function HotelBookingModal({
                 ))}
               </div>
             </div>
+
+            {offeredMeals.length > 0 && (
+              <div>
+                <span className="text-sm font-semibold text-ink block mb-2">
+                  🍽️ {isRTL ? "الوجبات (اختياري)" : "Meals (optional)"}
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  {offeredMeals.map((m) => {
+                    const on = meals.includes(m);
+                    return (
+                      <button
+                        key={m}
+                        type="button"
+                        onClick={() => toggleMeal(m)}
+                        aria-pressed={on}
+                        className={`text-xs font-semibold px-3 py-2 rounded-xl border transition ${
+                          on
+                            ? "bg-brand text-[#040d18] border-brand"
+                            : "border-line text-soft hover:border-brand/50 hover:text-ink"
+                        }`}
+                      >
+                        {on ? "✓ " : ""}
+                        {MEAL_LABELS[m].icon} {isRTL ? MEAL_LABELS[m].ar : MEAL_LABELS[m].en}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {error && (
               <p className="text-sm text-red-600 dark:text-red-300 bg-red-500/10 border border-red-500/25 rounded-xl px-3 py-2">

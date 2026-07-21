@@ -38,6 +38,7 @@ export async function POST(req: Request) {
       infoAr: sanitizeRichText(str(body.infoAr)),
       infoEn: sanitizeRichText(str(body.infoEn)),
       image: str(body.image, "/shrines/hussain-karbala.jpg"),
+      images: stringifyList(body.images),
       color: str(body.color, "from-[#1a2444] to-[#0a0f2c]"),
       sortOrder: int(body.sortOrder),
       published: bool(body.published),

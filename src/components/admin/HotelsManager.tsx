@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useResource } from "@/components/admin/useResource";
-import { Field, Input, Textarea, Button, Modal, Toggle, ErrorText, ImageUpload } from "@/components/admin/ui";
+import { Field, Input, Button, Modal, Toggle, ErrorText, ImageUpload, MultiImageUpload, ChipsInput } from "@/components/admin/ui";
 
 interface Hotel {
   id: string;
@@ -16,8 +16,13 @@ interface Hotel {
   addressAr: string | null;
   addressEn: string | null;
   image: string | null;
+  images: string; // JSON string — parsed for display only
   roomTypesAr: string; // JSON string — parsed for display only
   roomTypesEn: string;
+  priceStart: number | null;
+  mealBreakfast: boolean;
+  mealLunch: boolean;
+  mealDinner: boolean;
   website: string | null;
   sortOrder: number;
   published: boolean;
@@ -33,8 +38,13 @@ type FormState = {
   addressAr: string;
   addressEn: string;
   image: string;
-  roomTypesAr: string; // newline/comma separated in the form, stringified on save
-  roomTypesEn: string;
+  images: string[];
+  roomTypesAr: string[]; // chips; stringified on save
+  roomTypesEn: string[];
+  priceStart: string;
+  mealBreakfast: boolean;
+  mealLunch: boolean;
+  mealDinner: boolean;
   website: string;
   sortOrder: string;
   published: boolean;
@@ -50,8 +60,13 @@ const empty: FormState = {
   addressAr: "",
   addressEn: "",
   image: "",
-  roomTypesAr: "",
-  roomTypesEn: "",
+  images: [],
+  roomTypesAr: [],
+  roomTypesEn: [],
+  priceStart: "",
+  mealBreakfast: false,
+  mealLunch: false,
+  mealDinner: false,
   website: "",
   sortOrder: "0",
   published: true,
@@ -95,8 +110,13 @@ export default function HotelsManager() {
       addressAr: h.addressAr ?? "",
       addressEn: h.addressEn ?? "",
       image: h.image ?? "",
-      roomTypesAr: parseJsonList(h.roomTypesAr).join(", "),
-      roomTypesEn: parseJsonList(h.roomTypesEn).join(", "),
+      images: parseJsonList(h.images),
+      roomTypesAr: parseJsonList(h.roomTypesAr),
+      roomTypesEn: parseJsonList(h.roomTypesEn),
+      priceStart: h.priceStart != null ? String(h.priceStart) : "",
+      mealBreakfast: h.mealBreakfast,
+      mealLunch: h.mealLunch,
+      mealDinner: h.mealDinner,
       website: h.website ?? "",
       sortOrder: String(h.sortOrder),
       published: h.published,
@@ -131,8 +151,13 @@ export default function HotelsManager() {
         addressAr: h.addressAr ?? "",
         addressEn: h.addressEn ?? "",
         image: h.image ?? "",
-        roomTypesAr: parseJsonList(h.roomTypesAr).join(", "),
-        roomTypesEn: parseJsonList(h.roomTypesEn).join(", "),
+        images: parseJsonList(h.images),
+        roomTypesAr: parseJsonList(h.roomTypesAr),
+        roomTypesEn: parseJsonList(h.roomTypesEn),
+        priceStart: h.priceStart,
+        mealBreakfast: h.mealBreakfast,
+        mealLunch: h.mealLunch,
+        mealDinner: h.mealDinner,
         website: h.website ?? "",
         sortOrder: h.sortOrder,
         published: !h.published,
@@ -198,6 +223,19 @@ export default function HotelsManager() {
                     {parseJsonList(h.roomTypesEn).length > 0 && (
                       <span>🛏️ {parseJsonList(h.roomTypesEn).join(", ")}</span>
                     )}
+                    {h.priceStart != null && <span>💵 From ${h.priceStart.toLocaleString("en-US")}</span>}
+                    {(h.mealBreakfast || h.mealLunch || h.mealDinner) && (
+                      <span>
+                        🍽️{" "}
+                        {[
+                          h.mealBreakfast && "Breakfast",
+                          h.mealLunch && "Lunch",
+                          h.mealDinner && "Dinner",
+                        ]
+                          .filter(Boolean)
+                          .join(", ")}
+                      </span>
+                    )}
                     {h.website && (
                       <a
                         href={h.website}
@@ -237,7 +275,13 @@ export default function HotelsManager() {
 
       <Modal open={open} title={editingId ? "Edit Hotel" : "Add Hotel"} onClose={() => setOpen(false)}>
         <form onSubmit={onSubmit} className="space-y-4">
-          <ImageUpload label="Photo" hint="Optional" value={form.image} onChange={(v) => set("image", v)} />
+          <ImageUpload label="Cover photo" hint="Optional" value={form.image} onChange={(v) => set("image", v)} />
+          <MultiImageUpload
+            label="More photos"
+            hint="Optional — extra images shown in a gallery on the hotel card"
+            value={form.images}
+            onChange={(v) => set("images", v)}
+          />
           <div className="grid grid-cols-2 gap-4">
             <Field label="Country (EN)">
               <Input value={form.countryEn} onChange={(e) => set("countryEn", e.target.value)} placeholder="Iraq" />
@@ -271,12 +315,41 @@ export default function HotelsManager() {
             </Field>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Room types (EN)" hint="Comma or newline separated, e.g. Single, Double, Suite">
-              <Textarea rows={2} value={form.roomTypesEn} onChange={(e) => set("roomTypesEn", e.target.value)} />
+            <Field label="Room types (EN)" hint="Type and press Enter to add, e.g. Single, Double, Suite">
+              <ChipsInput
+                value={form.roomTypesEn}
+                onChange={(v) => set("roomTypesEn", v)}
+                placeholder="Single, Double…"
+              />
             </Field>
-            <Field label="Room types (AR)" hint="مفصولة بفاصلة أو سطر جديد">
-              <Textarea dir="rtl" rows={2} value={form.roomTypesAr} onChange={(e) => set("roomTypesAr", e.target.value)} />
+            <Field label="Room types (AR)" hint="اكتب واضغط Enter للإضافة">
+              <ChipsInput
+                dir="rtl"
+                value={form.roomTypesAr}
+                onChange={(v) => set("roomTypesAr", v)}
+                placeholder="مفرد، مزدوج…"
+              />
             </Field>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="Starting price (USD)" hint="Optional — shown as “From $X”">
+              <Input
+                type="number"
+                min="0"
+                dir="ltr"
+                value={form.priceStart}
+                onChange={(e) => set("priceStart", e.target.value)}
+                placeholder="e.g. 120"
+              />
+            </Field>
+            <div>
+              <span className="block text-xs font-medium text-ink/70 mb-1.5">Meals included</span>
+              <div className="flex flex-col gap-2 pt-1.5">
+                <Toggle checked={form.mealBreakfast} onChange={(v) => set("mealBreakfast", v)} label="Breakfast" />
+                <Toggle checked={form.mealLunch} onChange={(v) => set("mealLunch", v)} label="Lunch" />
+                <Toggle checked={form.mealDinner} onChange={(v) => set("mealDinner", v)} label="Dinner" />
+              </div>
+            </div>
           </div>
           <Field label="Website" hint="Optional — link to the hotel's website">
             <Input dir="ltr" value={form.website} onChange={(e) => set("website", e.target.value)} placeholder="https://…" />

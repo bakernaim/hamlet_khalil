@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import ImageCarousel from "@/components/site/ImageCarousel";
 import { useLang } from "@/context/LanguageContext";
 import { waHref } from "@/lib/whatsapp";
 import { FREQUENCY_LABEL } from "@/lib/recurrence";
@@ -120,6 +120,7 @@ export default function CurrentTrips({
                 : undefined;
             // Fall back to the linked package's photo when the trip has no image.
             const cardImage = trip.image ?? pkg?.image ?? null;
+            const gallery = [cardImage, ...trip.images].filter(Boolean) as string[];
             const packageAnchor =
               trip.packageType && trip.packageSlug
                 ? `#${trip.packageType}-${trip.packageSlug}`
@@ -136,18 +137,18 @@ export default function CurrentTrips({
                 <article className="package-card group flex flex-col rounded-2xl overflow-hidden border border-line bg-card h-full">
                   {/* Photo */}
                   <div className="relative h-40 shrink-0 overflow-hidden">
-                    {cardImage ? (
-                      <Image
-                        src={cardImage}
+                    {gallery.length > 0 ? (
+                      <ImageCarousel
+                        images={gallery}
                         alt={title}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="absolute inset-0"
+                        imageClassName="transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,33vw"
                       />
                     ) : (
                       <div className="absolute inset-0 bg-gradient-to-br from-[#dcebe3] to-[#c4d9cd] dark:from-[#12233c] dark:to-[#0b1828]" />
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-card/30 dark:from-card via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-card/30 dark:from-card via-transparent to-transparent pointer-events-none" />
 
                     {/* Status badge */}
                     <div

@@ -89,6 +89,11 @@ export async function removeUpload(imagePath: string | null | undefined): Promis
   await unlink(resolved).catch(() => undefined);
 }
 
+// Removes every upload in `paths`. Safe on non-media paths (seed images etc.).
+export async function removeUploads(paths: (string | null | undefined)[]): Promise<void> {
+  await Promise.all(paths.map((p) => removeUpload(p)));
+}
+
 // ── Private passport files ──────────────────────────────────────────────────
 
 // Saves a passport image to the private store and returns an opaque token

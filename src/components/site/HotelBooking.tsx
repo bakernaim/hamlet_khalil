@@ -1,11 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Image from "next/image";
 import { useLang } from "@/context/LanguageContext";
 import type { HotelDTO } from "@/lib/types";
 import Reveal from "@/components/site/Reveal";
 import HotelBookingModal from "@/components/site/HotelBookingModal";
+import ImageCarousel from "@/components/site/ImageCarousel";
 
 export default function HotelBooking({
   hotels,
@@ -88,13 +88,24 @@ export default function HotelBooking({
             const countryName = isRTL ? h.countryAr : h.countryEn;
             const address = isRTL ? h.addressAr : h.addressEn;
             const roomTypes = isRTL ? h.roomTypesAr : h.roomTypesEn;
+            const gallery = [h.image, ...h.images].filter(Boolean) as string[];
+            const meals = [
+              h.mealBreakfast && (isRTL ? "فطور" : "Breakfast"),
+              h.mealLunch && (isRTL ? "غداء" : "Lunch"),
+              h.mealDinner && (isRTL ? "عشاء" : "Dinner"),
+            ].filter(Boolean) as string[];
 
             return (
               <Reveal key={h.id} delay={i * 70}>
                 <article className="flex flex-col rounded-2xl border border-line bg-card h-full overflow-hidden">
-                  {h.image && (
+                  {gallery.length > 0 && (
                     <div className="relative h-36 shrink-0">
-                      <Image src={h.image} alt={name} fill className="object-cover" sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,33vw" />
+                      <ImageCarousel
+                        images={gallery}
+                        alt={name}
+                        className="absolute inset-0"
+                        sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,33vw"
+                      />
                     </div>
                   )}
                   <div className="flex flex-col flex-1 p-5">
@@ -105,7 +116,7 @@ export default function HotelBooking({
                   {address && <p className="text-muted text-xs leading-relaxed mb-3">{address}</p>}
 
                   {roomTypes.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mb-4">
+                    <div className="flex flex-wrap gap-1.5 mb-3">
                       {roomTypes.map((rt) => (
                         <span key={rt} className="text-[10px] text-soft bg-ink/4 border border-ink/8 px-2 py-0.5 rounded-md">
                           🛏️ {rt}
@@ -114,10 +125,27 @@ export default function HotelBooking({
                     </div>
                   )}
 
+                  {meals.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mb-3">
+                      {meals.map((m) => (
+                        <span key={m} className="text-[10px] text-accent bg-brand/10 border border-brand/20 px-2 py-0.5 rounded-md">
+                          🍽️ {m}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {h.priceStart != null && (
+                    <div className="mb-4 text-ink">
+                      <span className="text-[11px] text-muted">{isRTL ? "يبدأ من" : "Starting from"}</span>{" "}
+                      <span className="font-bold text-base">${h.priceStart.toLocaleString("en-US")}</span>
+                    </div>
+                  )}
+
                   <div className="mt-auto flex flex-col gap-2 pt-1">
                     <button
                       onClick={() => setSelected(h)}
-                      className="block w-full text-center text-sm font-semibold py-3 rounded-xl bg-brand text-[#040d18] hover:bg-brand-hover transition-colors duration-200"
+                      className="w-full text-center text-sm font-semibold py-2.5 rounded-xl bg-brand/10 border border-brand/30 text-accent hover:bg-brand-hover transition-colors duration-200 min-h-[42px] flex items-center justify-center"
                     >
                       {isRTL ? "اطلب الحجز" : "Request Booking"}
                     </button>

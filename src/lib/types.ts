@@ -17,7 +17,8 @@ export interface ZiyaratPackageDTO {
   highlightsEn: string[];
   infoAr: string; // rich-text HTML
   infoEn: string; // rich-text HTML
-  image: string;
+  image: string; // cover image
+  images: string[]; // extra gallery images (cover excluded)
   color: string;
 }
 
@@ -33,7 +34,8 @@ export interface TourismPackageDTO {
   descEn: string;
   infoAr: string; // rich-text HTML
   infoEn: string; // rich-text HTML
-  image: string;
+  image: string; // cover image
+  images: string[]; // extra gallery images (cover excluded)
 }
 
 export type TripStatus = "OPEN" | "ALMOST_FULL" | "DEPARTED" | "CLOSED";
@@ -54,7 +56,8 @@ export interface CurrentTripDTO {
   price: number;
   seatsLeft: number | null;
   status: TripStatus;
-  image: string | null;
+  image: string | null; // cover image
+  images: string[]; // extra gallery images (cover excluded)
   packageType: string | null;
   packageSlug: string | null;
 }
@@ -140,16 +143,25 @@ export interface HotelDTO {
   nameEn: string;
   addressAr: string | null;
   addressEn: string | null;
-  image: string | null; // /api/media/… path, optional
+  image: string | null; // /api/media/… path, optional (cover image)
+  images: string[]; // extra gallery images (cover excluded)
   roomTypesAr: string[];
   roomTypesEn: string[];
+  priceStart: number | null; // starting price in USD, shown as "From $X"
+  mealBreakfast: boolean;
+  mealLunch: boolean;
+  mealDinner: boolean;
   website: string | null;
 }
 
-// Room type chosen per room in a hotel-booking request — distinct from the
-// trip-booking ROOM_TYPES above.
+// Fallback room types for hotels that have no custom room types defined.
+// When a hotel defines its own roomTypes, the booking uses those strings instead.
 export const HOTEL_ROOM_TYPES = ["SINGLE", "DOUBLE", "TRIPLE", "SUITE"] as const;
 export type HotelRoomType = (typeof HOTEL_ROOM_TYPES)[number];
+
+// Meals a visitor can request with a hotel booking (only those the hotel offers).
+export const HOTEL_MEALS = ["BREAKFAST", "LUNCH", "DINNER"] as const;
+export type HotelMeal = (typeof HOTEL_MEALS)[number];
 
 export type HotelBookingStatus = "PENDING" | "CONTACTED" | "CLOSED";
 
@@ -160,7 +172,10 @@ export interface HotelBookingRequestDTO {
   hotelNameEn: string;
   fullName: string;
   phone: string;
-  rooms: HotelRoomType[];
+  rooms: string[]; // hotel-defined room type per room (falls back to HOTEL_ROOM_TYPES)
+  meals: HotelMeal[]; // requested meals
+  checkIn: string | null; // ISO — requested check-in date
+  nights: number | null; // number of nights, optional
   status: HotelBookingStatus;
   createdAt: string; // ISO
 }
@@ -196,4 +211,13 @@ export interface SiteSettings {
   workingExceptions: string; // JSON-encoded WorkingHoursException[], date-specific overrides (holidays etc.)
   instagramUrl: string;
   themeColor: string; // brand accent hex, e.g. "#00b86a"
+}
+
+// An admin-managed Instagram post shown in the homepage feed grid.
+export interface InstagramPostDTO {
+  id: string;
+  image: string; // uploaded /api/media path
+  permalink: string; // link to the post on Instagram (optional; "" = no link)
+  captionAr: string | null;
+  captionEn: string | null;
 }

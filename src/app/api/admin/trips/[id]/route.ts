@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { badRequest, notFound, str, optionalStr, int, optionalInt, bool, optionalDate } from "@/lib/api";
-import { removeUpload } from "@/lib/uploads";
+import { parseList, stringifyList } from "@/lib/serialize";
+import { removeUpload, removeUploads } from "@/lib/uploads";
 
 const STATUSES = ["OPEN", "ALMOST_FULL", "DEPARTED", "CLOSED"];
 const FREQUENCIES = ["ONCE", "WEEKLY", "BIWEEKLY", "MONTHLY"];
@@ -43,6 +44,7 @@ export async function PUT(req: Request, { params }: Ctx) {
       seatsLeft: optionalInt(body.seatsLeft),
       status,
       image,
+      images: stringifyList(body.images),
       packageType: optionalStr(body.packageType),
       packageSlug: optionalStr(body.packageSlug),
       sortOrder: int(body.sortOrder, existing.sortOrder),
@@ -50,6 +52,8 @@ export async function PUT(req: Request, { params }: Ctx) {
     },
   });
   if (image !== existing.image) await removeUpload(existing.image);
+  const keptImages = new Set(parseList(updated.images));
+  await removeUploads(parseList(existing.images).filter((p) => !keptImages.has(p)));
   return NextResponse.json(updated);
 }
 
@@ -59,5 +63,6 @@ export async function DELETE(_req: Request, { params }: Ctx) {
   if (!existing) return notFound();
   await prisma.currentTrip.delete({ where: { id } });
   await removeUpload(existing.image);
+  await removeUploads(parseList(existing.images));
   return NextResponse.json({ ok: true });
 }

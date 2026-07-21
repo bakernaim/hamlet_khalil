@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Field, Input, Textarea, Button, Toggle, ErrorText, ImageUpload } from "@/components/admin/ui";
+import { Field, Input, Textarea, Button, Toggle, ErrorText, ImageUpload, MultiImageUpload } from "@/components/admin/ui";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import { parseList } from "@/lib/serialize";
 
@@ -22,6 +22,7 @@ interface Ziyarat {
   infoAr: string;
   infoEn: string;
   image: string;
+  images: string; // JSON string from the raw row
   color: string;
   sortOrder: number;
   published: boolean;
@@ -41,6 +42,7 @@ type FormState = {
   infoAr: string;
   infoEn: string;
   image: string;
+  images: string[];
   color: string;
   sortOrder: string;
   published: boolean;
@@ -60,6 +62,7 @@ const empty: FormState = {
   infoAr: "",
   infoEn: "",
   image: "/shrines/hussain-karbala.jpg",
+  images: [],
   color: "from-[#1a2444] to-[#0a0f2c]",
   sortOrder: "0",
   published: true,
@@ -80,6 +83,7 @@ function toForm(z: Ziyarat): FormState {
     infoAr: z.infoAr,
     infoEn: z.infoEn,
     image: z.image,
+    images: parseList(z.images),
     color: z.color,
     sortOrder: String(z.sortOrder),
     published: z.published,
@@ -207,7 +211,7 @@ export default function ZiyaratForm({ id }: { id?: string }) {
           </Field>
           <div className="grid grid-cols-2 gap-4">
             <ImageUpload
-              label="Image"
+              label="Cover image"
               hint="Shown on the package card"
               value={form.image}
               onChange={(p) => set("image", p)}
@@ -216,6 +220,12 @@ export default function ZiyaratForm({ id }: { id?: string }) {
               <Input type="number" value={form.sortOrder} onChange={(e) => set("sortOrder", e.target.value)} />
             </Field>
           </div>
+          <MultiImageUpload
+            label="More images"
+            hint="Optional — extra photos shown in a gallery on the package details"
+            value={form.images}
+            onChange={(v) => set("images", v)}
+          />
           <Toggle checked={form.published} onChange={(v) => set("published", v)} label="Published (visible on site)" />
 
             <ErrorText>{formError}</ErrorText>

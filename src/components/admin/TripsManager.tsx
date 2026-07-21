@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useResource } from "@/components/admin/useResource";
-import { Field, Input, Select, Button, Modal, Toggle, ErrorText, ImageUpload } from "@/components/admin/ui";
+import { Field, Input, Select, Button, Modal, Toggle, ErrorText, ImageUpload, MultiImageUpload } from "@/components/admin/ui";
+import { parseList } from "@/lib/serialize";
 
 // Minimal shape for the linked-package dropdowns.
 type PkgOption = { slug: string; nameEn: string; nameAr: string };
@@ -21,6 +22,7 @@ interface Trip {
   seatsLeft: number | null;
   status: string;
   image: string | null;
+  images: string; // JSON string from the raw row
   packageType: string | null;
   packageSlug: string | null;
   sortOrder: number;
@@ -40,6 +42,7 @@ type FormState = {
   seatsLeft: string;
   status: string;
   image: string;
+  images: string[];
   packageType: string;
   packageSlug: string;
   sortOrder: string;
@@ -59,6 +62,7 @@ const empty: FormState = {
   seatsLeft: "",
   status: "OPEN",
   image: "",
+  images: [],
   packageType: "",
   packageSlug: "",
   sortOrder: "0",
@@ -95,6 +99,7 @@ function toForm(t: Trip): FormState {
     seatsLeft: t.seatsLeft == null ? "" : String(t.seatsLeft),
     status: t.status,
     image: t.image ?? "",
+    images: parseList(t.images),
     packageType: t.packageType ?? "",
     packageSlug: t.packageSlug ?? "",
     sortOrder: String(t.sortOrder),
@@ -368,10 +373,16 @@ export default function TripsManager() {
             </Field>
           </div>
           <ImageUpload
-            label="Image"
+            label="Cover image"
             hint="Optional — shown on the trip card"
             value={form.image}
             onChange={(p) => set("image", p)}
+          />
+          <MultiImageUpload
+            label="More images"
+            hint="Optional — extra photos shown in a gallery on the trip card"
+            value={form.images}
+            onChange={(v) => set("images", v)}
           />
           <Toggle checked={form.published} onChange={(v) => set("published", v)} label="Published (visible on site)" />
 

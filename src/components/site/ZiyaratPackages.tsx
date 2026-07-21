@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import ImageCarousel from "@/components/site/ImageCarousel";
 import { useLang } from "@/context/LanguageContext";
 import type { ZiyaratPackageDTO } from "@/lib/types";
 import Reveal from "@/components/site/Reveal";
@@ -50,6 +50,7 @@ export default function ZiyaratPackages({
               const duration = isRTL ? pkg.durationAr : pkg.durationEn;
               const badge = isRTL ? pkg.badgeAr : pkg.badgeEn;
               const highlights = isRTL ? pkg.highlightsAr : pkg.highlightsEn;
+              const gallery = [pkg.image, ...pkg.images].filter(Boolean);
 
               return (
                 <Reveal key={pkg.id} delay={i * 80}>
@@ -59,14 +60,14 @@ export default function ZiyaratPackages({
                   >
                     {/* Photo */}
                     <div className="relative h-44 sm:h-48 shrink-0 overflow-hidden">
-                      <Image
-                        src={pkg.image}
+                      <ImageCarousel
+                        images={gallery}
                         alt={name}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="absolute inset-0"
+                        imageClassName="transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,25vw"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-card/30 dark:from-card via-transparent to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-card/30 dark:from-card via-transparent to-transparent pointer-events-none" />
 
                       <div className="absolute top-3 inset-x-3 flex items-center justify-between">
                         <span className="text-xl drop-shadow">{pkg.flag}</span>
@@ -111,7 +112,7 @@ export default function ZiyaratPackages({
                       {pkgInfo(pkg) && (
                         <button
                           onClick={() => setInfoPkg(pkg)}
-                          className="block w-full text-center text-sm font-semibold py-3 rounded-xl border border-brand/30 text-accent bg-brand/8 hover:bg-brand hover:text-[#040d18] hover:border-brand transition-colors duration-200 min-h-[44px] flex items-center justify-center"
+                          className="w-full text-center text-sm font-semibold py-2.5 rounded-xl bg-brand/10 border border-brand/30 text-accent hover:bg-brand-hover transition-colors duration-200 min-h-[42px] flex items-center justify-center"
                         >
                           {isRTL ? "التفاصيل الكاملة 📖" : "Full Details 📖"}
                         </button>

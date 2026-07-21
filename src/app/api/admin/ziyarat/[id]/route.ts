@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { stringifyList } from "@/lib/serialize";
+import { parseList, stringifyList } from "@/lib/serialize";
 import { badRequest, notFound, str, optionalStr, int, bool } from "@/lib/api";
 import { sanitizeRichText } from "@/lib/sanitize";
-import { removeUpload } from "@/lib/uploads";
+import { removeUpload, removeUploads } from "@/lib/uploads";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -45,12 +45,15 @@ export async function PUT(req: Request, { params }: Ctx) {
       infoAr: sanitizeRichText(str(body.infoAr)),
       infoEn: sanitizeRichText(str(body.infoEn)),
       image,
+      images: stringifyList(body.images),
       color: str(body.color, existing.color),
       sortOrder: int(body.sortOrder, existing.sortOrder),
       published: bool(body.published),
     },
   });
   if (image !== existing.image) await removeUpload(existing.image);
+  const keptImages = new Set(parseList(updated.images));
+  await removeUploads(parseList(existing.images).filter((p) => !keptImages.has(p)));
   return NextResponse.json(updated);
 }
 
@@ -60,5 +63,6 @@ export async function DELETE(_req: Request, { params }: Ctx) {
   if (!existing) return notFound();
   await prisma.ziyaratPackage.delete({ where: { id } });
   await removeUpload(existing.image);
+  await removeUploads(parseList(existing.images));
   return NextResponse.json({ ok: true });
 }

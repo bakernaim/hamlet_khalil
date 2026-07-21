@@ -22,6 +22,7 @@ import {
   Images,
   GalleryHorizontal,
   BedDouble,
+  Camera,
 } from "lucide-react";
 import ThemeToggle from "@/components/site/ThemeToggle";
 
@@ -36,6 +37,7 @@ const NAV = [
   { href: "/admin/hotel-bookings", label: "Hotel Bookings", icon: Ticket },
   { href: "/admin/banners", label: "Banners", icon: Megaphone },
   { href: "/admin/gallery", label: "Gallery", icon: Images },
+  { href: "/admin/instagram", label: "Instagram", icon: Camera },
   { href: "/admin/reviews", label: "Reviews", icon: Star },
   { href: "/admin/users", label: "Staff Users", icon: Users },
   { href: "/admin/settings", label: "Site Settings", icon: Settings },

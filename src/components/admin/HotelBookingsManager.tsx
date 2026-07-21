@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useResource } from "@/components/admin/useResource";
 import { Button, ErrorText } from "@/components/admin/ui";
-import type { HotelBookingRequestDTO, HotelBookingStatus, HotelRoomType } from "@/lib/types";
+import type { HotelBookingRequestDTO, HotelBookingStatus, HotelMeal } from "@/lib/types";
 
 const STATUS_META: Record<HotelBookingStatus, { label: string; chip: string }> = {
   PENDING: { label: "Pending", chip: "bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30" },
@@ -11,11 +11,10 @@ const STATUS_META: Record<HotelBookingStatus, { label: string; chip: string }> =
   CLOSED: { label: "Closed", chip: "bg-ink/8 text-ink/45 border border-line" },
 };
 
-const ROOM_LABELS: Record<HotelRoomType, string> = {
-  SINGLE: "Single",
-  DOUBLE: "Double",
-  TRIPLE: "Triple",
-  SUITE: "Suite",
+const MEAL_LABELS: Record<HotelMeal, string> = {
+  BREAKFAST: "Breakfast",
+  LUNCH: "Lunch",
+  DINNER: "Dinner",
 };
 
 function timeAgo(iso: string): string {
@@ -29,10 +28,10 @@ function timeAgo(iso: string): string {
   return `${days}d ago`;
 }
 
-function roomsSummary(rooms: HotelRoomType[]): string {
-  const counts = new Map<HotelRoomType, number>();
+function roomsSummary(rooms: string[]): string {
+  const counts = new Map<string, number>();
   for (const r of rooms) counts.set(r, (counts.get(r) ?? 0) + 1);
-  return [...counts.entries()].map(([type, n]) => `${n}× ${ROOM_LABELS[type]}`).join(", ");
+  return [...counts.entries()].map(([type, n]) => `${n}× ${type}`).join(", ");
 }
 
 export default function HotelBookingsManager() {
@@ -142,6 +141,15 @@ export default function HotelBookingsManager() {
                     <div className="text-ink/60 text-sm mt-1">🏨 {r.hotelNameEn || r.hotelNameAr}</div>
                     <div className="text-ink/50 text-xs mt-1 flex flex-wrap gap-x-4 gap-y-1">
                       <span>🛏️ {roomsSummary(r.rooms)} ({r.rooms.length} {r.rooms.length === 1 ? "room" : "rooms"})</span>
+                      {r.checkIn && (
+                        <span>
+                          📅 {new Date(r.checkIn).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
+                          {r.nights != null && ` · ${r.nights} ${r.nights === 1 ? "night" : "nights"}`}
+                        </span>
+                      )}
+                      {r.meals.length > 0 && (
+                        <span>🍽️ {r.meals.map((m) => MEAL_LABELS[m]).join(", ")}</span>
+                      )}
                       <a href={`tel:${r.phone}`} className="hover:text-ink">📞 {r.phone}</a>
                       <a
                         href={`https://wa.me/${r.phone.replace(/[^0-9]/g, "")}`}
