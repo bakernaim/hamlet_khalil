@@ -8,6 +8,10 @@ export function notFound(message = "Not found") {
   return NextResponse.json({ error: message }, { status: 404 });
 }
 
+export function forbidden(message = "You don't have permission to do this") {
+  return NextResponse.json({ error: message }, { status: 403 });
+}
+
 export function serverError(message = "Something went wrong") {
   return NextResponse.json({ error: message }, { status: 500 });
 }

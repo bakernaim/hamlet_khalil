@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword } from "@/lib/password";
-import { badRequest, str } from "@/lib/api";
+import { getSession } from "@/lib/session";
+import { badRequest, forbidden, str } from "@/lib/api";
 
 const ROLES = ["admin", "editor"];
 
@@ -14,6 +15,9 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const session = await getSession();
+  if (session?.role !== "admin") return forbidden("Only admins can manage staff users");
+
   const body = await req.json().catch(() => null);
   if (!body) return badRequest("Invalid JSON body");
 

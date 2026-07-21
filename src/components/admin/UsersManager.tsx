@@ -12,7 +12,10 @@ interface User {
   createdAt: string;
 }
 
-export default function UsersManager() {
+// The built-in root admin account is locked from edit/delete (matches the API guard).
+const ROOT_ADMIN_USERNAME = "admin";
+
+export default function UsersManager({ isAdmin }: { isAdmin: boolean }) {
   const { items, loading, error, save, remove } = useResource<User>("/api/admin/users");
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -66,9 +69,12 @@ export default function UsersManager() {
       <header className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-ink">Staff Users</h1>
-          <p className="text-ink/45 text-sm mt-1">People who can sign in and manage the site.</p>
+          <p className="text-ink/45 text-sm mt-1">
+            People who can sign in and manage the site.
+            {!isAdmin && " Only admins can add, edit, or remove staff."}
+          </p>
         </div>
-        <Button onClick={openNew}>+ New User</Button>
+        {isAdmin && <Button onClick={openNew}>+ New User</Button>}
       </header>
 
       <ErrorText>{error}</ErrorText>
@@ -98,8 +104,18 @@ export default function UsersManager() {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => openEdit(u)} className="text-ink/60 hover:text-ink text-xs px-2 py-1 rounded border border-line hover:bg-ink/5">Edit</button>
-                      <button onClick={() => onDelete(u)} className="text-red-600/80 hover:text-red-600 dark:text-red-300/80 dark:hover:text-red-300 text-xs px-2 py-1 rounded border border-red-500/25 hover:bg-red-500/10">Delete</button>
+                      {!isAdmin ? (
+                        <span className="text-ink/30 text-xs">—</span>
+                      ) : u.username === ROOT_ADMIN_USERNAME ? (
+                        <span className="text-ink/40 text-xs inline-flex items-center gap-1" title="The primary admin account is protected">
+                          🔒 Protected
+                        </span>
+                      ) : (
+                        <>
+                          <button onClick={() => openEdit(u)} className="text-ink/60 hover:text-ink text-xs px-2 py-1 rounded border border-line hover:bg-ink/5">Edit</button>
+                          <button onClick={() => onDelete(u)} className="text-red-600/80 hover:text-red-600 dark:text-red-300/80 dark:hover:text-red-300 text-xs px-2 py-1 rounded border border-red-500/25 hover:bg-red-500/10">Delete</button>
+                        </>
+                      )}
                     </div>
                   </td>
                 </tr>
