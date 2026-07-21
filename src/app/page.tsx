@@ -16,6 +16,7 @@ import FAQ from "@/components/site/FAQ";
 import InstagramFeed from "@/components/site/InstagramFeed";
 import Footer from "@/components/site/Footer";
 import FloatingButtons from "@/components/site/FloatingButtons";
+import HolidayNotice from "@/components/site/HolidayNotice";
 import LanguageWrapper from "@/components/site/LanguageWrapper";
 import {
   getZiyaratPackages,
@@ -79,6 +80,7 @@ export default async function Home() {
       <Footer settings={settings} />
       <PromoBannerCarousel banners={barBanners} whatsappNumber={wa} />
       {modalBanner && <PromoModal banner={modalBanner} whatsappNumber={wa} />}
+      <HolidayNotice settings={settings} />
       <FloatingButtons whatsappNumber={wa} />
     </LanguageWrapper>
   );

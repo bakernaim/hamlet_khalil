@@ -148,6 +148,54 @@ export function formatScheduleLines(schedule: WorkingDaySchedule[], locale: "en"
   return lines;
 }
 
+// Human-readable hours for a single day's ranges, e.g. "9 AM – 6 PM".
+export function formatDayHours(ranges: WorkingHoursRange[], locale: "en" | "ar"): string {
+  return rangesLabel(ranges, locale);
+}
+
+// Whether a given calendar day is fully closed (a weekend/off day or a holiday
+// exception), as opposed to merely being outside opening hours on a working day.
+// A date-specific exception takes priority over the weekly schedule.
+export function dayInfo(
+  schedule: WorkingDaySchedule[],
+  date: Date,
+  exceptions: WorkingHoursException[] = []
+): { closed: boolean; label?: string; ranges: WorkingHoursRange[] } {
+  const exception = exceptions.find((e) => e.date === dateKey(date));
+  if (exception) {
+    const closed = exception.closed || exception.ranges.length === 0;
+    return { closed, label: exception.label, ranges: closed ? [] : exception.ranges };
+  }
+  const day = schedule.find((d) => d.day === date.getDay());
+  if (!day || day.closed || day.ranges.length === 0) return { closed: true, ranges: [] };
+  return { closed: false, ranges: day.ranges };
+}
+
+export function isDayClosed(
+  schedule: WorkingDaySchedule[],
+  date: Date,
+  exceptions: WorkingHoursException[] = []
+): boolean {
+  return dayInfo(schedule, date, exceptions).closed;
+}
+
+// The next open calendar day strictly after `from`. Returns its date and hours,
+// or null if nothing is open within a year (e.g. an all-closed schedule).
+export function nextOpenDay(
+  schedule: WorkingDaySchedule[],
+  exceptions: WorkingHoursException[],
+  from: Date
+): { date: Date; ranges: WorkingHoursRange[] } | null {
+  const d = new Date(from);
+  d.setHours(0, 0, 0, 0);
+  for (let i = 0; i < 400; i++) {
+    d.setDate(d.getDate() + 1);
+    const info = dayInfo(schedule, d, exceptions);
+    if (!info.closed) return { date: new Date(d), ranges: info.ranges };
+  }
+  return null;
+}
+
 export function isOpenAt(
   schedule: WorkingDaySchedule[],
   date: Date,
