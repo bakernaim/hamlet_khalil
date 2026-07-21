@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import { Field, Input, Textarea, Button, ErrorText } from "@/components/admin/ui";
 import WorkingHoursCard from "@/components/admin/WorkingHoursCard";
+import BookingCleanupCard from "@/components/admin/BookingCleanupCard";
 import type { SiteSettings } from "@/lib/types";
 
-export default function SettingsManager() {
+export default function SettingsManager({ isAdmin }: { isAdmin: boolean }) {
   const [form, setForm] = useState<SiteSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -144,6 +145,8 @@ export default function SettingsManager() {
           {saved && <span className="text-accent text-sm">✓ Saved</span>}
         </div>
       </form>
+
+      {isAdmin && <div className="max-w-2xl mt-6"><BookingCleanupCard /></div>}
     </div>
   );
 }
