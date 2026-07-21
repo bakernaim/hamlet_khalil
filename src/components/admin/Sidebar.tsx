@@ -25,6 +25,7 @@ import {
   Camera,
   ChevronDown,
   Package,
+  PlaneTakeoff,
   type LucideIcon,
 } from "lucide-react";
 import ThemeToggle from "@/components/site/ThemeToggle";
@@ -43,6 +44,7 @@ const GROUPS: NavGroup[] = [
     items: [
       { href: "/admin/bookings", label: "Trip Bookings", icon: Ticket },
       { href: "/admin/hotel-bookings", label: "Hotel Bookings", icon: BedDouble },
+      { href: "/admin/flight-bookings", label: "Flight Bookings", icon: PlaneTakeoff },
     ],
   },
   {
@@ -54,6 +56,7 @@ const GROUPS: NavGroup[] = [
       { href: "/admin/tourism", label: "Tourism Packages", icon: Plane },
       { href: "/admin/trips", label: "Current Trips", icon: CalendarClock },
       { href: "/admin/hotels", label: "Hotels", icon: BedDouble },
+      { href: "/admin/flights", label: "Flights", icon: PlaneTakeoff },
     ],
   },
   {
@@ -86,6 +89,7 @@ export default function Sidebar({ userName }: { userName: string }) {
   const [open, setOpen] = useState(false);
   const [pendingCount, setPendingCount] = useState(0);
   const [hotelPendingCount, setHotelPendingCount] = useState(0);
+  const [flightPendingCount, setFlightPendingCount] = useState(0);
 
   // Poll for pending bookings so staff notice new requests without a refresh.
   useEffect(() => {
@@ -110,11 +114,23 @@ export default function Sidebar({ userName }: { userName: string }) {
         /* ignore transient errors */
       }
     };
+    const fetchFlightPending = async () => {
+      try {
+        const res = await fetch("/api/admin/flight-bookings", { cache: "no-store" });
+        if (!res.ok || !active) return;
+        const data: { status: string }[] = await res.json();
+        setFlightPendingCount(data.filter((b) => b.status === "PENDING").length);
+      } catch {
+        /* ignore transient errors */
+      }
+    };
     fetchPending();
     fetchHotelPending();
+    fetchFlightPending();
     const t = setInterval(() => {
       fetchPending();
       fetchHotelPending();
+      fetchFlightPending();
     }, 30000);
     return () => {
       active = false;
@@ -132,7 +148,13 @@ export default function Sidebar({ userName }: { userName: string }) {
     exact ? pathname === href : pathname === href || pathname.startsWith(href + "/");
 
   const badgeFor = (href: string) =>
-    href === "/admin/bookings" ? pendingCount : href === "/admin/hotel-bookings" ? hotelPendingCount : 0;
+    href === "/admin/bookings"
+      ? pendingCount
+      : href === "/admin/hotel-bookings"
+        ? hotelPendingCount
+        : href === "/admin/flight-bookings"
+          ? flightPendingCount
+          : 0;
 
   // Which group (if any) contains the current route — used to auto-open it.
   const activeGroupId = GROUPS.find((g) => g.items.some((it) => isActive(it.href, it.exact)))?.id;

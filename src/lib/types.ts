@@ -154,6 +154,39 @@ export interface HotelDTO {
   website: string | null;
 }
 
+export interface FlightDTO {
+  id: string;
+  fromAr: string;
+  fromEn: string;
+  toAr: string;
+  toEn: string;
+  airlineAr: string;
+  airlineEn: string;
+  mealIncluded: boolean;
+  price: number; // USD
+  image: string | null;
+}
+
+export type FlightBookingStatus = "PENDING" | "CONTACTED" | "CLOSED";
+
+export interface FlightBookingRequestDTO {
+  id: string;
+  flightId: string | null;
+  fromAr: string;
+  fromEn: string;
+  toAr: string;
+  toEn: string;
+  airlineAr: string;
+  airlineEn: string;
+  fullName: string;
+  phone: string;
+  travelDate: string; // ISO
+  passengers: number;
+  passports: string[]; // private file tokens; view via /api/admin/passport/<token>
+  status: FlightBookingStatus;
+  createdAt: string; // ISO
+}
+
 // Fallback room types for hotels that have no custom room types defined.
 // When a hotel defines its own roomTypes, the booking uses those strings instead.
 export const HOTEL_ROOM_TYPES = ["SINGLE", "DOUBLE", "TRIPLE", "SUITE"] as const;

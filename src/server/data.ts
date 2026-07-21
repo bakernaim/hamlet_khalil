@@ -11,6 +11,7 @@ import type {
   GalleryItemDTO,
   HeroImageDTO,
   HotelDTO,
+  FlightDTO,
   InstagramPostDTO,
   SiteSettings,
   TripStatus,
@@ -197,6 +198,26 @@ export async function getHotels(publishedOnly = true): Promise<HotelDTO[]> {
     mealLunch: h.mealLunch,
     mealDinner: h.mealDinner,
     website: h.website,
+  }));
+}
+
+// Published flights / plane tickets for the public booking section.
+export async function getFlights(publishedOnly = true): Promise<FlightDTO[]> {
+  const rows = await prisma.flight.findMany({
+    where: publishedOnly ? { published: true } : undefined,
+    orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
+  });
+  return rows.map((f) => ({
+    id: f.id,
+    fromAr: f.fromAr,
+    fromEn: f.fromEn,
+    toAr: f.toAr,
+    toEn: f.toEn,
+    airlineAr: f.airlineAr,
+    airlineEn: f.airlineEn,
+    mealIncluded: f.mealIncluded,
+    price: f.price,
+    image: f.image,
   }));
 }
 

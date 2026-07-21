@@ -228,6 +228,47 @@ model HotelBookingRequest {
   updatedAt   DateTime @updatedAt
 }
 
+// A flight / plane ticket offering managed in the admin and shown on the site.
+model Flight {
+  id           String                 @id @default(cuid())
+  fromAr       String
+  fromEn       String
+  toAr         String
+  toEn         String
+  airlineAr    String
+  airlineEn    String
+  mealIncluded Boolean                @default(false) // is a meal served on board
+  price        Int // ticket price in USD
+  image        String? // optional airline logo / photo (/api/media/…)
+  sortOrder    Int                    @default(0)
+  published    Boolean                @default(true)
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+  requests     FlightBookingRequest[]
+}
+
+// A flight-booking request submitted from the public site. Like the hotel
+// request: no payment step — just enough to follow up over WhatsApp.
+model FlightBookingRequest {
+  id         String   @id @default(cuid())
+  flightId   String?
+  flight     Flight?  @relation(fields: [flightId], references: [id], onDelete: SetNull)
+  fromAr     String // snapshots so the record survives flight deletion
+  fromEn     String
+  toAr       String
+  toEn       String
+  airlineAr  String
+  airlineEn  String
+  fullName   String
+  phone      String
+  travelDate DateTime // the date the traveler wants to fly
+  passengers Int      @default(1)
+  passports  String   @default("[]") // JSON string[] of private passport file tokens, one per passenger
+  status     String   @default("PENDING") // PENDING | CONTACTED | CLOSED
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
 model Setting {
   key   String @id
   value String

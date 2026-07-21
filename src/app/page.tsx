@@ -6,6 +6,7 @@ import TrustBar from "@/components/site/TrustBar";
 import VerseBanner from "@/components/site/VerseBanner";
 import TourismPackages from "@/components/site/TourismPackages";
 import HotelBooking from "@/components/site/HotelBooking";
+import Flights from "@/components/site/Flights";
 import PromoBannerCarousel from "@/components/site/PromoBannerCarousel";
 import PromoModal from "@/components/site/PromoModal";
 import HowItWorks from "@/components/site/HowItWorks";
@@ -25,6 +26,7 @@ import {
   getGalleryItems,
   getHeroImages,
   getHotels,
+  getFlights,
   getSettings,
   getInstagramPosts,
 } from "@/server/data";
@@ -44,6 +46,8 @@ export default async function Home() {
     getHeroImages(),
     getHotels(),
   ]);
+
+  const flights = await getFlights();
 
   // Admin-managed Instagram posts; empty → the section shows static fallback.
   const instagram = await getInstagramPosts();
@@ -65,6 +69,7 @@ export default async function Home() {
         <VerseBanner />
         <TourismPackages packages={tourism} />
         <HotelBooking hotels={hotels} whatsappNumber={wa} />
+        <Flights flights={flights} whatsappNumber={wa} />
         <HowItWorks />
         <Gallery items={gallery} />
         <Reviews reviews={reviews} />

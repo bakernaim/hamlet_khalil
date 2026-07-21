@@ -48,11 +48,21 @@ Verify changes with `npm run build` **and** `npm run lint`. The first admin is `
   fixed-height flex column — header + Save/Cancel footer stay pinned while the fields scroll
   internally — and `router.push` back to the list on save.
 - **API** [src/app/api/](src/app/api/): `auth/{login,logout}` set/clear the session cookie;
-  `admin/{ziyarat,tourism,trips,banners,gallery,reviews,users,settings,bookings}` are the CRUD handlers
-  (collection `route.ts` + item `[id]/route.ts`). **Public** (unguarded) endpoints: `api/booking/upload`
-  (stores a passport privately, returns a token), `api/booking` (creates a PENDING `Booking`) and
+  `admin/{ziyarat,tourism,trips,banners,gallery,instagram,reviews,users,settings,bookings,hotels,hotel-bookings,flights,flight-bookings}`
+  are the CRUD handlers (collection `route.ts` + item `[id]/route.ts`). **Public** (unguarded) endpoints:
+  `api/booking/upload` (stores a passport privately, returns a token), `api/booking` (creates a PENDING
+  `Booking`), `api/hotel-booking` / `api/flight-booking` (create PENDING hotel/flight requests) and
   `api/reviews` (visitor submits a review, stored with `approved: false`). `admin/passport/[name]`
   streams a private passport file and is session-guarded.
+- **Hotels & Flights** are parallel catalog+booking features: a `Hotel` / `Flight` is managed in
+  [HotelsManager](src/components/admin/HotelsManager.tsx) / [FlightsManager](src/components/admin/FlightsManager.tsx),
+  shown publicly by [HotelBooking](src/components/site/HotelBooking.tsx) / [Flights](src/components/site/Flights.tsx),
+  and booked via [HotelBookingModal](src/components/site/HotelBookingModal.tsx) /
+  [FlightBookingModal](src/components/site/FlightBookingModal.tsx) which POST a PENDING
+  `HotelBookingRequest` / `FlightBookingRequest` (reviewed in their `*BookingsManager`; the sidebar polls
+  pending counts for both). A flight carries from/to/airline (bilingual), `mealIncluded`, `price`; booking
+  picks a `travelDate` + passengers. Users/roles: staff CRUD is admin-only, and the built-in `admin`
+  account can't be edited/deleted.
 - **Recurring trips & bookings**: a `CurrentTrip` is one-off or repeats (`frequency` +
   `recurEndDate`). [src/lib/recurrence.ts](src/lib/recurrence.ts) turns that into the bookable
   departure dates (`computeDepartures`, future-only, capped); `server/data.ts` puts them on the DTO
