@@ -78,7 +78,7 @@ export default function Flights({
           </div>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+        <div className="max-w-4xl mx-auto flex flex-col gap-4">
           {visible.map((f, i) => {
             const from = isRTL ? f.fromAr : f.fromEn;
             const to = isRTL ? f.toAr : f.toEn;
@@ -86,31 +86,25 @@ export default function Flights({
 
             return (
               <Reveal key={f.id} delay={i * 70}>
-                <article className="flex flex-col rounded-2xl border border-line bg-card h-full overflow-hidden">
+                <article className="flex flex-col sm:flex-row rounded-2xl border border-line bg-card overflow-hidden">
                   {f.image && (
-                    <div className="relative h-32 shrink-0">
-                      <Image
-                        src={f.image}
-                        alt={airline}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,33vw"
-                      />
+                    <div className="relative w-full sm:w-48 h-36 sm:h-auto shrink-0">
+                      <Image src={f.image} alt={airline} fill className="object-cover" sizes="(max-width:640px) 100vw, 192px" />
                     </div>
                   )}
-                  <div className="flex flex-col flex-1 p-5">
-                    {/* Route */}
-                    <div className="flex items-center justify-center gap-3 mb-3">
-                      <span className="text-ink font-bold text-base leading-snug">{from}</span>
-                      <span className="text-accent text-lg">✈</span>
-                      <span className="text-ink font-bold text-base leading-snug">{to}</span>
-                    </div>
+                  <div className="flex flex-1 flex-col sm:flex-row min-w-0">
+                    <div className="flex-1 p-5 min-w-0">
+                      {/* Route */}
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className="text-ink font-bold text-base leading-snug">{from}</span>
+                        <span className="text-accent text-lg">✈</span>
+                        <span className="text-ink font-bold text-base leading-snug">{to}</span>
+                      </div>
 
-                    <div className="text-center text-accent text-[11px] font-medium mb-3">🛫 {airline}</div>
+                      <div className="text-accent text-[11px] font-medium mb-3">🛫 {airline}</div>
 
-                    <div className="flex flex-wrap justify-center gap-1.5 mb-4">
                       <span
-                        className={`text-[10px] px-2 py-0.5 rounded-md border ${
+                        className={`inline-block text-[10px] px-2 py-0.5 rounded-md border ${
                           f.mealIncluded
                             ? "text-accent bg-brand/10 border-brand/20"
                             : "text-soft bg-ink/4 border-ink/8"
@@ -122,12 +116,11 @@ export default function Flights({
                       </span>
                     </div>
 
-                    <div className="text-center mb-4 text-ink">
-                      <span className="text-[11px] text-muted">{isRTL ? "التذكرة من" : "Ticket from"}</span>{" "}
-                      <span className="font-bold text-lg">${f.price.toLocaleString("en-US")}</span>
-                    </div>
-
-                    <div className="mt-auto pt-1">
+                    <div className="shrink-0 sm:w-48 p-5 sm:ps-4 border-t sm:border-t-0 sm:border-s border-line flex flex-col justify-center gap-2">
+                      <div className="text-ink">
+                        <span className="text-[11px] text-muted">{isRTL ? "يبدأ من" : "Starting from"}</span>
+                        <div className="font-bold text-lg leading-tight">${f.price.toLocaleString("en-US")}</div>
+                      </div>
                       <button
                         onClick={() => setSelected(f)}
                         className="w-full text-center text-sm font-semibold py-2.5 rounded-xl bg-brand/10 border border-brand/30 text-accent hover:bg-brand-hover transition-colors duration-200 min-h-[42px] flex items-center justify-center"

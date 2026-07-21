@@ -81,7 +81,7 @@ export default function HotelBooking({
           </div>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+        <div className="max-w-4xl mx-auto flex flex-col gap-4">
           {visible.map((h, i) => {
             const name = isRTL ? h.nameAr : h.nameEn;
             const city = isRTL ? h.cityAr : h.cityEn;
@@ -97,69 +97,63 @@ export default function HotelBooking({
 
             return (
               <Reveal key={h.id} delay={i * 70}>
-                <article className="flex flex-col rounded-2xl border border-line bg-card h-full overflow-hidden">
+                <article className="flex flex-col sm:flex-row rounded-2xl border border-line bg-card overflow-hidden">
                   {gallery.length > 0 && (
-                    <div className="relative h-36 shrink-0">
+                    <div className="relative w-full sm:w-56 h-44 sm:h-auto shrink-0">
                       <ImageCarousel
                         images={gallery}
                         alt={name}
                         className="absolute inset-0"
-                        sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,33vw"
+                        sizes="(max-width:640px) 100vw, 224px"
                       />
                     </div>
                   )}
-                  <div className="flex flex-col flex-1 p-5">
-                  <div className="text-accent text-[11px] font-medium mb-1.5">
-                    📍 {city}, {countryName}
-                  </div>
-                  <h3 className="text-ink font-bold text-base leading-snug mb-1.5">{name}</h3>
-                  {address && <p className="text-muted text-xs leading-relaxed mb-3">{address}</p>}
+                  <div className="flex flex-1 flex-col sm:flex-row min-w-0">
+                    <div className="flex-1 p-5 min-w-0">
+                      <div className="text-accent text-[11px] font-medium mb-1.5">
+                        📍 {city}, {countryName}
+                      </div>
+                      <h3 className="text-ink font-bold text-base leading-snug mb-1.5">{name}</h3>
+                      {address && <p className="text-muted text-xs leading-relaxed mb-3">{address}</p>}
 
-                  {roomTypes.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mb-3">
-                      {roomTypes.map((rt) => (
-                        <span key={rt} className="text-[10px] text-soft bg-ink/4 border border-ink/8 px-2 py-0.5 rounded-md">
-                          🛏️ {rt}
-                        </span>
-                      ))}
+                      <div className="flex flex-wrap gap-1.5">
+                        {roomTypes.map((rt) => (
+                          <span key={rt} className="text-[10px] text-soft bg-ink/4 border border-ink/8 px-2 py-0.5 rounded-md">
+                            🛏️ {rt}
+                          </span>
+                        ))}
+                        {meals.map((m) => (
+                          <span key={m} className="text-[10px] text-accent bg-brand/10 border border-brand/20 px-2 py-0.5 rounded-md">
+                            🍽️ {m}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  )}
 
-                  {meals.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mb-3">
-                      {meals.map((m) => (
-                        <span key={m} className="text-[10px] text-accent bg-brand/10 border border-brand/20 px-2 py-0.5 rounded-md">
-                          🍽️ {m}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  {h.priceStart != null && (
-                    <div className="mb-4 text-ink">
-                      <span className="text-[11px] text-muted">{isRTL ? "يبدأ من" : "Starting from"}</span>{" "}
-                      <span className="font-bold text-base">${h.priceStart.toLocaleString("en-US")}</span>
-                    </div>
-                  )}
-
-                  <div className="mt-auto flex flex-col gap-2 pt-1">
-                    <button
-                      onClick={() => setSelected(h)}
-                      className="w-full text-center text-sm font-semibold py-2.5 rounded-xl bg-brand/10 border border-brand/30 text-accent hover:bg-brand-hover transition-colors duration-200 min-h-[42px] flex items-center justify-center"
-                    >
-                      {isRTL ? "اطلب الحجز" : "Request Booking"}
-                    </button>
-                    {h.website && (
-                      <a
-                        href={h.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-center text-xs text-muted hover:text-ink"
+                    <div className="shrink-0 sm:w-48 p-5 sm:ps-4 border-t sm:border-t-0 sm:border-s border-line flex flex-col justify-center gap-2">
+                      {h.priceStart != null && (
+                        <div className="text-ink">
+                          <span className="text-[11px] text-muted">{isRTL ? "يبدأ من" : "Starting from"}</span>
+                          <div className="font-bold text-lg leading-tight">${h.priceStart.toLocaleString("en-US")}</div>
+                        </div>
+                      )}
+                      <button
+                        onClick={() => setSelected(h)}
+                        className="w-full text-center text-sm font-semibold py-2.5 rounded-xl bg-brand/10 border border-brand/30 text-accent hover:bg-brand-hover transition-colors duration-200 min-h-[42px] flex items-center justify-center"
                       >
-                        {isRTL ? "زيارة موقع الفندق ↗" : "Visit hotel website ↗"}
-                      </a>
-                    )}
-                  </div>
+                        {isRTL ? "اطلب الحجز" : "Request Booking"}
+                      </button>
+                      {h.website && (
+                        <a
+                          href={h.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-center text-xs text-muted hover:text-ink"
+                        >
+                          {isRTL ? "زيارة موقع الفندق ↗" : "Visit hotel website ↗"}
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </article>
               </Reveal>
