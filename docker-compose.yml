@@ -1,0 +1,41 @@
+services:
+  npm:
+    image: 'jc21/nginx-proxy-manager:latest'
+    container_name: nginx-proxy-manager
+    restart: unless-stopped
+    ports:
+      - '80:80'   # HTTP Traffic
+      - '443:443' # HTTPS Traffic
+      - '81:81'   # Admin Web Interface
+    volumes:
+      - ./npm/data:/data
+      - ./npm/letsencrypt:/etc/letsencrypt
+    networks:
+      - app-network
+
+  app:
+    container_name: hamlet-khalil-app
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ./app/.env.production
+    environment:
+      DATABASE_URL: "file:/app/data/dev.db"
+    volumes:
+      - ./data/dev.db:/app/data/dev.db
+      - private-uploads:/app/private_uploads
+      - public-uploads:/app/public/uploads
+    networks:
+      - app-network
+    # No need to expose ports to the host; NPM handles internal routing
+    # (add a Proxy Host in the NPM admin UI at :81 pointing to "app:3000")
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  private-uploads:
+  public-uploads:

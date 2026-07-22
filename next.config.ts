@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Standalone output for Docker: bundles a minimal server + traced node_modules into .next/standalone.
+  output: "standalone",
   // Keep the native SQLite driver out of the bundler — it's used only on the server.
   serverExternalPackages: ["better-sqlite3", "@prisma/adapter-better-sqlite3"],
   // Let the dev server (incl. HMR websocket) be reached from any host.

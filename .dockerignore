@@ -1,0 +1,16 @@
+dev.db
+dev.db-journal
+prisma/dev.db
+prisma/dev.db-journal
+private_uploads
+public/uploads
+.env
+.env.*
+!.env.example
+.git
+.gitignore
+*.md
+.vscode
+.DS_Store
+npm-debug.log*
+npm/
