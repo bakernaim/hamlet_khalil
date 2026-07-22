@@ -22,7 +22,7 @@ services:
     env_file:
       - ./app/.env.production
     environment:
-      DATABASE_URL: "file:/app/data/dev.db"
+      DATABASE_URL: "file:./data/dev.db"
     volumes:
       - ./data/dev.db:/app/data/dev.db
       - private-uploads:/app/private_uploads

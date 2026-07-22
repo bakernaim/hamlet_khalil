@@ -1,11 +1,18 @@
-FROM node:20-alpine
+# Debian-based (glibc), not Alpine (musl): the local node_modules this Dockerfile
+# copies in was built on a glibc host, and ships glibc-linked native binaries
+# (Prisma's schema/query engines, better-sqlite3) that won't run under musl.
+FROM node:20-slim
 WORKDIR /app
 
 ENV NODE_ENV=production
 
+# Prisma's engine binaries are linked against OpenSSL.
+RUN apt-get update && apt-get install -y --no-install-recommends openssl ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
 # Don't run as root
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN groupadd --system --gid 1001 nodejs
+RUN useradd --system --uid 1001 --gid nodejs nextjs
 
 COPY .next/standalone ./
 COPY .next/static ./.next/static
