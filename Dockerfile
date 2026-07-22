@@ -1,7 +1,9 @@
 # Debian-based (glibc), not Alpine (musl): the local node_modules this Dockerfile
 # copies in was built on a glibc host, and ships glibc-linked native binaries
 # (Prisma's schema/query engines, better-sqlite3) that won't run under musl.
-FROM node:20-slim
+# The Node major must also match the machine that built node_modules (native
+# addons are tied to NODE_MODULE_VERSION — Node 22 = 127).
+FROM node:22-slim
 WORKDIR /app
 
 ENV NODE_ENV=production

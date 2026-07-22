@@ -64,4 +64,4 @@ ssh "$SERVER_HOST" "cd $REMOTE_DIR && TMP=\$(mktemp -d) && unzip -oq $ARCHIVE_NA
 rm "$ARCHIVE_NAME"
 
 echo "==> Deploy complete."
-echo "Note: $REMOTE_DIR/data/dev.db must exist on the server (bind-mounted DB) before the app can start correctly."
+echo "Note: the DB lives in $REMOTE_DIR/data/ (bind-mounted dir, owned by uid 1001); the entrypoint creates+seeds dev.db on first boot. See deployment.md."

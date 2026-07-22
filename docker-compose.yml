@@ -24,7 +24,10 @@ services:
     environment:
       DATABASE_URL: "file:./data/dev.db"
     volumes:
-      - ./data/dev.db:/app/data/dev.db
+      # Mount the directory, not the file: a file bind mount whose host source
+      # doesn't exist gets auto-created by Docker as a *directory*, which makes
+      # Prisma fail with P1013 ("invalid database string").
+      - ./data:/app/data
       - private-uploads:/app/private_uploads
       - public-uploads:/app/public/uploads
     networks:
