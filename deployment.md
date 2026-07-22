@@ -100,6 +100,10 @@ Everything worth backing up:
   — native binary built on one Node major, run on another. The Dockerfile base image and the
   local Node that ran `npm install` disagree. Align them (see Prerequisites), then
   `docker compose build --no-cache app`.
+- **Seed fails: `Cannot find module '../src/generated/prisma/index.js'`** — the seed imports
+  the generated Prisma client and helpers from `src/`, which deploy.sh must stage
+  (`src/generated`, `src/data`, `src/lib`) and the Dockerfile must `COPY src ./src`. If you
+  see this, the image was built from an older archive — redeploy with `./deploy.sh`.
 - **SQLite "unable to open database file" / permission denied** — `~/data` isn't writable by
   uid 1001. `sudo chown -R 1001:1001 ~/data`.
 - **Old code still serving after deploy** — compose cached the image layers. The deploy

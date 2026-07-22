@@ -31,6 +31,13 @@ cp -r public "$APP_DIR/public"
 echo "==> Copying Prisma schema/seed/config + full node_modules (Prisma CLI's dependency tree isn't worth curating by hand)"
 cp -r prisma "$APP_DIR/prisma"
 cp prisma.config.ts "$APP_DIR/prisma.config.ts"
+
+# seed.ts imports from src/: the generated Prisma client (gitignored, so it must
+# come from the local build machine) + starter content and lib helpers.
+mkdir -p "$APP_DIR/src"
+cp -r src/generated "$APP_DIR/src/generated"
+cp -r src/data "$APP_DIR/src/data"
+cp -r src/lib "$APP_DIR/src/lib"
 cp -r node_modules "$APP_DIR/node_modules"
 
 echo "==> Copying app-side deploy files (Dockerfile, entrypoint, env)"

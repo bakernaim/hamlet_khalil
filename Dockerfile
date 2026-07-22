@@ -24,6 +24,9 @@ COPY public ./public
 # needed to sync/seed the SQLite DB on start.
 COPY prisma ./prisma
 COPY prisma.config.ts ./prisma.config.ts
+# Subset of src/ the seed script imports (generated Prisma client, starter
+# content, lib helpers) — staged by deploy.sh.
+COPY src ./src
 # Full node_modules (merged over .next/standalone's traced subset): the Prisma
 # CLI + tsx have a deep transitive dependency tree that isn't worth curating by
 # hand — they only run via the entrypoint below, not in the traced server bundle.
