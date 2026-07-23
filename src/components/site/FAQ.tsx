@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { useLang } from "@/context/LanguageContext";
 import { faq } from "@/data/content";
+import type { SectionCopy } from "@/lib/types";
 import Reveal from "@/components/site/Reveal";
 
-export default function FAQ() {
+export default function FAQ({ copy }: { copy: SectionCopy }) {
   const { isRTL } = useLang();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
@@ -19,8 +20,13 @@ export default function FAQ() {
             {isRTL ? "أسئلة شائعة" : "FAQ"}
           </span>
           <h2 className="text-2xl sm:text-4xl font-bold text-ink mb-3">
-            {isRTL ? "كل ما تريد معرفته" : "Everything You Need to Know"}
+            {isRTL ? copy.titleAr : copy.titleEn}
           </h2>
+          {(isRTL ? copy.descAr : copy.descEn) && (
+            <p className="text-muted max-w-md mx-auto text-sm leading-relaxed">
+              {isRTL ? copy.descAr : copy.descEn}
+            </p>
+          )}
           <div className="section-divider w-16 mx-auto mt-5" />
         </div>
 

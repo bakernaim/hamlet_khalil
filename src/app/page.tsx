@@ -31,6 +31,7 @@ import {
   getSettings,
   getInstagramPosts,
 } from "@/server/data";
+import { sectionCopy } from "@/lib/settings";
 
 // Content is edited from the admin dashboard, so always render fresh.
 export const dynamic = "force-dynamic";
@@ -64,18 +65,18 @@ export default async function Home() {
       <Navbar whatsappNumber={wa} />
       <main>
         <Hero settings={settings} images={heroImages} />
-        <CurrentTrips trips={trips} whatsappNumber={wa} ziyarat={ziyarat} tourism={tourism} />
-        <ZiyaratPackages packages={ziyarat} />
-        <TrustBar />
+        <CurrentTrips trips={trips} whatsappNumber={wa} ziyarat={ziyarat} tourism={tourism} copy={sectionCopy(settings, "trips")} />
+        <ZiyaratPackages packages={ziyarat} copy={sectionCopy(settings, "ziyarat")} />
+        <TourismPackages packages={tourism} copy={sectionCopy(settings, "tourism")} />
+        <HotelBooking hotels={hotels} whatsappNumber={wa} copy={sectionCopy(settings, "hotels")} />
+        <Flights flights={flights} whatsappNumber={wa} copy={sectionCopy(settings, "flights")} />
+        <HowItWorks copy={sectionCopy(settings, "how")} />
+        <TrustBar copy={sectionCopy(settings, "about")} />
         <VerseBanner />
-        <TourismPackages packages={tourism} />
-        <HotelBooking hotels={hotels} whatsappNumber={wa} />
-        <Flights flights={flights} whatsappNumber={wa} />
-        <HowItWorks />
-        <Gallery items={gallery} />
-        <Reviews reviews={reviews} />
-        <FAQ />
-        <InstagramFeed instagramUrl={settings.instagramUrl} items={instagram} />
+        <Gallery items={gallery} copy={sectionCopy(settings, "gallery")} />
+        <Reviews reviews={reviews} copy={sectionCopy(settings, "reviews")} />
+        <FAQ copy={sectionCopy(settings, "faq")} />
+        <InstagramFeed instagramUrl={settings.instagramUrl} items={instagram} copy={sectionCopy(settings, "instagram")} />
       </main>
       <Footer settings={settings} />
       <PromoBannerCarousel banners={barBanners} whatsappNumber={wa} />

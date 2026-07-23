@@ -4,7 +4,23 @@ import { useEffect, useState } from "react";
 import { Field, Input, Textarea, Button, ErrorText } from "@/components/admin/ui";
 import WorkingHoursCard from "@/components/admin/WorkingHoursCard";
 import BookingCleanupCard from "@/components/admin/BookingCleanupCard";
-import type { SiteSettings } from "@/lib/types";
+import type { SectionName, SiteSettings } from "@/lib/types";
+import { sectionCopyKey } from "@/lib/settings";
+
+// Homepage sections whose title/description are editable below, in page order.
+const SECTION_LABELS: { name: SectionName; label: string }[] = [
+  { name: "trips", label: "Current Trips" },
+  { name: "ziyarat", label: "Ziyarat Packages" },
+  { name: "about", label: "Why Choose Us (trust bar)" },
+  { name: "tourism", label: "Tourism Packages" },
+  { name: "hotels", label: "Hotel Booking" },
+  { name: "flights", label: "Flight Tickets" },
+  { name: "how", label: "How It Works" },
+  { name: "gallery", label: "Gallery" },
+  { name: "reviews", label: "Reviews" },
+  { name: "faq", label: "FAQ" },
+  { name: "instagram", label: "Instagram Feed" },
+];
 
 export default function SettingsManager({ isAdmin }: { isAdmin: boolean }) {
   const [form, setForm] = useState<SiteSettings | null>(null);
@@ -59,7 +75,7 @@ export default function SettingsManager({ isAdmin }: { isAdmin: boolean }) {
     <div>
       <header className="mb-6">
         <h1 className="text-2xl font-bold text-ink">Site Settings</h1>
-        <p className="text-ink/45 text-sm mt-1">Contact info and hero text shown across the site.</p>
+        <p className="text-ink/45 text-sm mt-1">Contact info, hero text and section titles shown across the site.</p>
       </header>
 
       <form onSubmit={onSubmit} className="space-y-6 max-w-2xl">
@@ -106,6 +122,67 @@ export default function SettingsManager({ isAdmin }: { isAdmin: boolean }) {
               <Textarea rows={2} dir="rtl" value={form.heroSubheadingAr} onChange={(e) => set("heroSubheadingAr", e.target.value)} />
             </Field>
           </div>
+          <div className="grid grid-cols-3 gap-4">
+            <Field label="Pilgrims stat" hint='Shown as "5000+"'>
+              <Input type="number" min={0} dir="ltr" value={form.statPilgrims} onChange={(e) => set("statPilgrims", e.target.value)} />
+            </Field>
+            <Field label="Years of experience" hint='Shown as "15+"'>
+              <Input type="number" min={0} dir="ltr" value={form.statYears} onChange={(e) => set("statYears", e.target.value)} />
+            </Field>
+            <Field label="Destinations" hint='Shown as "20+"'>
+              <Input type="number" min={0} dir="ltr" value={form.statDestinations} onChange={(e) => set("statDestinations", e.target.value)} />
+            </Field>
+          </div>
+        </section>
+
+        <section className="rounded-2xl bg-card border border-line p-5 space-y-3">
+          <h2 className="text-ink font-semibold text-sm">Homepage sections</h2>
+          <p className="text-ink/45 text-xs">
+            Title and short description shown above each section. Clearing a field restores the
+            default text. Descriptions are optional for Gallery, Reviews, FAQ, Instagram and the
+            trust bar — leave them empty to show none.
+          </p>
+          {SECTION_LABELS.map(({ name, label }) => (
+            <details key={name} className="rounded-xl border border-line bg-page-alt/50 open:pb-4">
+              <summary className="cursor-pointer select-none px-4 py-3 text-sm font-medium text-ink/80 hover:text-ink">
+                {label}
+              </summary>
+              <div className="px-4 space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <Field label="Title (EN)">
+                    <Input
+                      value={form[sectionCopyKey(name, "TitleEn")]}
+                      onChange={(e) => set(sectionCopyKey(name, "TitleEn"), e.target.value)}
+                    />
+                  </Field>
+                  <Field label="Title (AR)">
+                    <Input
+                      dir="rtl"
+                      value={form[sectionCopyKey(name, "TitleAr")]}
+                      onChange={(e) => set(sectionCopyKey(name, "TitleAr"), e.target.value)}
+                    />
+                  </Field>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <Field label="Description (EN)">
+                    <Textarea
+                      rows={2}
+                      value={form[sectionCopyKey(name, "DescEn")]}
+                      onChange={(e) => set(sectionCopyKey(name, "DescEn"), e.target.value)}
+                    />
+                  </Field>
+                  <Field label="Description (AR)">
+                    <Textarea
+                      rows={2}
+                      dir="rtl"
+                      value={form[sectionCopyKey(name, "DescAr")]}
+                      onChange={(e) => set(sectionCopyKey(name, "DescAr"), e.target.value)}
+                    />
+                  </Field>
+                </div>
+              </div>
+            </details>
+          ))}
         </section>
 
         <section className="rounded-2xl bg-card border border-line p-5 space-y-4">

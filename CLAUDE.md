@@ -120,6 +120,13 @@ Verify changes with `npm run build` **and** `npm run lint`. The first admin is `
 - **Settings**: key/value `Setting` rows merged over defaults in
   [src/lib/settings.ts](src/lib/settings.ts). Add a new setting by extending `SETTING_DEFAULTS`
   + the `SiteSettings` type.
+- **Section copy**: every homepage section's title + short description is editable in
+  Settings → "Homepage sections". The keys (`section<Name>TitleAr/En`, `section<Name>DescAr/En`)
+  are generated from `SECTION_NAMES` (lib/types.ts) + `SECTION_COPY_DEFAULTS` (lib/settings.ts);
+  `page.tsx` passes `copy={sectionCopy(settings, "<name>")}` into each section component, which
+  renders `copy.titleAr/En` and (if non-empty) `copy.descAr/En`. To make a new section's copy
+  editable: add its name to `SECTION_NAMES`, defaults to `SECTION_COPY_DEFAULTS`, a label to
+  `SECTION_LABELS` in SettingsManager, and take a `copy: SectionCopy` prop.
 - **Theme**: dual light/dark driven by semantic tokens in
   [src/app/globals.css](src/app/globals.css) — `:root` = light (warm off-white), `html.dark`
   = the original dark navy. Use the token utilities (`bg-page`, `bg-page-alt`, `bg-card`,

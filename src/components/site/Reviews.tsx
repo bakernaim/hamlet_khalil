@@ -5,7 +5,7 @@
 
 import { useEffect, useState } from "react";
 import { useLang } from "@/context/LanguageContext";
-import type { ReviewDTO } from "@/lib/types";
+import type { ReviewDTO, SectionCopy } from "@/lib/types";
 
 const PREVIEW_COUNT = 6;
 
@@ -19,7 +19,7 @@ function Stars({ n, className = "" }: { n: number; className?: string }) {
   );
 }
 
-export default function Reviews({ reviews }: { reviews: ReviewDTO[] }) {
+export default function Reviews({ reviews, copy }: { reviews: ReviewDTO[]; copy: SectionCopy }) {
   const { isRTL, lang } = useLang();
   const [showAll, setShowAll] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
@@ -42,8 +42,13 @@ export default function Reviews({ reviews }: { reviews: ReviewDTO[] }) {
           </span>
           {/* h2 → Reem Kufi */}
           <h2 className="text-2xl sm:text-4xl font-bold text-ink mb-3">
-            {isRTL ? "ماذا قالوا عنّا" : "What They Say"}
+            {isRTL ? copy.titleAr : copy.titleEn}
           </h2>
+          {(isRTL ? copy.descAr : copy.descEn) && (
+            <p className="text-muted max-w-md mx-auto text-sm leading-relaxed">
+              {isRTL ? copy.descAr : copy.descEn}
+            </p>
+          )}
           <div className="section-divider w-16 mx-auto mt-5" />
           <button
             type="button"

@@ -2,10 +2,11 @@
 
 import { useLang } from "@/context/LanguageContext";
 import { howItWorks } from "@/data/content";
+import type { SectionCopy } from "@/lib/types";
 import Reveal from "@/components/site/Reveal";
 
 // 4-step "book in minutes" journey with a connecting line on desktop.
-export default function HowItWorks() {
+export default function HowItWorks({ copy }: { copy: SectionCopy }) {
   const { isRTL } = useLang();
 
   return (
@@ -19,12 +20,10 @@ export default function HowItWorks() {
             {isRTL ? "خطوات بسيطة" : "Simple Steps"}
           </span>
           <h2 className="text-2xl sm:text-4xl font-bold text-ink mb-3">
-            {isRTL ? "كيف تحجز رحلتك؟" : "How It Works"}
+            {isRTL ? copy.titleAr : copy.titleEn}
           </h2>
           <p className="text-muted max-w-md mx-auto text-sm leading-relaxed">
-            {isRTL
-              ? "من اختيار الباقة حتى الوصول — أربع خطوات فقط"
-              : "From choosing a package to arrival — just four steps"}
+            {isRTL ? copy.descAr : copy.descEn}
           </p>
           <div className="section-divider w-16 mx-auto mt-5" />
         </div>

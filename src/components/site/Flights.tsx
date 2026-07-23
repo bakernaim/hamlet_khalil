@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import { useLang } from "@/context/LanguageContext";
 import { waHref } from "@/lib/whatsapp";
-import type { FlightDTO } from "@/lib/types";
+import type { FlightDTO, SectionCopy } from "@/lib/types";
 import Reveal from "@/components/site/Reveal";
 import FlightBookingModal from "@/components/site/FlightBookingModal";
 import { FilterSelect, Pager, PAGE_SIZES } from "@/components/site/SearchPager";
@@ -12,9 +12,11 @@ import { FilterSelect, Pager, PAGE_SIZES } from "@/components/site/SearchPager";
 export default function Flights({
   flights,
   whatsappNumber,
+  copy,
 }: {
   flights: FlightDTO[];
   whatsappNumber: string;
+  copy: SectionCopy;
 }) {
   const { isRTL } = useLang();
   const [selected, setSelected] = useState<FlightDTO | null>(null);
@@ -68,12 +70,10 @@ export default function Flights({
             {isRTL ? "تذاكر الطيران" : "Plane Tickets"}
           </span>
           <h2 className="text-2xl sm:text-4xl font-bold text-ink mb-3">
-            {isRTL ? "نحجز لك تذكرة طيرانك" : "We book your flight ticket"}
+            {isRTL ? copy.titleAr : copy.titleEn}
           </h2>
           <p className="text-muted max-w-lg mx-auto text-sm leading-relaxed">
-            {isRTL
-              ? "اختر رحلتك، حدّد التاريخ، وأرسل لنا طلبك — سنتواصل معك عبر واتساب لتأكيد الحجز والسعر."
-              : "Pick your flight, choose a date, and send us your request — we'll reach out on WhatsApp to confirm the booking and price."}
+            {isRTL ? copy.descAr : copy.descEn}
           </p>
           <div className="section-divider w-16 mx-auto mt-5" />
         </div>

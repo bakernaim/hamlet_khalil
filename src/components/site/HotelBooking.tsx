@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useLang } from "@/context/LanguageContext";
 import { waHref } from "@/lib/whatsapp";
-import type { HotelDTO } from "@/lib/types";
+import type { HotelDTO, SectionCopy } from "@/lib/types";
 import Reveal from "@/components/site/Reveal";
 import HotelBookingModal from "@/components/site/HotelBookingModal";
 import ImageCarousel from "@/components/site/ImageCarousel";
@@ -12,9 +12,11 @@ import { SearchBox, FilterSelect, Pager, PAGE_SIZES } from "@/components/site/Se
 export default function HotelBooking({
   hotels,
   whatsappNumber,
+  copy,
 }: {
   hotels: HotelDTO[];
   whatsappNumber: string;
+  copy: SectionCopy;
 }) {
   const { isRTL } = useLang();
   const [selected, setSelected] = useState<HotelDTO | null>(null);
@@ -72,12 +74,10 @@ export default function HotelBooking({
             {isRTL ? "إقامتك بين أيدينا" : "Your Stay, Sorted"}
           </span>
           <h2 className="text-2xl sm:text-4xl font-bold text-ink mb-3">
-            {isRTL ? "نساعدك في حجز فندقك" : "We help you book your hotel"}
+            {isRTL ? copy.titleAr : copy.titleEn}
           </h2>
           <p className="text-muted max-w-lg mx-auto text-sm leading-relaxed">
-            {isRTL
-              ? "اختر من الفنادق التي نتعامل معها في العراق وإيران، وأرسل لنا طلبك — سنتواصل معك عبر واتساب لتأكيد الحجز."
-              : "Choose from the hotels we work with in Iraq and Iran, send us your request, and we'll reach out on WhatsApp to confirm your booking."}
+            {isRTL ? copy.descAr : copy.descEn}
           </p>
           <div className="section-divider w-16 mx-auto mt-5" />
         </div>

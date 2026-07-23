@@ -231,12 +231,43 @@ export interface WorkingHoursException {
   label?: string; // optional note, e.g. "Eid holiday"
 }
 
-export interface SiteSettings {
+// Homepage sections whose heading/description copy is editable in the dashboard.
+// Adding a name here auto-creates its 4 setting keys (section<Name>TitleAr/En,
+// section<Name>DescAr/En) — provide defaults in lib/settings.ts SECTION_COPY_DEFAULTS.
+export const SECTION_NAMES = [
+  "trips",
+  "ziyarat",
+  "tourism",
+  "hotels",
+  "flights",
+  "how",
+  "gallery",
+  "reviews",
+  "faq",
+  "instagram",
+  "about",
+] as const;
+export type SectionName = (typeof SECTION_NAMES)[number];
+
+type SectionCopyKey = `section${Capitalize<SectionName>}${"TitleAr" | "TitleEn" | "DescAr" | "DescEn"}`;
+
+// The bilingual heading copy one section component receives as a prop.
+export interface SectionCopy {
+  titleAr: string;
+  titleEn: string;
+  descAr: string; // "" = section renders no description
+  descEn: string;
+}
+
+export interface SiteSettings extends Record<SectionCopyKey, string> {
   whatsappNumber: string;
   heroHeadingAr: string;
   heroHeadingEn: string;
   heroSubheadingAr: string;
   heroSubheadingEn: string;
+  statPilgrims: string; // hero stats — numeric strings, rendered with a "+" suffix
+  statYears: string;
+  statDestinations: string;
   phone: string;
   addressAr: string;
   addressEn: string;

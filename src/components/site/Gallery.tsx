@@ -6,11 +6,11 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useLang } from "@/context/LanguageContext";
-import type { GalleryItemDTO } from "@/lib/types";
+import type { GalleryItemDTO, SectionCopy } from "@/lib/types";
 
 const PREVIEW_COUNT = 8;
 
-export default function Gallery({ items }: { items: GalleryItemDTO[] }) {
+export default function Gallery({ items, copy }: { items: GalleryItemDTO[]; copy: SectionCopy }) {
   const { isRTL } = useLang();
   const [showAll, setShowAll] = useState(false);
   const [active, setActive] = useState<number | null>(null);
@@ -29,8 +29,13 @@ export default function Gallery({ items }: { items: GalleryItemDTO[] }) {
           </span>
           {/* h2 → Reem Kufi */}
           <h2 className="text-2xl sm:text-4xl font-bold text-ink mb-3">
-            {isRTL ? "لحظات من رحلاتنا" : "Moments From Our Trips"}
+            {isRTL ? copy.titleAr : copy.titleEn}
           </h2>
+          {(isRTL ? copy.descAr : copy.descEn) && (
+            <p className="text-muted max-w-md mx-auto text-sm leading-relaxed">
+              {isRTL ? copy.descAr : copy.descEn}
+            </p>
+          )}
           <div className="section-divider w-16 mx-auto mt-5" />
         </div>
 

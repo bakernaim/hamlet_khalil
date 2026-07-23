@@ -73,7 +73,7 @@ export default function Navbar({ whatsappNumber }: { whatsappNumber: string }) {
               <a
                 key={link.href}
                 href={link.href}
-                className={`relative text-sm transition-colors font-medium px-4 py-2 rounded-lg hover:bg-brand/6 group ${
+                className={`relative text-sm transition-colors font-medium px-3 py-2 rounded-lg hover:bg-brand/6 group ${
                   scrolled ? "text-muted hover:text-accent" : "text-white/60 hover:text-brand-hover"
                 }`}
               >
@@ -86,7 +86,7 @@ export default function Navbar({ whatsappNumber }: { whatsappNumber: string }) {
           {/* ── Right controls ── */}
           <div className="hidden lg:flex items-center gap-3">
             {hijriDate && (
-              <span className={`inline-flex items-center gap-1.5 text-[11px] rounded-full px-3 py-1.5 border ${
+              <span className={`hidden xl:inline-flex items-center gap-1.5 text-[11px] rounded-full px-3 py-1.5 border ${
                 scrolled ? "text-muted border-ink/10 bg-ink/4" : "text-white/45 border-white/10 bg-white/4"
               }`}>
                 <span className="text-brand/80">☾</span>

@@ -8,6 +8,8 @@ export const nav = {
     { ar: "الرحلات الحالية", en: "Current Trips", href: "#trips" },
     { ar: "زيارات", en: "Ziyarat", href: "#ziyarat" },
     { ar: "السياحة", en: "Tourism", href: "#tourism" },
+    { ar: "الفنادق", en: "Hotels", href: "#hotels" },
+    { ar: "تذاكر الطيران", en: "Tickets", href: "#flights" },
     { ar: "عن الوكالة", en: "About", href: "#about" },
     { ar: "تواصل معنا", en: "Contact", href: "#contact" },
   ],

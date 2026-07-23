@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useLang } from "@/context/LanguageContext";
-import type { InstagramPostDTO } from "@/lib/types";
+import type { InstagramPostDTO, SectionCopy } from "@/lib/types";
 
 // Static fallback shown when no live Instagram feed is configured/available.
 const FALLBACK_ITEMS = [
@@ -17,9 +17,11 @@ const FALLBACK_ITEMS = [
 export default function InstagramFeed({
   instagramUrl,
   items = [],
+  copy,
 }: {
   instagramUrl: string;
   items?: InstagramPostDTO[];
+  copy: SectionCopy;
 }) {
   const { isRTL } = useLang();
   const live = items.length > 0;
@@ -47,9 +49,14 @@ export default function InstagramFeed({
               <circle cx="17.5" cy="6.5" r="1.5" fill="url(#ig-g)"/>
             </svg>
             <h2 className="text-2xl sm:text-3xl font-bold text-ink">
-              {isRTL ? "تابعونا على انستغرام" : "Follow Us on Instagram"}
+              {isRTL ? copy.titleAr : copy.titleEn}
             </h2>
           </div>
+          {(isRTL ? copy.descAr : copy.descEn) && (
+            <p className="text-muted max-w-md mx-auto text-sm leading-relaxed mb-2">
+              {isRTL ? copy.descAr : copy.descEn}
+            </p>
+          )}
           <a
             href={instagramUrl}
             target="_blank"

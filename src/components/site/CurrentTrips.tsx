@@ -5,7 +5,7 @@ import ImageCarousel from "@/components/site/ImageCarousel";
 import { useLang } from "@/context/LanguageContext";
 import { waHref } from "@/lib/whatsapp";
 import { FREQUENCY_LABEL } from "@/lib/recurrence";
-import type { CurrentTripDTO, TripStatus, ZiyaratPackageDTO, TourismPackageDTO } from "@/lib/types";
+import type { CurrentTripDTO, SectionCopy, TripStatus, ZiyaratPackageDTO, TourismPackageDTO } from "@/lib/types";
 import Reveal from "@/components/site/Reveal";
 import BookingModal from "@/components/site/BookingModal";
 import PackageInfoModal from "@/components/site/PackageInfoModal";
@@ -56,11 +56,13 @@ export default function CurrentTrips({
   whatsappNumber,
   ziyarat,
   tourism,
+  copy,
 }: {
   trips: CurrentTripDTO[];
   whatsappNumber: string;
   ziyarat: ZiyaratPackageDTO[];
   tourism: TourismPackageDTO[];
+  copy: SectionCopy;
 }) {
   const { isRTL, lang } = useLang();
   const [bookingTrip, setBookingTrip] = useState<CurrentTripDTO | null>(null);
@@ -98,12 +100,10 @@ export default function CurrentTrips({
             {isRTL ? "الرحلات القادمة" : "Upcoming Departures"}
           </span>
           <h2 className="text-2xl sm:text-4xl font-bold text-ink mb-3">
-            {isRTL ? "الرحلات المتاحة الآن" : "Current Trips"}
+            {isRTL ? copy.titleAr : copy.titleEn}
           </h2>
           <p className="text-muted max-w-md mx-auto text-sm leading-relaxed">
-            {isRTL
-              ? "احجز مقعدك في رحلاتنا القادمة قبل نفاد الأماكن"
-              : "Reserve your seat on our upcoming departures before they sell out"}
+            {isRTL ? copy.descAr : copy.descEn}
           </p>
           <div className="section-divider w-16 mx-auto mt-5" />
         </div>

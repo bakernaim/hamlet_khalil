@@ -24,10 +24,15 @@ export default function Hero({ settings, images }: { settings: SiteSettings; ima
   const heading = isRTL ? settings.heroHeadingAr : settings.heroHeadingEn;
   const subheading = isRTL ? settings.heroSubheadingAr : settings.heroSubheadingEn;
 
+  // Stat numbers come from the dashboard settings; fall back if not a number.
+  const num = (v: string, fallback: number) => {
+    const n = Number.parseInt(v, 10);
+    return Number.isFinite(n) ? n : fallback;
+  };
   const stats = [
-    { value: 5000, suffix: "+", label: { ar: "حاج وزائر", en: "Pilgrims" } },
-    { value: 15, suffix: "+", label: { ar: "سنة خبرة", en: "Years" } },
-    { value: 20, suffix: "+", label: { ar: "وجهة سفر", en: "Destinations" } },
+    { value: num(settings.statPilgrims, 5000), suffix: "+", label: { ar: "حاج وزائر", en: "Pilgrims" } },
+    { value: num(settings.statYears, 15), suffix: "+", label: { ar: "سنة خبرة", en: "Years" } },
+    { value: num(settings.statDestinations, 20), suffix: "+", label: { ar: "وجهة سفر", en: "Destinations" } },
   ];
 
   return (

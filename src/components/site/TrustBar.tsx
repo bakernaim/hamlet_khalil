@@ -2,8 +2,9 @@
 
 import { useLang } from "@/context/LanguageContext";
 import { trustItems } from "@/data/content";
+import type { SectionCopy } from "@/lib/types";
 
-export default function TrustBar() {
+export default function TrustBar({ copy }: { copy: SectionCopy }) {
   const { isRTL } = useLang();
 
   return (
@@ -16,9 +17,14 @@ export default function TrustBar() {
         <div className="text-center mb-8 sm:mb-10">
           <div className="ornate-divider max-w-[220px] mx-auto">
             <span className="text-accent/90 text-xs font-medium tracking-widest uppercase whitespace-nowrap px-3">
-              {isRTL ? "لماذا تختارنا" : "Why Choose Us"}
+              {isRTL ? copy.titleAr : copy.titleEn}
             </span>
           </div>
+          {(isRTL ? copy.descAr : copy.descEn) && (
+            <p className="text-muted max-w-md mx-auto text-sm leading-relaxed mt-4">
+              {isRTL ? copy.descAr : copy.descEn}
+            </p>
+          )}
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8">

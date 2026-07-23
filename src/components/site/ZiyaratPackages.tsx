@@ -3,14 +3,16 @@
 import { useState } from "react";
 import ImageCarousel from "@/components/site/ImageCarousel";
 import { useLang } from "@/context/LanguageContext";
-import type { ZiyaratPackageDTO } from "@/lib/types";
+import type { SectionCopy, ZiyaratPackageDTO } from "@/lib/types";
 import Reveal from "@/components/site/Reveal";
 import PackageInfoModal from "@/components/site/PackageInfoModal";
 
 export default function ZiyaratPackages({
   packages,
+  copy,
 }: {
   packages: ZiyaratPackageDTO[];
+  copy: SectionCopy;
 }) {
   const { isRTL } = useLang();
   const [infoPkg, setInfoPkg] = useState<ZiyaratPackageDTO | null>(null);
@@ -29,12 +31,10 @@ export default function ZiyaratPackages({
             {isRTL ? "باقاتنا المقدسة" : "Sacred Packages"}
           </span>
           <h2 className="text-2xl sm:text-4xl font-bold text-ink mb-3">
-            {isRTL ? "زيارات الأماكن المقدسة" : "Ziyarat Packages"}
+            {isRTL ? copy.titleAr : copy.titleEn}
           </h2>
           <p className="text-muted max-w-md mx-auto text-sm leading-relaxed">
-            {isRTL
-              ? "رحلات روحانية منظمة مع مرشد ديني متخصص"
-              : "Fully organized spiritual journeys with a specialist religious guide"}
+            {isRTL ? copy.descAr : copy.descEn}
           </p>
           <div className="section-divider w-16 mx-auto mt-5" />
         </div>
