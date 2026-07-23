@@ -60,9 +60,16 @@ export default async function Home() {
   const barBanners = banners.filter((b) => b.displayMode !== "modal");
   const modalBanner = banners.find((b) => b.displayMode === "modal" || b.displayMode === "both");
 
+  // Sections that render nothing when they have no content — drop their navbar links too.
+  const hiddenSections = [
+    trips.length === 0 && "#trips",
+    hotels.length === 0 && "#hotels",
+    flights.length === 0 && "#flights",
+  ].filter((s): s is string => Boolean(s));
+
   return (
     <LanguageWrapper>
-      <Navbar whatsappNumber={wa} />
+      <Navbar whatsappNumber={wa} hiddenSections={hiddenSections} />
       <main>
         <Hero settings={settings} images={heroImages} />
         <CurrentTrips trips={trips} whatsappNumber={wa} ziyarat={ziyarat} tourism={tourism} copy={sectionCopy(settings, "trips")} />
@@ -71,11 +78,11 @@ export default async function Home() {
         <HotelBooking hotels={hotels} whatsappNumber={wa} copy={sectionCopy(settings, "hotels")} />
         <Flights flights={flights} whatsappNumber={wa} copy={sectionCopy(settings, "flights")} />
         <HowItWorks copy={sectionCopy(settings, "how")} />
-        <TrustBar copy={sectionCopy(settings, "about")} />
-        <VerseBanner />
         <Gallery items={gallery} copy={sectionCopy(settings, "gallery")} />
         <Reviews reviews={reviews} copy={sectionCopy(settings, "reviews")} />
         <FAQ copy={sectionCopy(settings, "faq")} />
+        <TrustBar copy={sectionCopy(settings, "about")} />
+        <VerseBanner />
         <InstagramFeed instagramUrl={settings.instagramUrl} items={instagram} copy={sectionCopy(settings, "instagram")} />
       </main>
       <Footer settings={settings} />

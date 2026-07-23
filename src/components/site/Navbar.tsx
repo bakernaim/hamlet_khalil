@@ -8,9 +8,16 @@ import { nav } from "@/data/content";
 import { waHref } from "@/lib/whatsapp";
 import ThemeToggle from "@/components/site/ThemeToggle";
 
-export default function Navbar({ whatsappNumber }: { whatsappNumber: string }) {
+export default function Navbar({
+  whatsappNumber,
+  hiddenSections = [],
+}: {
+  whatsappNumber: string;
+  hiddenSections?: string[]; // hrefs of sections not rendered on the page (no content)
+}) {
   const { lang, toggleLang, isRTL } = useLang();
   const WHATSAPP_URL = waHref(whatsappNumber);
+  const links = nav.links.filter((l) => !hiddenSections.includes(l.href));
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [hijriDate, setHijriDate] = useState("");
@@ -69,7 +76,7 @@ export default function Navbar({ whatsappNumber }: { whatsappNumber: string }) {
 
           {/* ── Desktop links ── */}
           <div className="hidden lg:flex items-center gap-0.5">
-            {nav.links.map((link) => (
+            {links.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
@@ -155,7 +162,7 @@ export default function Navbar({ whatsappNumber }: { whatsappNumber: string }) {
         } bg-page/98 backdrop-blur-xl border-t border-line shadow-xl shadow-black/8 dark:shadow-black/40`}
       >
         <div className="px-5 py-5 flex flex-col gap-1" dir={isRTL ? "rtl" : "ltr"}>
-          {nav.links.map((link) => (
+          {links.map((link) => (
             <a
               key={link.href}
               href={link.href}
